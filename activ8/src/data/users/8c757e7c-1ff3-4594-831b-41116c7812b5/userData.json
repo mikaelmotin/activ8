@@ -1,0 +1,30 @@
+{
+  "uuid": "8c757e7c-1ff3-4594-831b-41116c7812b5",
+  "username": "DaBaby",
+  "userFolder": "src\\data\\users\\8c757e7c-1ff3-4594-831b-41116c7812b5",
+  "studyFolders": [
+    {
+      "title": "Glossary",
+      "studySets": [
+        {
+          "title": "English",
+          "flashcards": [
+            {
+              "term": "Äpple",
+              "definition": "Apple"
+            }
+          ]
+        },
+        {
+          "title": "Spanish",
+          "flashcards": [
+            {
+              "term": "Äpple",
+              "definition": "Manzana"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
