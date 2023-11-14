@@ -17,7 +17,7 @@ public class StudyFolder {
     public void addStudySet(StudySet studySet){
         studySets.add(studySet);
     }
-    public void removestudySet(StudySet studySet){
+    public void removeStudySet(StudySet studySet){
         studySets.remove(studySet);
     }
     public void editStudySet(StudySet studySet, String term, String description){
@@ -30,7 +30,7 @@ public class StudyFolder {
     public void setDescription(String description) {
         this.description = description;
     }
-    public ArrayList<StudySet> getStudysets() {
+    public ArrayList<StudySet> getStudySets() {
         return studySets;
     }
     public String getTitle() {

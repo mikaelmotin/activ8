@@ -33,7 +33,7 @@ public class App {
         //activ8testable.UserManager.saveUserData(user);
 
         for(StudyFolder f: user.getStudyFolders()) {
-            for(StudySet s: f.getStudysets()) {
+            for(StudySet s: f.getStudySets()) {
                 System.out.println(s.getTitle());
             }
         }

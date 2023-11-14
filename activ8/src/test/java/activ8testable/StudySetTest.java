@@ -1,14 +1,22 @@
 package activ8testable;
-
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class StudySetTest {
     StudySet test = new StudySet("test");
+
+    @Test
+    void StudySetConstructor() {
+        assertEquals(test.getTitle(),"test");
+    }
+    @Test
+    void getSize() {
+        int size = test.getSize();
+        assertEquals(size, 0);
+    }
+
     @Test
     void addFlashcard() {
         Flashcard testCard = new Flashcard("testCard","A card for testing");
@@ -25,10 +33,6 @@ class StudySetTest {
         int size = test.getSize();
         assertEquals(size,0);
     }
-
-    @Test
-    void editFlashcard() {
-    } //remove
 
     @Test
     void editTitle() {

@@ -33,7 +33,7 @@ public JsonElement serialize(User user, Type typeOfSrc, JsonSerializationContext
 
             // Serialize StudySets
             JsonArray studySetsArray = new JsonArray();
-            for (StudySet studySet : studyFolder.getStudysets()) {
+            for (StudySet studySet : studyFolder.getStudySets()) {
                 JsonObject studySetObject = new JsonObject();
                 studySetObject.addProperty("title", studySet.getTitle());
                 // Add more properties if needed

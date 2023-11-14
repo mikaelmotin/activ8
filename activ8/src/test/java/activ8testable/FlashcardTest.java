@@ -1,13 +1,16 @@
 package activ8testable;
-
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 class FlashcardTest {
     //Creates a Flashcard.
     Flashcard testCard = new Flashcard("test", "A card for testing");
 
+    //Tests that the created test card is created with the correct term and definition.
+    @Test
+    void FlashcardConstructor() {
+        assertEquals(testCard.getTerm(),"test");
+        assertEquals(testCard.getDefinition(),"A card for testing");
+    }
     //Tests that the method getTerm() returns the correct term.
     @Test
     void getTerm() {

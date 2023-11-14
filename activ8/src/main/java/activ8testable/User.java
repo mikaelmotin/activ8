@@ -37,7 +37,7 @@ public class User {
 
     // Remove a study set from a study folder
     public void removeStudySet(StudyFolder studyFolder, StudySet studySet) {
-        studyFolder.removestudySet(studySet);
+        studyFolder.removeStudySet(studySet);
     }
 
     // Get study folders
