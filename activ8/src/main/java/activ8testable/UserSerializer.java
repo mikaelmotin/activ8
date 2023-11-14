@@ -43,7 +43,7 @@ public JsonElement serialize(User user, Type typeOfSrc, JsonSerializationContext
                 for (Flashcard flashcard : studySet.getFlashcardsList()) {
                     JsonObject flashcardObject = new JsonObject();
                     flashcardObject.addProperty("term", flashcard.getTerm());
-                    flashcardObject.addProperty("definition", flashcard.getDefintion());
+                    flashcardObject.addProperty("definition", flashcard.getDefinition());
                     flashcardsArray.add(flashcardObject);
                 }
                 studySetObject.add("flashcards", flashcardsArray);

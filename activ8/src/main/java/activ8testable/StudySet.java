@@ -22,7 +22,7 @@ public class StudySet {
     }
     public void editFlashcard(Flashcard card, String term, String definition){
         card.setTerm(term);
-        card.setDefintion(definition);
+        card.setDefinition(definition);
     } //not good object-oriented!
     public void editTitle(String title) {
         this.title = title;
