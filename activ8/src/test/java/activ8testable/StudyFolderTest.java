@@ -1,6 +1,9 @@
 package activ8testable;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class StudyFolderTest {
@@ -39,9 +42,10 @@ class StudyFolderTest {
 
     @Test
     void getDescription() {
-
         String description = testFolder.getDescription();
-        assertEquals(description,"");
+        assertNull(description);
+        testFolder.setDescription("testDescription");
+        assertEquals(testFolder.getDescription(),"testDescription");
     }
 
     @Test
@@ -52,10 +56,17 @@ class StudyFolderTest {
     }
 
     @Test
-    void getStudysets() {
+    void getStudySets() {
+        StudySet testSet = new StudySet("testSet");
+        testFolder.addStudySet(testSet);
+        List<StudySet> testList = new ArrayList<>();
+        testList.add(testSet);
+        assertEquals(testFolder.getStudySets(),testList);
     }
 
     @Test
     void getTitle() {
+        String title = testFolder.getTitle();
+        assertEquals(title,"test");
     }
 }
