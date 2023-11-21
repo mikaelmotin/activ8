@@ -33,14 +33,14 @@ public JsonElement serialize(User user, Type typeOfSrc, JsonSerializationContext
 
             // Serialize StudySets
             JsonArray studySetsArray = new JsonArray();
-            for (StudySet studySet : studyFolder.getStudySets()) {
+            for (StudySetFlashcard studySetFlashcard : studyFolder.getStudySets()) {
                 JsonObject studySetObject = new JsonObject();
-                studySetObject.addProperty("title", studySet.getTitle());
+                studySetObject.addProperty("title", studySetFlashcard.getTitle());
                 // Add more properties if needed
 
                 // Serialize Flashcards
                 JsonArray flashcardsArray = new JsonArray();
-                for (Flashcard flashcard : studySet.getFlashcardsList()) {
+                for (Card flashcard : studySetFlashcard.getCardsList("medium")) {
                     JsonObject flashcardObject = new JsonObject();
                     flashcardObject.addProperty("term", flashcard.getTerm());
                     flashcardObject.addProperty("definition", flashcard.getDefinition());

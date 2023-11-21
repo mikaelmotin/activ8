@@ -12,21 +12,21 @@ class StudyFolderTest {
     @Test
     void size() {
         assertEquals(testFolder.size(),0);
-        StudySet testSet = new StudySet("testSet");
+        StudySetFlashcard testSet = new StudySetFlashcard("testSet");
         testFolder.addStudySet(testSet);
         assertEquals(testFolder.size(),1);
     }
 
     @Test
     void addStudySet() {
-        StudySet testSet = new StudySet("testSet");
+        StudySetFlashcard testSet = new StudySetFlashcard("testSet");
         testFolder.addStudySet(testSet);
         assertEquals(testFolder.size(),1);
     }
 
     @Test
     void removeStudySet() {
-        StudySet testSet = new StudySet("testSet");
+        StudySetFlashcard testSet = new StudySetFlashcard("testSet");
         testFolder.addStudySet(testSet);
         assertEquals(testFolder.size(),1);
         testFolder.removeStudySet(testSet);
@@ -57,9 +57,9 @@ class StudyFolderTest {
 
     @Test
     void getStudySets() {
-        StudySet testSet = new StudySet("testSet");
+        StudySetFlashcard testSet = new StudySetFlashcard("testSet");
         testFolder.addStudySet(testSet);
-        List<StudySet> testList = new ArrayList<>();
+        List<StudySetFlashcard> testList = new ArrayList<>();
         testList.add(testSet);
         assertEquals(testFolder.getStudySets(),testList);
     }

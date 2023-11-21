@@ -12,12 +12,12 @@ public class App {
         Flashcard flashcard2 = new Flashcard("Äpple", "Manzana");
         Flashcard flashcard3 = new Flashcard("Äpple", "Apfel");
         
-        StudySet set = new StudySet("English");
-        StudySet set2 = new StudySet("Spanish");
-        StudySet set3 = new StudySet("German");
-        set.addFlashcard(flashcard);
-        set2.addFlashcard(flashcard2);
-        set3.addFlashcard(flashcard3);
+        StudySetFlashcard set = new StudySetFlashcard("English");
+        StudySetFlashcard set2 = new StudySetFlashcard("Spanish");
+        StudySetFlashcard set3 = new StudySetFlashcard("German");
+        set.addCard(flashcard);
+        set2.addCard(flashcard2);
+        set3.addCard(flashcard3);
 
         StudyFolder folder = user.createStudyFolder("Glossary"); 
         user.addStudySet(folder, set);
@@ -33,7 +33,7 @@ public class App {
         //activ8testable.UserManager.saveUserData(user);
 
         for(StudyFolder f: user.getStudyFolders()) {
-            for(StudySet s: f.getStudySets()) {
+            for(StudySetFlashcard s: f.getStudySets()) {
                 System.out.println(s.getTitle());
             }
         }

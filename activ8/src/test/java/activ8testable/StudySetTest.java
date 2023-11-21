@@ -5,7 +5,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StudySetTest {
-    StudySet test = new StudySet("test");
+    StudySetFlashcard test = new StudySetFlashcard("test");
 
     //Tests that the created StudySet is created with the correct title.
     @Test
@@ -18,20 +18,20 @@ class StudySetTest {
         int size = test.getSize();
         assertEquals(size, 0);
     }
-    //Tests that the addFlashcard() adds a Flashcard to the StudySet.
+    //Tests that the addCard() adds a Flashcard to the StudySet.
     @Test
-    void addFlashcard() {
+    void addCardForFlashcard() {
         Flashcard testCard = new Flashcard("testCard","A card for testing");
-        test.addFlashcard(testCard);
+        test.addCard(testCard);
         int size = test.getSize();
         assertEquals(size,1);
     }
     //Tests that the addFlashcard() removes a Flashcard to the StudySet.
     @Test
-    void removeFlashcard() {
+    void removeCardForFlashcard() {
         Flashcard testCard = new Flashcard("testCard","A card for testing");
-        test.addFlashcard(testCard);
-        test.removeFlashcard(testCard);
+        test.addCard(testCard);
+        test.removeCard(testCard);
         int size = test.getSize();
         assertEquals(size,0);
     }
@@ -51,12 +51,13 @@ class StudySetTest {
     }
     //Tests that the getFlashcardsList() method returns a list of Flashcards that are in the StudySet.
     @Test
-    void getFlashcardsList() {
+    void getCardsListForFlashcard() {
         Flashcard testCard = new Flashcard("testCard","A card for testing");
-        test.addFlashcard(testCard);
+        testCard.setDifficulty("medium");
+        test.addCard(testCard);
         List<Flashcard> testList = new ArrayList<>();
         testList.add(testCard);
-        assertEquals(test.getFlashcardsList(),testList);
+        assertEquals(test.getCardsList("medium"),testList);
 
     }
     //Tests that the getTitle() returns the title of the StudySet.

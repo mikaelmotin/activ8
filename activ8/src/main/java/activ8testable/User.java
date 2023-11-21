@@ -31,13 +31,13 @@ public class User {
     }
 
     // Add a study set to a study folder
-    public void addStudySet(StudyFolder studyFolder, StudySet studySet) {
-        studyFolder.addStudySet(studySet);
+    public void addStudySet(StudyFolder studyFolder, StudySetFlashcard studySetFlashcard) {
+        studyFolder.addStudySet(studySetFlashcard);
     }
 
     // Remove a study set from a study folder
-    public void removeStudySet(StudyFolder studyFolder, StudySet studySet) {
-        studyFolder.removeStudySet(studySet);
+    public void removeStudySet(StudyFolder studyFolder, StudySetFlashcard studySetFlashcard) {
+        studyFolder.removeStudySet(studySetFlashcard);
     }
 
     // Get study folders

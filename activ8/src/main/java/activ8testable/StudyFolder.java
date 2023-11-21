@@ -8,21 +8,21 @@ import java.util.ArrayList;
 public class StudyFolder {
     private String title;
     private String description;
-    private ArrayList<StudySet> studySets = new ArrayList<>();
+    private ArrayList<StudySetFlashcard> studySetFlashcards = new ArrayList<>();
     
 
     public StudyFolder(String title) {
         this.title = title;
     }
-    public void addStudySet(StudySet studySet){
-        studySets.add(studySet);
+    public void addStudySet(StudySetFlashcard studySetFlashcard){
+        studySetFlashcards.add(studySetFlashcard);
     }
-    public void removeStudySet(StudySet studySet){
-        studySets.remove(studySet);
+    public void removeStudySet(StudySetFlashcard studySetFlashcard){
+        studySetFlashcards.remove(studySetFlashcard);
     }
-    public void editStudySet(StudySet studySet, String term, String description){
-        studySet.editTitle(term);
-        studySet.setDescription(description);
+    public void editStudySet(StudySetFlashcard studySetFlashcard, String term, String description){
+        studySetFlashcard.editTitle(term);
+        studySetFlashcard.setDescription(description);
     } //bad design?
     public void editTitle(String title) {
         this.title = title;
@@ -31,10 +31,10 @@ public class StudyFolder {
         this.description = description;
     }
     public String getDescription(){return this.description;}
-    public ArrayList<StudySet> getStudySets() {
-        return studySets;
+    public ArrayList<StudySetFlashcard> getStudySets() {
+        return studySetFlashcards;
     }
-    public int size(){return studySets.size();}
+    public int size(){return studySetFlashcards.size();}
     public String getTitle() {
         return this.title;
     }
