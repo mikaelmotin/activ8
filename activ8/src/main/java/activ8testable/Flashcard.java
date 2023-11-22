@@ -10,6 +10,11 @@ public class Flashcard implements FlashcardINTERFACE{
         this.definition = definition;
         this.difficulty = "medium";
     }
+    public Flashcard(String term, String definition,String difficulty) {
+        this.term = term;
+        this.definition = definition;
+        this.difficulty = difficulty;
+    }
     @Override
     public String getTerm() {
         return term;
@@ -34,7 +39,7 @@ public class Flashcard implements FlashcardINTERFACE{
 
     @Override
     public void setDifficulty(String difficulty) {
-        if (difficulty =="easy" || difficulty=="medium" || difficulty=="hard"){
+        if (difficulty.equals("easy") || difficulty.equals("medium")|| difficulty.equals("hard")){
             this.difficulty = difficulty;
         }
         else {

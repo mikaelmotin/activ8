@@ -21,8 +21,8 @@ public class UserManagerGSON implements UserManager {
 
     public User createUser(String username) throws IOException {
         UUID uuid = UUID.randomUUID();
-        Path userFolder = Paths.get("src", "data", "users", uuid.toString());
-        Path userDataJSON = Paths.get("src", "data", "users", uuid.toString(), "userData.json");
+        Path userFolder = Paths.get("activ8","src", "data", "users", uuid.toString());
+        Path userDataJSON = Paths.get("activ8","src", "data", "users", uuid.toString(), "userData.json");
         
         // Create a folder with the user's UUID as the name
         try {

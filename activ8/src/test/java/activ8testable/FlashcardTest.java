@@ -11,6 +11,14 @@ class FlashcardTest {
         assertEquals(testCard.getTerm(),"test");
         assertEquals(testCard.getDefinition(),"A card for testing");
     }
+    //Tests that the created test card is created with the correct term, definition and difficulty.
+    @Test
+    void FlashcardConstructorWithDifficulty() {
+        Flashcard testCard2 = new Flashcard("test", "A card for testing","medium");
+        assertEquals(testCard2.getTerm(),"test");
+        assertEquals(testCard2.getDifficulty(),"medium");
+        assertEquals(testCard2.getDefinition(),"A card for testing");
+    }
     //Tests that the method getTerm() returns the correct term.
     @Test
     void getTerm() {

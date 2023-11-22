@@ -16,6 +16,7 @@ public class StudySetFlashcard implements StudySet{
         this.title = title;
     }
 
+
     @Override
     public void removeCard(Card card) { flashcardsList.remove(card.getDifficulty(),card);}
 
