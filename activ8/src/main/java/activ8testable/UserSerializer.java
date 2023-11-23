@@ -40,7 +40,19 @@ public JsonElement serialize(User user, Type typeOfSrc, JsonSerializationContext
 
                 // Serialize Flashcards
                 JsonArray flashcardsArray = new JsonArray();
+                for (Card flashcard : studySetFlashcard.getCardsList("easy")) {
+                    JsonObject flashcardObject = new JsonObject();
+                    flashcardObject.addProperty("term", flashcard.getTerm());
+                    flashcardObject.addProperty("definition", flashcard.getDefinition());
+                    flashcardsArray.add(flashcardObject);
+                }
                 for (Card flashcard : studySetFlashcard.getCardsList("medium")) {
+                    JsonObject flashcardObject = new JsonObject();
+                    flashcardObject.addProperty("term", flashcard.getTerm());
+                    flashcardObject.addProperty("definition", flashcard.getDefinition());
+                    flashcardsArray.add(flashcardObject);
+                }
+                for (Card flashcard : studySetFlashcard.getCardsList("hard")) {
                     JsonObject flashcardObject = new JsonObject();
                     flashcardObject.addProperty("term", flashcard.getTerm());
                     flashcardObject.addProperty("definition", flashcard.getDefinition());

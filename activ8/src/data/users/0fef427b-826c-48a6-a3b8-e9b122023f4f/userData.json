@@ -1,0 +1,30 @@
+{
+  "uuid": "0fef427b-826c-48a6-a3b8-e9b122023f4f",
+  "username": "Michelangelito",
+  "userFolder": "activ8\\src\\data\\users\\0fef427b-826c-48a6-a3b8-e9b122023f4f",
+  "studyFolders": [
+    {
+      "title": "Glossary",
+      "studySets": [
+        {
+          "title": "English",
+          "flashcards": [
+            {
+              "term": "Äpple",
+              "definition": "Apple"
+            }
+          ]
+        },
+        {
+          "title": "Spanish",
+          "flashcards": [
+            {
+              "term": "Äpple",
+              "definition": "Manzana"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
