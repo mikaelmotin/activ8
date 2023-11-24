@@ -42,8 +42,6 @@ public class Flashcard implements FlashcardINTERFACE{
         if (difficulty.equals("easy") || difficulty.equals("medium")|| difficulty.equals("hard")){
             this.difficulty = difficulty;
         }
-        else {
-            throw new IllegalArgumentException();
-        }
+        else throw new IllegalArgumentException();
     }
 }
