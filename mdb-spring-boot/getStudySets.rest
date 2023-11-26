@@ -1,0 +1,27 @@
+
+# @no-cookie-jar
+GET http://localhost:8080/api/studyfolders HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAwIiwiaWF0IjoxNzAxMDAyNzc4LCJleHAiOjE3MDEwODkxNzh9.8ud65wllsuZ2RUHDoW31X1O-hRsW6qQ5NF68kuwo7O4;
+content-type: application/json
+###
+
+POST http://localhost:8080/api/studysets HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAwIiwiaWF0IjoxNzAxMDAyNzc4LCJleHAiOjE3MDEwODkxNzh9.8ud65wllsuZ2RUHDoW31X1O-hRsW6qQ5NF68kuwo7O4;
+content-type: application/json
+
+{
+    "studyFolderId": "65635676cd44ec3fc70fbcdf",
+    "title": "test studySetTitle",
+    "description": "test studySetDesc."
+}
+###
+
+PUT http://localhost:8080/api/studyfolders/65635676cd44ec3fc70fbcdf HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAwIiwiaWF0IjoxNzAxMDAyNzc4LCJleHAiOjE3MDEwODkxNzh9.8ud65wllsuZ2RUHDoW31X1O-hRsW6qQ5NF68kuwo7O4;
+content-type: application/json
+
+{
+    "title": "test title2UU",
+    "description": "test desc.2UU"
+}
+
