@@ -10,7 +10,7 @@ public class MultipleChoiceCard implements MultipleChoiceINTERFACE{
     private List<String> options = new ArrayList<>();
     private String difficulty;
 
-    public MultipleChoiceCard(String option1, String option2, String option3, String term, String definition) {
+    public MultipleChoiceCard(String definition, String term,  String option1, String option2, String option3) {
         this.option1 = option1;
         this.option2 = option2;
         this.option3 = option3;
@@ -40,7 +40,7 @@ public class MultipleChoiceCard implements MultipleChoiceINTERFACE{
 
     @Override
     public String getDifficulty() {
-        return null;
+        return this.difficulty;
     }
 
     @Override
