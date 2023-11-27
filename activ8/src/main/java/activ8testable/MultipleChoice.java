@@ -36,6 +36,8 @@ public class MultipleChoice {
         this.answer = answer;
     }
 
+
+    
     public void setDefinition(String definition) {
         this.definition = definition;
     }
