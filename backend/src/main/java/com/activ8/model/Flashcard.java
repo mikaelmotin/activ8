@@ -11,17 +11,20 @@ public abstract class Flashcard {
     protected String studySetId;
     protected String term;
     protected String definition;
+    protected EDifficulty difficulty;
 
-    public Flashcard(String studySetId, String term, String definition) {
+    public Flashcard(String studySetId, String term, String definition, EDifficulty difficulty) {
         this.studySetId = studySetId;
         this.term = term;
         this.definition = definition;
+        this.difficulty = difficulty;
     }
-    public Flashcard(String id, String studySetId, String term, String definition) {
+    public Flashcard(String id, String studySetId, String term, String definition,EDifficulty difficulty) {
         this.id = id;
         this.studySetId = studySetId;
         this.term = term;
         this.definition = definition;
+        this.difficulty = difficulty;
     }
     public String getId() {
         return id;
@@ -32,5 +35,9 @@ public abstract class Flashcard {
     public String getDefinition() {
         return definition;
     }
+    public EDifficulty getDifficulty() {
+        return difficulty;
+    }
+
 
 }

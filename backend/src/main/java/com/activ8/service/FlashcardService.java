@@ -1,5 +1,6 @@
 package com.activ8.service;
 
+import com.activ8.dto.FlashcardCheckDTO;
 import com.activ8.model.Flashcard;
 import com.activ8.repository.FlashcardRepository;
 import java.util.List;
@@ -24,6 +25,9 @@ public class FlashcardService {
 
     public List<Flashcard> getAllFlashcardsByStudySetId(String studySetId) {
         return flashcardRepository.findAllByStudySetId(studySetId); 
+    }
+    public boolean guessTerm(FlashcardCheckDTO flashcard){
+        return flashcardRepository.findById(flashcard.flashcardId()).get().getTerm().equals(flashcard.guess());
     }
 
 }

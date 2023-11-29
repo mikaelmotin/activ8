@@ -2,8 +2,8 @@ POST http://localhost:8080/api/auth/signup HTTP/1.1
 content-type: application/json
 
 {
-    "username": "user100",
-    "email": "user100@example.com",
+    "username": "user1001",
+    "email": "user1001@example.com",
     "password": "apa123"
 }
 content-type: application/json
