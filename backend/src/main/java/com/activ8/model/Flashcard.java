@@ -12,6 +12,10 @@ public abstract class Flashcard {
     protected String term;
     protected String definition;
 
+    public Flashcard() {
+        
+    }
+
     public Flashcard(String studySetId, String term, String definition) {
         this.studySetId = studySetId;
         this.term = term;
@@ -25,6 +29,9 @@ public abstract class Flashcard {
     }
     public String getId() {
         return id;
+    }
+    public String getStudySetId() {
+        return studySetId;
     }
     public String getTerm() {
         return term;

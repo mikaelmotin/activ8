@@ -11,6 +11,8 @@ public interface FlashcardRepository extends MongoRepository<Flashcard, String> 
   List<Flashcard> findAllByStudySetId(String studySetId);
   
   Optional<Flashcard> findById(String id);
+
+  void deleteById(String id);
   
 }
 

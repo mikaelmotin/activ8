@@ -1,6 +1,7 @@
 package com.activ8.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,33 +29,77 @@ public class StudySetController {
   @Autowired
   StudySetService studySetService;
 
-  // POST REQUESTS - Used to create data
-  @PostMapping
-  public ResponseEntity<?> createStudySet(@AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestBody CreateStudySetDTO studySetDTO) {
-    StudySet studySet = new StudySet(userDetails.getId(), studySetDTO.studyFolderId(), studySetDTO.title(),
-        studySetDTO.description());
-    StudySet createdStudySet = studySetService.saveStudySet(studySet);
-
-    return ResponseEntity.ok().body(createdStudySet);
-  }
-
   // GET REQUESTS - Used to get data
-  @GetMapping("/{studyFolderId}")
+
+  /**
+   * Used to get all StudySets in a StudyFolder by ID
+   * 
+   * @param studyFolderId
+   * @return List<StudySet>
+   */
+  @GetMapping("/all/{studyFolderId}")
   public ResponseEntity<?> getStudySets(@PathVariable String studyFolderId) {
     List<StudySet> studySets = studySetService.getAllStudySets(studyFolderId);
 
     return ResponseEntity.ok().body(studySets);
   }
 
-  @GetMapping("/{studyFolderId}/shares")
-  public ResponseEntity<?> getSharedStudySets(@PathVariable String studyFolderId) {
-    List<StudySet> studySets = studySetService.getAllStudySets(studyFolderId);
+  /**
+   * Used to get a specific StudySet by its ID
+   * 
+   * @param studySetId
+   * @return StudySet
+   */
+  @GetMapping("/{studySetId}")
+  public ResponseEntity<?> getStudySet(@PathVariable String studySetId) {
+    Optional<StudySet> studySet = studySetService.getStudySet(studySetId);
 
-    return ResponseEntity.ok().body(studySets);
+    return ResponseEntity.ok().body(studySet);
+  }
+
+  // @GetMapping("/{studyFolderId}/shares")
+  // public ResponseEntity<?> getSharedStudySets(@PathVariable String
+  // studyFolderId) {
+  // List<StudySet> studySets = studySetService.getAllStudySets(studyFolderId);
+
+  // return ResponseEntity.ok().body(studySets);
+  // }
+
+  // POST REQUESTS - Used to create data
+
+  /**
+   * Creates & returns the created StudySet
+   * 
+   * @param userDetails
+   * @param studySetDTO
+   * @return StudySet
+   */
+  @PostMapping
+  public ResponseEntity<?> createStudySet(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @RequestBody CreateStudySetDTO studySetDTO) {
+
+    StudySet studySet = new StudySet(
+        userDetails.getId(),
+        studySetDTO.studyFolderId(),
+        studySetDTO.title(),
+        studySetDTO.description());
+
+    StudySet createdStudySet = studySetService.saveStudySet(studySet);
+
+    return ResponseEntity.ok().body(createdStudySet);
   }
 
   // PUT REQUESTS - Used to change data
+
+  /**
+   * Updates the values of a StudySet and returns the updated StudySet
+   * 
+   * @param userDetails
+   * @param studySetId
+   * @param updateStudySetDTO
+   * @return StudySet
+   */
   @PutMapping("/{studySetId}")
   public ResponseEntity<?> updateStudySet(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -66,12 +111,14 @@ public class StudySetController {
         userDetails.getId(),
         updateStudySetDTO.studyFolderId(),
         updateStudySetDTO.title(),
-        updateStudySetDTO.description()
-    );
+        updateStudySetDTO.description());
 
     StudySet updatedStudySet = studySetService.saveStudySet(studySet);
 
     return ResponseEntity.ok().body(updatedStudySet);
   }
+
+  // DELETE NOT IMPLEMENTED THINK ABOUT THIS, SHOULD IT ALSO DELETE ALL
+  // FLASHCARDS?
 
 }

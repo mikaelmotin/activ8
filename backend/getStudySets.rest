@@ -11,8 +11,8 @@ content-type: application/json
 
 {
     "studyFolderId": "65635676cd44ec3fc70fbcdf",
-    "title": "test studySetTitle",
-    "description": "test studySetDesc."
+    "title": "test studySetTitle2 v",
+    "description": "test studySetDesc2. v"
 }
 ###
 

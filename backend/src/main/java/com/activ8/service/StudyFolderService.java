@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.activ8.model.Flashcard;
 import com.activ8.model.StudyFolder;
 import com.activ8.repository.StudyFolderRepository;
 
@@ -29,10 +30,24 @@ public class StudyFolderService {
     }
 
     @Transactional
-    public Optional<StudyFolder> getStudyFolder(String folderId) {
-        Optional<StudyFolder> studyFolder = studyFolderRepository.findById(folderId);
+    public Optional<StudyFolder> getStudyFolder(String studyFolderId) {
+        Optional<StudyFolder> studyFolder = studyFolderRepository.findById(studyFolderId);
 
         return studyFolder;
+    }
+
+    @Transactional
+    public Boolean deleteStudyFolder(String userID, String studyFolderId) {
+        StudyFolder studyFolderToDelete = studyFolderRepository.findById(studyFolderId).get();
+        
+        if(studyFolderToDelete.userId().equals(userID) 
+            && studyFolderRepository.existsById(studyFolderId)) {
+                studyFolderRepository.delete(studyFolderToDelete);
+                return true;
+        }
+        
+        
+        return false;
     }
 
 }
