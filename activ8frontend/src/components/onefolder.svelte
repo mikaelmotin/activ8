@@ -1,13 +1,66 @@
 <!-- Folder.svelte -->
 <script>
   export let imagePath = 'https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png';
-  export let folderName = 'Untitled Folder';
+  // export let folderName = 'Untitled Folder';
+
+  let responseData = null;
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/studyfolders", {
+            method: "GET",
+            headers: {
+                "Authorization": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMzYzOTg0LCJleHAiOjE3MDE0NTAzODR9.Bv1vOkv0gUjOJv3ZYQ177LkRYiZP92Rfks4qPeprebc",
+                'Content-Type': 'application/json',
+            }
+        });
+
+      if (response.ok) {
+        responseData = await response.json();
+        console.log('Data:', responseData);
+      } else {
+        console.error('Request failed with status:', response.status);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+    console.log(responseData[0].title)
+  };
+
+  
 </script>
 
-<div class=".folder">
+
+<button on:click={fetchData}>Get Folders</button>
+
+
+{#if responseData}
+<div class="w-screen grid grid-cols-4">
+  {#each responseData as folder (folder.id)}
+    <div class="h-32 w-screen gap-y-8">
+      <img class="w-32 h-fit" src={imagePath} alt="Folder Icon" />
+      <p>{folder.title}</p>
+    </div>
+  {/each}
+</div>
+{:else}
+  <p>Press the button.</p>
+{/if}
+
+
+
+
+
+
+
+
+
+
+<!-- Din är kod kvar här nere -->
+<!-- <div class=".folder">
   <img src={imagePath} alt="Folder Icon" />
   <p>{folderName}</p>
-</div>
+</div> -->
 
 <style>
   .folders {
