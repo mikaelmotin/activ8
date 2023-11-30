@@ -41,6 +41,9 @@
   <title>Home</title>
 </svelte:head>
 
+<h1>APAPAPAPAP</h1>
+<onefolder></onefolder>
+
 <main>
   <div class="div">
     <div class="div-2">
@@ -85,6 +88,67 @@
       <div class="div-17"></div>
     </div>
   </div>
+  <div class="folders">
+    <div class="div">
+      <div class="column">
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+      </div>
+      <div class="column-2">
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+      </div>
+      <div class="column-3">
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+      </div>
+      <div class="column-4">
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+        <onefolder
+          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
+          class="onefolder"
+        ></onefolder>
+      </div>
+    </div>
+  </div>
+
 
   <h1>Welcome to SvelteKit</h1>
 
@@ -369,4 +433,5 @@
         margin-top: 40px;
       }
     }
+
 </style>
