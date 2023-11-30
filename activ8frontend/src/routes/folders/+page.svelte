@@ -1,6 +1,7 @@
 <script>
   import { isPreviewing, RenderContent } from '@builder.io/sdk-svelte';
   import { BUILDER_PUBLIC_API_KEY } from '../../apiKey';
+  import onefolder from '../../components/onefolder.svelte';
 
   // Create an array of your custom components and their properties
 
@@ -9,7 +10,32 @@
 
   // we want to show unpublished content when in preview mode.
   const canShowContent = data.content || isPreviewing();
+
+
+      const CUSTOM_COMPONENTS = [
+        {
+          component: onefolder,
+          name: 'onefolder',
+          inputs: [
+            {
+              name: 'imagePath',
+              type: 'string',
+              defaultValue: 'https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png', // Provide a custom image path
+            },
+          ],
+        },
+      ];
+
+
+    export let content = undefined;
 </script>
+
+  <RenderContent
+    model="page"
+    {content}
+    apiKey={BUILDER_PUBLIC_API_KEY}
+    customComponents={CUSTOM_COMPONENTS}
+  />
 
 <svelte:head>
   <title>Home</title>
@@ -23,11 +49,7 @@
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/268b476b-1d5b-4233-bfae-4929d72a06c3?apiKey=d16dfbfed95d4aa8b4c0577dbaa29d8f&"
         class="img"
       />
-      <img
-        loading="lazy"
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ebef2882-e956-431f-8081-2d6662211cc7?apiKey=d16dfbfed95d4aa8b4c0577dbaa29d8f&"
-        class="img-2"
-      />
+
     </div>
     <div class="div-3">
       <div class="div-4">My Folders</div>
@@ -37,7 +59,7 @@
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/894b54a2-3b68-46fa-9be2-49c741172ad5?apiKey=d16dfbfed95d4aa8b4c0577dbaa29d8f&"
           class="img-3"
         />
-        <div class="div-6">Edit Folders</div>
+
       </div>
       <div class="div-7">
         <img
@@ -45,7 +67,7 @@
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/cd03c599-4bc6-414d-a53a-d8aa8f346850?apiKey=d16dfbfed95d4aa8b4c0577dbaa29d8f&"
           class="img-4"
         />
-        <div class="div-8">Add Folders</div>
+
       </div>
     </div>
     <div class="div-9">
@@ -118,7 +140,7 @@
       aspect-ratio: 1;
       object-fit: contain;
       object-position: center;
-      width: 70px;
+      width: 85px;
       overflow: hidden;
       max-width: 100%;
     }
@@ -153,7 +175,7 @@
       color: #000;
       flex-grow: 1;
       flex-basis: auto;
-      margin: -3px 0 -2px;
+      margin: -20px 0 -2px;
       font: 700 48px/50px Inconsolata, -apple-system, Roboto, Helvetica,
         sans-serif;
     }
@@ -227,7 +249,8 @@
       flex-direction: column;
       align-items: center;
       margin-left: -4px;
-      padding: 50px 57px 50px 58px;
+      padding: 160px 57px;
+      overflow-y: auto
     }
     @media (max-width: 991px) {
       .div-10 {
