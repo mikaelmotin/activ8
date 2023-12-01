@@ -6,12 +6,12 @@ public class MultiChoiceFlashcard extends Flashcard {
     
     private List<String> flashcardIds;
 
-    public MultiChoiceFlashcard(String studySetId, String term, String definition, List<Flashcard> flashcardIds) {
-        super(studySetId, term, definition);
+    public MultiChoiceFlashcard(String studySetId, String term, String definition, EDifficulty difficulty, List<Flashcard> flashcardIds) {
+        super(studySetId, term, definition, difficulty);
     }
     
-    public MultiChoiceFlashcard(String studySetId, String id, String term, String definition, List<Flashcard> flashcardIds) {
-      super(id, studySetId, term, definition);
+    public MultiChoiceFlashcard(String studySetId, String id, String term, String definition, EDifficulty difficulty, List<Flashcard> flashcardIds) {
+      super(id, studySetId, term, definition, difficulty);
     }
 
     public List<String> getFlashcardIds() {

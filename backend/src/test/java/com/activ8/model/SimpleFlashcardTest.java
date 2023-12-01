@@ -18,4 +18,9 @@ class SimpleFlashcardTest {
         String definition = testCard.getDefinition();
         assertEquals(definition, "A card for testing");
     }
+    @Test
+    void getDifficulty(){
+        EDifficulty difficulty = testCard.getDifficulty();
+        assertEquals(difficulty,EDifficulty.MEDIUM);
+    }
 }

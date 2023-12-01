@@ -5,36 +5,24 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
+    User testUser = new User("testUser","testuser@test.com" ,"password");
 
-    @Test
-    void getId() {
-    }
-
-    @Test
-    void setId() {
-    }
 
     @Test
     void getUsername() {
+        String username = testUser.getUsername();
+        assertEquals(username, "testUser");
     }
-
-    @Test
-    void setUsername() {
-    }
-
     @Test
     void getEmail() {
-    }
-
-    @Test
-    void setEmail() {
+        String Email = testUser.getEmail();
+        assertEquals(Email, "testuser@test.com");
     }
 
     @Test
     void getPassword() {
+        String password = testUser.getPassword();
+        assertEquals(password, "password");
     }
 
-    @Test
-    void setPassword() {
-    }
 }

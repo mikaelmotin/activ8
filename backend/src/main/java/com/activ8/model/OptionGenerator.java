@@ -2,6 +2,7 @@ package com.activ8.model;
 
 import com.activ8.service.FlashcardService;
 import com.activ8.repository.StudySetRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,9 @@ import java.util.Optional;
 import java.util.Random;
 
 public class OptionGenerator {
+    @Autowired
     private StudySetRepository studySetRepository;
+    @Autowired
     private FlashcardService flashcardService;
 
     public OptionGenerator(StudySetRepository studySetRepository, FlashcardService flashcardService) {
