@@ -10,9 +10,10 @@
       const response = await fetch("http://localhost:8080/api/studyfolders", {
             method: "GET",
             headers: {
-                "Authorization": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMzYzOTg0LCJleHAiOjE3MDE0NTAzODR9.Bv1vOkv0gUjOJv3ZYQ177LkRYiZP92Rfks4qPeprebc",
                 'Content-Type': 'application/json',
-            }
+            },
+
+            credentials: 'include',
         });
 
       if (response.ok) {
