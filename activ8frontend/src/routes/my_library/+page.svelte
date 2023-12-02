@@ -1,6 +1,6 @@
 <script>
     import Onefolder from "../../components/onefolder.svelte";
-
+    import RouteGuard from "../../components/RouteGuard.svelte";
 
     let imagePath = 'https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png';
 
@@ -27,11 +27,12 @@
     }
     console.log(responseData[0].title)
   };
+
 </script>
 
 
 
-
+<RouteGuard>
 <h1 class="pl-12 pt-12">Nu har man loggats in och man kan visa folders här</h1>
 <button class="mb-20" on:click={fetchData}>Press Me!</button>
 
@@ -43,5 +44,6 @@
 {/each}
 </div>
 {/if}
+</RouteGuard>
 
 

@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { enhance } from "$app/forms";
+    import { isAuthenticated } from "../../stores/authStore";
+  // import { isAuthenticated } from "../../stores/authStore"
 
   let form;
   let error = false;
@@ -9,7 +11,7 @@
   function handleInput() {
     error = false
   }
-  
+
   const handleSubmit = async (event) => {
     // Form data:
     const form = event.target;
@@ -33,7 +35,8 @@
 
       // Check if the response is okay
       if (response.ok) {
-        // Do something... idk, maybe redirect?
+        // Do something... idk, maybe redirect and save user state?
+        sessionStorage.setItem(isAuthenticated, true);
         goto("/my_library");
       } else {
         // Handle error cases
