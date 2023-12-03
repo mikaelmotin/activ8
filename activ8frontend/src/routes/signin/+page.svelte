@@ -36,6 +36,8 @@
       // Check if the response is okay
       if (response.ok) {
         // Do something... idk, maybe redirect and save user state?
+        isAuthenticated.set(true);
+        sessionStorage.setItem("isAuthenticated", "true")
         sessionStorage.setItem(isAuthenticated, true);
         goto("/my_library");
       } else {
