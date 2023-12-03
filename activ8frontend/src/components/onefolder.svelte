@@ -1,7 +1,7 @@
 <!-- Folder.svelte -->
 <script>
   export let imagePath = 'https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png';
-  // export let folderName = 'Untitled Folder';
+  export let folderName = 'Untitled Folder';
 
   let responseData = null;
 
