@@ -178,7 +178,7 @@
         padding: 8px;
     }
     .list-bg{
-        background-color: #cbc9c9;
+        background-color: #fff;
         width: auto;
         height: auto;
         overflow: auto; /* Enable scrolling */
