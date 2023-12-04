@@ -1,7 +1,7 @@
 <script>
   import { isPreviewing, RenderContent } from '@builder.io/sdk-svelte';
   import { BUILDER_PUBLIC_API_KEY } from '../../apiKey';
-  import onefolder from '../../components/onefolder.svelte';
+  import Onefolder from "../../components/onefolder.svelte"
 
   // Create an array of your custom components and their properties
 
@@ -11,38 +11,16 @@
   // we want to show unpublished content when in preview mode.
   const canShowContent = data.content || isPreviewing();
 
-
-      const CUSTOM_COMPONENTS = [
-        {
-          component: onefolder,
-          name: 'onefolder',
-          inputs: [
-            {
-              name: 'imagePath',
-              type: 'string',
-              defaultValue: 'https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png', // Provide a custom image path
-            },
-          ],
-        },
-      ];
-
-
-    export let content = undefined;
 </script>
 
-  <RenderContent
-    model="page"
-    {content}
-    apiKey={BUILDER_PUBLIC_API_KEY}
-    customComponents={CUSTOM_COMPONENTS}
-  />
 
 <svelte:head>
   <title>Home</title>
 </svelte:head>
 
-<h1>APAPAPAPAP</h1>
-<onefolder></onefolder>
+
+
+
 
 <main>
   <div class="div">
@@ -77,6 +55,7 @@
       <div class="div-10">
         <div class="div-11">
           <div class="div-12">
+            <Onefolder> </Onefolder>
             <div class="column"></div>
             <div class="column-2"></div>
             <div class="column-3"></div>
@@ -91,64 +70,11 @@
   <div class="folders">
     <div class="div">
       <div class="column">
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-      </div>
-      <div class="column-2">
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-      </div>
-      <div class="column-3">
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-      </div>
-      <div class="column-4">
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
-        <onefolder
-          imagePath="https://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Folder-icon.png"
-          class="onefolder"
-        ></onefolder>
       </div>
     </div>
   </div>
 
+<flashcard></flashcard>
 
   <h1>Welcome to SvelteKit</h1>
 
