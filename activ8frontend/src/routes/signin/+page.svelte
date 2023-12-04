@@ -2,14 +2,16 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { enhance } from "$app/forms";
+  import { isAuthenticated } from "../../stores/authStore";
+  // import { isAuthenticated } from "../../stores/authStore"
 
   let form;
-  let error = false;
+  let inputError = false;
 
   function handleInput() {
-    error = false
+    inputError = false;
   }
-  
+
   const handleSubmit = async (event) => {
     // Form data:
     const form = event.target;
@@ -33,12 +35,15 @@
 
       // Check if the response is okay
       if (response.ok) {
-        // Do something... idk, maybe redirect?
+        // Do something... idk, maybe redirect and save user state?
+        isAuthenticated.set(true);
+        sessionStorage.setItem("isAuthenticated", "true")
+        sessionStorage.setItem(isAuthenticated, true);
         goto("/my_library");
       } else {
         // Handle error cases
         console.error("Sign in failed:", response.status, response.statusText);
-        error = true;
+        inputError = true;
       }
     } catch (error) {
       // Handle fetch error (e.g., network issue)
@@ -92,7 +97,7 @@
         />
       </div>
 
-      {#if error}
+      {#if inputError}
         <p class="mt-4 text-red-600">Wrong username or password</p>
       {/if}
       <button
