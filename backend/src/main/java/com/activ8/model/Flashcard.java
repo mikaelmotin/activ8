@@ -13,13 +13,17 @@ public abstract class Flashcard {
     protected String definition;
     protected EDifficulty difficulty;
 
-    public Flashcard(String studySetId, String term, String definition, EDifficulty difficulty) {
+    public Flashcard() {
+
+    }
+
+    public Flashcard(String studySetId, String term, String definition) {
         this.studySetId = studySetId;
         this.term = term;
         this.definition = definition;
         this.difficulty = difficulty;
     }
-    public Flashcard(String id, String studySetId, String term, String definition,EDifficulty difficulty) {
+    public Flashcard(String id, String studySetId, String term, String definition) {
         this.id = id;
         this.studySetId = studySetId;
         this.term = term;
@@ -28,6 +32,9 @@ public abstract class Flashcard {
     }
     public String getId() {
         return id;
+    }
+    public String getStudySetId() {
+        return studySetId;
     }
     public String getTerm() {
         return term;
