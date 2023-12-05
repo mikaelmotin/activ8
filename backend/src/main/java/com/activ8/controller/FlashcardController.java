@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.activ8.model.Flashcard;
 import com.activ8.model.SimpleFlashcard;
-import com.activ8.service.FlashcardService;
+import com.activ8.service.*;
 import com.activ8.service.StudySetService;
 import com.activ8.service.UserDetailsImpl;
 import com.activ8.dto.CreateFlashcardDTO;
@@ -75,8 +75,9 @@ public class FlashcardController {
         flashcardId, 
         updateFlashcardDTO.studySetId(), 
         updateFlashcardDTO.term(), 
-        updateFlashcardDTO.definition()
-    );
+        updateFlashcardDTO.definition(),
+            updateFlashcardDTO.difficulty()
+        );
 
     Flashcard updatedFlashcard = flashcardService.saveFlashcard(flashcard);
    

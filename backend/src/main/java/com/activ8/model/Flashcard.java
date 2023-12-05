@@ -17,13 +17,13 @@ public abstract class Flashcard {
 
     }
 
-    public Flashcard(String studySetId, String term, String definition) {
+    public Flashcard(String studySetId, String term, String definition,EDifficulty difficulty) {
         this.studySetId = studySetId;
         this.term = term;
         this.definition = definition;
         this.difficulty = difficulty;
     }
-    public Flashcard(String id, String studySetId, String term, String definition) {
+    public Flashcard(String id, String studySetId, String term, String definition, EDifficulty difficulty) {
         this.id = id;
         this.studySetId = studySetId;
         this.term = term;
