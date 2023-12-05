@@ -3,7 +3,6 @@ package com.activ8.service;
 import com.activ8.dto.FlashcardCheckDTO;
 import com.activ8.model.Flashcard;
 import com.activ8.repository.FlashcardRepository;
-import com.activ8.repository.StudySetRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FlashcardService {
+    public FlashcardService() {
 
-    @Autowired 
+    }
+
+    @Autowired
     FlashcardRepository flashcardRepository;
 
     @Autowired

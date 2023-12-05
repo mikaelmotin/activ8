@@ -1,58 +1,62 @@
+/*
 package com.activ8.model;
 
-import com.activ8.service.FlashcardService;
-import com.activ8.repository.StudySetRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
-public class OptionGenerator {
-    @Autowired
+import com.activ8.model.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.activ8.repository.StudySetRepository;
+import com.activ8.service.FlashcardService;
+
+public class OptionGeneratorTest {
+
+    @Mock
     private StudySetRepository studySetRepository;
-    @Autowired
+
+    @Mock
     private FlashcardService flashcardService;
 
-    public OptionGenerator(StudySetRepository studySetRepository, FlashcardService flashcardService) {
-        this.studySetRepository = studySetRepository;
-        this.flashcardService = flashcardService;
+    @InjectMocks
+    private OptionGenerator optionGenerator;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+        optionGenerator = new OptionGenerator(studySetRepository, flashcardService);
     }
 
-    public List<String> generateOptions(String studySetId, String currentFlashcardTerm) {
-        Optional<StudySet> optionalStudySet = studySetRepository.findById(studySetId);
+    @Test
+    public void testGenerateOptions() {
+        // Mock data for testing
+        String studySetId = "studySetId";
+        String currentFlashcardTerm = "currentTerm";
 
-        if (optionalStudySet.isPresent()) {
-            StudySet studySet = optionalStudySet.get();
-            List<String> options = new ArrayList<>();
-            List<Flashcard> flashcards = flashcardService.getAllFlashcardsByStudySetId(studySetId);
+        StudySet studySet = new StudySet(studySetId,"100","101","test","A test set");
 
-            if (flashcards.size() >= 3) {
-                Random random = new Random();
+        Flashcard flashcard1 = new SimpleFlashcard("studySetId", "term1", "definition1", EDifficulty.MEDIUM);
+        Flashcard flashcard2 = new SimpleFlashcard("studySetId", "term2", "definition2", EDifficulty.MEDIUM);
+        Flashcard flashcard3 = new SimpleFlashcard("studySetId", "term3", "definition3", EDifficulty.MEDIUM);
 
-                int index1, index2, index3;
-                do {
-                    index1 = random.nextInt(flashcards.size());
-                    index2 = random.nextInt(flashcards.size());
-                    index3 = random.nextInt(flashcards.size());
-                } while (index1 == index2 || index1 == index3 || index2 == index3
-                        || flashcards.get(index1).getTerm().equals(currentFlashcardTerm)
-                        || flashcards.get(index2).getTerm().equals(currentFlashcardTerm)
-                        || flashcards.get(index3).getTerm().equals(currentFlashcardTerm));
+        List<Flashcard> mockFlashcards = Arrays.asList(flashcard1, flashcard2, flashcard3);
 
-                options.add(flashcards.get(index1).getTerm());
-                options.add(flashcards.get(index2).getTerm());
-                options.add(flashcards.get(index3).getTerm());
+        when(studySetRepository.findById(studySetId)).thenReturn(Optional.of(studySet));
+        when(flashcardService.getAllFlashcardsByStudySetId(studySetId)).thenReturn(mockFlashcards);
 
-                return options;
-            } else {
-                System.out.println("Study Set doesn't have enough flashcards.");
-            }
-        } else {
-            System.out.println("Study Set not found.");
-        }
+        List<String> options = optionGenerator.generateOptions(studySetId, currentFlashcardTerm);
 
-        return null;
+        assertNotNull(options);
+        assertEquals(3, options.size());
+        assertFalse(options.contains(currentFlashcardTerm)); // Ensure currentTerm is not in options
     }
-}
+} 
+*/
