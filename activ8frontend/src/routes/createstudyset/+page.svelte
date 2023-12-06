@@ -1,20 +1,49 @@
 <script>
-    import Subsetflashcard from '../../components/subsetflashcard.svelte';
-    import { isPreviewing, RenderContent } from '@builder.io/sdk-svelte';
-    import { BUILDER_PUBLIC_API_KEY } from '../../apiKey';
-  
-    let flashcards = [
-      { term: 'Term 1', definition: 'Definition 1' },
-      { term: 'Term 2', definition: 'Definition 2' },
-      { term: 'Term 2', definition: 'Definition 2' }
-      // Add more flashcards as needed
-    ];
-  
-    function addCard() {
-      // Add logic to add a new flashcard to the array
-      const newFlashcard = { term: 'New Term', definition: 'New Definition' };
-      flashcards = [...flashcards, newFlashcard];
+  import Subsetflashcard from '../../components/subsetflashcard.svelte';
+  import { onMount } from "svelte";
+
+  let newCard = { term: "", definition: "" };
+  let flashcards = []; 
+
+
+  const fetchData = async () => {
+    // Fetch data from the database if needed
+    
+  }
+
+  const addCard = () =>{
+    console.log("newCard", newCard)
+    const flashcard = { term: newCard.term, definition: newCard.definition };
+
+      flashcards = [...flashcards, flashcard];
+
+      // Clear the input fields
+      newCard = { term: "", definition: "" };
+      console.log(flashcard)
+
+      saveToDatabase(flashcard);
+
+  }
+
+
+
+  const saveToDatabase = async (flashcard) => {
+    console.log('Saving to database:', flashcard);
+    const response = await fetch('http://localhost:8080/api/flashcards/{studySetId}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(flashcard),
+      credentials: "include"
+    });
+
+    if (response.ok) {
+      console.log('Flashcard saved successfully!');
+    } else {
+      console.error('Failed to save flashcard to the database');
     }
+  }
   </script>
   
   <div class="main-container">
@@ -34,9 +63,8 @@
       </div>
 
       <div class = "list-bg">
-        {#each flashcards as flashcard (flashcard.term)}
-        <Subsetflashcard {flashcard} />
-      {/each}
+        
+        <Subsetflashcard bind:newCard={newCard}/>
   
       </div>
 
