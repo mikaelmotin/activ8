@@ -8,6 +8,7 @@
 
   const fetchData = async () => {
     // Fetch data from the database if needed
+    
   }
 
   const addCard = () =>{
@@ -18,19 +19,23 @@
 
       // Clear the input fields
       newCard = { term: "", definition: "" };
-    
+      console.log(flashcard)
 
+      saveToDatabase(flashcard);
 
   }
 
+
+
   const saveToDatabase = async (flashcard) => {
     console.log('Saving to database:', flashcard);
-    const response = await fetch('ändra', {
+    const response = await fetch('http://localhost:8080/api/flashcards/{studySetId}', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(flashcard),
+      credentials: "include"
     });
 
     if (response.ok) {
