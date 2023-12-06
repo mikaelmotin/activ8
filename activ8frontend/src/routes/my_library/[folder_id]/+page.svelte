@@ -18,8 +18,8 @@
               </div>
                   
               <img class="h-14 ml-auto mr-12" src="/user.png" alt="user profile" />
-              <button class="border border-gray-500 rounded" style="width: 100px; height: 40px; position: absolute; right: 180px; top: 25px; margin-right: 10px;">Edit folders</button>
-              <button class="border border-gray-500 rounded" style="width: 100px; height: 40px; position: absolute; right: 300px; top: 25px;">Add folders</button>
+              <button class="border border-gray-500 rounded" style="width: 100px; height: 40px; position: absolute; right: 180px; top: 25px; margin-right: 10px;">Edit study set</button>
+              <button class="border border-gray-500 rounded" style="width: 100px; height: 40px; position: absolute; right: 300px; top: 25px;">Add study set</button>
         
         </nav>
         <div class="flex mt-4 mx-12 bg-white w-[80%] h-full justify-center">
@@ -42,7 +42,7 @@
                                 <div class="flex justify-center w-full">
                                 <div class="grid mt-4 grid-cols-2 w-full h-full">
                                     {#each data.studysets as studyset (studyset.id)}
-                                        <div
+                                        <a href="{window.location.href}/{studyset.id}"
                                             class="flex flex-col bg-[#00D5AF] w-96 h-32 rounded-xl hover:scale-105 hover:shadow-xl duration-300 cursor-pointer"
                                         >
                                             <p class="truncate mt-4 ml-4 text-white text-xl font-semibold">
@@ -52,7 +52,7 @@
                                                 {studyset.description}
                                             </p>
                                             <p class="self-end mt-2 mr-4 font-thin text-white">12 cards</p>
-                                        </div>
+                                        </a>
                                     {/each}
                                 </div>
                                 </div>
