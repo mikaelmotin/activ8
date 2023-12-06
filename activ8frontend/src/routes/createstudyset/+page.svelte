@@ -2,57 +2,22 @@
   import Subsetflashcard from '../../components/subsetflashcard.svelte';
   import { onMount } from "svelte";
 
-  let flashcards = [{}];
+  let newCard = "";
+  let flashcards = []; 
 
-  let newCard = { term: '', definition: '' };
-
-  function updateCard(index, updatedCard) {
-        flashcards[index] = updatedCard;
-    }
-
-  onMount(() => {
-    fetchData();
-    addCard();
-  });
 
   const fetchData = async () => {
     // Fetch data from the database if needed
   }
-  /*
-  const addCard = () => {
-    // Check if both term and definition are provided before adding the card
-    if (newCard.term.trim() !== '' && newCard.definition.trim() !== '') {
-      // Remove the placeholder card if it's still present
-      if (flashcards.length === 1 && !flashcards[0].term) {
-        flashcards = [];
-      }
 
-      // Add logic to add a new flashcard to the array
-      flashcards = [flashcards, newCard];
-
-      // Call the function to save data to the database
-      saveToDatabase(newCard);
-
-      // Reset newCard for the next addition
-      newCard = { term: '', definition: '' };
-    } else {
-      alert("Please provide both term and definition");
-    }
-    console.log("hej", newCard)
-  console.log("hejdå", flashcards)  
-
-  }
-
-  */
-
-  const addCard = () => {
-    const newCard = {
-      
-    }
+  const addCard = () =>{
+    console.log("newCard", newCard)
+    console.log("newCard.term")
+    console.log("newCard.definition")
+    // add to flashcards
 
 
   }
-  
 
   const saveToDatabase = async (flashcard) => {
     console.log('Saving to database:', flashcard);
@@ -89,9 +54,8 @@
       </div>
 
       <div class = "list-bg">
-        {#each flashcards as flashcard, index}
-        <Subsetflashcard newCard={newCard} index={index} on:updateCard={updateCard}/>
-      {/each}
+        
+        <Subsetflashcard bind:newCard={newCard}/>
   
       </div>
 
