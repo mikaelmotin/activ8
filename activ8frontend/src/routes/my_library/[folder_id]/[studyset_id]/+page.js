@@ -28,6 +28,6 @@ export const load = ({ fetch, params }) => {
 
 
     return {
-        studysets: fetchFlashcards(params)
+        flashcards: fetchFlashcards(params)
     };
 }
