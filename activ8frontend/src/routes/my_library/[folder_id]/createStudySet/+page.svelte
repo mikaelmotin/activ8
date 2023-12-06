@@ -1,14 +1,17 @@
 <script>
     import { onMount } from "svelte";
-
-    //folder_id:
-    export let data;
-
     import RouteGuard from "../../../../components/RouteGuard.svelte";
     import Subsetflashcard from "../../../../components/subsetflashcard.svelte";
     import FlashcardComponent from "../../../../components/FlashcardComponent.svelte";
 
+
+    //folder_id:
+    export let data;
     console.log(data);
+
+    const fetchData = async () => {
+        // Fetch data from the database if needed
+    };
 
     // Input values 
     let title = "";
@@ -20,47 +23,21 @@
         {term: "", definition: ""}
     ]
 
-    function addFlashcard() {
-        flashcards = [...flashcards, {term: "", definition: ""}];
-        console.log(flashcards)
-    }
 
+  // Update the removeFlashcard function
+  function removeFlashcard(index) {
+    flashcards = flashcards.filter((_, i) => i !== index);
+    flashcards = [...flashcards]; // Ensure reactivity by creating a new array reference
+  }
 
+  // Update the addFlashcard function
+  function addFlashcard() {
+    flashcards = [...flashcards, { term: "", definition: "" }];
+    flashcards = [...flashcards]; // Ensure reactivity by creating a new array reference
+    console.log(flashcards)
+  }
+ 
 
-
-
-
-
-
-    // let newCard = { term: "", definition: "" };
-    // let flashcards_list = [];
-
-   
-    onMount(() => {
-        // Start with an empty flashcard in the list:
-        // flashcards_list.push(newCard);
-    })
-
-    const fetchData = async () => {
-        // Fetch data from the database if needed
-    };
-
-    const addCard = () => {
-        
-        // flashcards_list.push(newCard);
-        
-        // console.log("newCard", newFlashcard);
-
-        // const flashcard = {
-        //     term: newFlashcard.term,
-        //     definition: newFlashcard.definition,
-        // };
-
-        // flashcards = [...flashcards, flashcard];
-
-        // // Clear the input fields
-        // console.log(flashcard);
-    };
 
     const saveCards = () => {
         flashcards_list.forEach(async (flashcard) => {
@@ -90,7 +67,7 @@
 </script>
 
 <RouteGuard>
-    <div class="flex flex-col w-screen h-screen bg-[#ECF0F5] items-center">
+    <div class="flex flex-col w-screen h-[100%] bg-[#ECF0F5] items-center">
         <nav class="flex w-full mt-4">
             <div style="width: 100%; height: 100%; position: relative">
                 <div
@@ -131,8 +108,8 @@
                 <textarea bind:value={description} name="definition" rows="3" class="border-b-4 border-black w-full outline-none font-thin resize-none"  type="text"></textarea>
             </div>
             <div class="mt-20 mx-2">
-                {#each flashcards as flashcard }
-                    <FlashcardComponent {flashcard} />                
+                {#each flashcards as flashcard, index}
+                    <FlashcardComponent {flashcard} {removeFlashcard} {index}/>
                 {/each}
 
             </div>
