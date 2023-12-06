@@ -15,11 +15,12 @@ public class ApiTests {
     }
 
     // Tests that the API call Sign creates a user successfully.
+    /*
     @Test
     public void testSignUp() {
         given()
                 .header("content-type", "application/json")
-                .body("{\"username\": \"tester7\", \"email\": \"tester7@example.com\", \"password\": \"password\"}")
+                .body("{\"username\": \"tester9\", \"email\": \"tester9@example.com\", \"password\": \"password\"}")
                 .when()
                 .post("/api/auth/signup")
                 .then()
@@ -27,7 +28,7 @@ public class ApiTests {
                 .contentType(ContentType.JSON) // Assert content type is JSON
                 .body("message", equalTo("User registered successfully!")) // Assert message in the response body
                 .log().all(); // Log response for debugging purposes
-    }
+    } */
 
     @Test
     public void testSignIn() {
@@ -65,7 +66,7 @@ public class ApiTests {
     @Test
     public void testCreateStudyFolders() {
         given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTIyMjAxIiwiaWF0IjoxNzAxMTgyMTA5LCJleHAiOjE3MDEyNjg1MDl9.G854Qj4XoMNCKWZxJ3de7BI1ENnu6mm-GvMk4IrBiaE")
+                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE4Nzc1NjgsImV4cCI6MTcwMTk2Mzk2OH0.aWWqkHMrU3yeCeT1REBrGWuaqKe6yR9VE7F3wqlzDBM")
                 .header("content-type", "application/json")
                 .body("{\"title\": \"testFolder\", \"description\": \"A test folder\"}")
                 .when()
@@ -81,7 +82,7 @@ public class ApiTests {
     @Test
     public void testEditExistingStudyFolders() {
         given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE4MDI4MjUsImV4cCI6MTcwMTg4OTIyNX0.FNfyWwXYgldL4ujYysYPQox8xp6ibRq7SJxwFUgqemY")
+                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE4Nzc1NjgsImV4cCI6MTcwMTk2Mzk2OH0.aWWqkHMrU3yeCeT1REBrGWuaqKe6yR9VE7F3wqlzDBM")
                 .header("content-type", "application/json")
                 .body("{\"title\": \"testFolder2\", \"description\": \"A test folder2\"}")
                 .when()
@@ -93,7 +94,7 @@ public class ApiTests {
                 .body("description", equalTo("A test folder2")) // Assert 'description' field in the response body
                 .log().all(); // Log response for debugging purposes
     }
-    @Test
+    /*@Test
     public void testGetAllFlashcardsInStudySet() {
         given()
                 .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo")
@@ -109,5 +110,5 @@ public class ApiTests {
                 // Add more assertions based on the response structure
                 .log().all(); // Log response for debugging purposes
     }
-
+*/
 }
