@@ -1,18 +1,19 @@
 package com.activ8.controller;
-import com.activ8.service.*;
 
 import com.activ8.model.Flashcard;
-
+import com.activ8.service.FlashcardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@RequestMapping("/study")
-public class StudySessionController{
-    private FlashcardService flashcardService;
+@Controller
+@RequestMapping("/api/studysession")
+public class StudySessionController {
+    private final FlashcardService flashcardService;
 
     @Autowired
     public StudySessionController(FlashcardService flashcardService) {
@@ -25,5 +26,4 @@ public class StudySessionController{
         model.addAttribute("flashcards", flashcards);
         return "study-session"; // Return view for study session
     }
-
 }
