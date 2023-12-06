@@ -2,7 +2,7 @@
   import Subsetflashcard from '../../components/subsetflashcard.svelte';
   import { onMount } from "svelte";
 
-  let newCard = "";
+  let newCard = { term: "", definition: "" };
   let flashcards = []; 
 
 
@@ -12,9 +12,13 @@
 
   const addCard = () =>{
     console.log("newCard", newCard)
-    console.log("newCard.term")
-    console.log("newCard.definition")
-    // add to flashcards
+    const flashcard = { term: newCard.term, definition: newCard.definition };
+
+      flashcards = [...flashcards, flashcard];
+
+      // Clear the input fields
+      newCard = { term: "", definition: "" };
+    
 
 
   }

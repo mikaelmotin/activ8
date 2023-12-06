@@ -2,7 +2,7 @@
 import { createEventDispatcher } from 'svelte';
 const dispatch = createEventDispatcher();
 
-export let newCard = ""; 
+export let newCard = {term:"", definition:""}; 
    
    
 
@@ -18,14 +18,14 @@ export let newCard = "";
         <div class="div-6">
             <div class="div-7">
                 <input type="text" 
-                bind:value={newCard} placeholder="Enter a term">
+                bind:value={newCard.term} placeholder="Enter a term">
             </div>
             <div class="div-8">Term</div>
         </div>
         <div class="div-9">
             <div class="div-10">
-  <!--         <input type="text" 
-                value={newCard.definition} on:input={updateDefinition} placeholder="Enter the definition">-->
+         <input type="text" 
+                bind:value={newCard.definition} placeholder="Enter the definition">
             </div>
             <div class="div-11"></div>
             <div class="div-12">Definition</div>
