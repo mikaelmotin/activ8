@@ -1,3 +1,4 @@
+/*
 package com.activ8.model;
 
 import org.springframework.data.annotation.Id;
@@ -18,4 +19,4 @@ public class Difficulty {
     }
 
     // Getters and setters for id and level
-}
+}*/
