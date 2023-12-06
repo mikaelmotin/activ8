@@ -3,7 +3,7 @@ import { onMount } from "svelte";
 import RouteGuard from "../../components/RouteGuard.svelte";
 
 
-let responseData = null;
+export let responseData = null;
 let editMode = false;
 
 onMount(() => {
