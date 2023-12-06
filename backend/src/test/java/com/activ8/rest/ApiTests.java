@@ -45,6 +45,7 @@ public class ApiTests {
         String cookieValue = response.getHeader("Set-Cookie");
         System.out.println("Set-Cookie value: " + cookieValue);
     }
+
     @Test
     public void testGetAllStudyFolders() {
         given()
@@ -90,6 +91,22 @@ public class ApiTests {
                 .contentType(ContentType.JSON) // Assert content type is JSON
                 .body("title", equalTo("testFolder2")) // Assert 'title' field in the response body
                 .body("description", equalTo("A test folder2")) // Assert 'description' field in the response body
+                .log().all(); // Log response for debugging purposes
+    }
+    @Test
+    public void testGetAllFlashcardsInStudySet() {
+        given()
+                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo")
+                .header("content-type", "application/json")
+                .when()
+                .get("/api/flashcards/all/6567877386dcd351d6f3515e")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                // Add assertions as needed for the response body
+                .body("property", equalTo("expectedValue"))
+                .body("listProperty", hasSize(3))
+                // Add more assertions based on the response structure
                 .log().all(); // Log response for debugging purposes
     }
 
