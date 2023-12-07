@@ -1,7 +1,8 @@
 <script>
   import { isPreviewing, RenderContent } from '@builder.io/sdk-svelte';
   import { BUILDER_PUBLIC_API_KEY } from '../../apiKey';
-  import Onefolder from "../../components/onefolder.svelte"
+  import onefolder from "../../components/Onefolder.svelte";
+  import Thefolder from '../../components/Thefolder.svelte';
 
   // Create an array of your custom components and their properties
 
@@ -55,7 +56,7 @@
       <div class="div-10">
         <div class="div-11">
           <div class="div-12">
-            <Onefolder> </Onefolder>
+            <Thefolder> </Thefolder>
             <div class="column"></div>
             <div class="column-2"></div>
             <div class="column-3"></div>
@@ -81,11 +82,7 @@
   <div>Below is your Builder Content:</div>
   {#if canShowContent}
   <div>page Title: {data.content?.data?.title || 'Unpublished'}</div>
-  <RenderContent
-    model="page"
-    content="{data.content}"
-    apiKey="{BUILDER_PUBLIC_API_KEY}"
-  />
+  
   {:else} Content Not Found {/if}
 </main>
 

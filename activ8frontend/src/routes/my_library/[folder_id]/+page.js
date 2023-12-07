@@ -28,6 +28,7 @@ export const load = ({ fetch, params }) => {
 
 
     return {
-        studysets: fetchStudySets(params)
+        studysets: fetchStudySets(params),
+        folder_id: folder_id
     };
 }
