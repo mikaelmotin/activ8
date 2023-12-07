@@ -103,13 +103,13 @@ public class StudyFolderController {
    */
   @DeleteMapping("/{studyFolderId}")
   public ResponseEntity<?> deleteStudyFolder(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String studyFolderId) {
-    throw new UnsupportedOperationException();
     
-    // if(studyFolderService.deleteStudyFolder(userDetails.getId(), studyFolderId)) {
-    //   return ResponseEntity.ok().body("StudyFolder " + studyFolderId + " successfully deleted");  
-    // }
-    // // IF I DELETE A STUDYFOLDER, SHOULD I DELETE ALL STUDY SETS IN THAT FOLDER?
+     if(studyFolderService.deleteStudyFolder(userDetails.getId(), studyFolderId)) {
+       return ResponseEntity.ok().body("StudyFolder " + studyFolderId + " successfully deleted");
+     }
+     // IF I DELETE A STUDYFOLDER, SHOULD I DELETE ALL STUDY SETS IN THAT FOLDER?
     
-    // return ResponseEntity.ok().body("Error while deleting: " + studyFolderId);
+     return ResponseEntity.ok().body("Error while deleting: " + studyFolderId);
   }
+
 }

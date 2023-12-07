@@ -12,4 +12,6 @@ public interface StudyFolderRepository extends MongoRepository<StudyFolder, Stri
   
   Optional<StudyFolder> findById(String id);
 
+  void deleteById(String id);
+
 }

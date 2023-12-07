@@ -49,7 +49,7 @@ public class ApiTests {
     @Test
     public void testGetAllStudyFolders() {
         given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE4MDI4MjUsImV4cCI6MTcwMTg4OTIyNX0.FNfyWwXYgldL4ujYysYPQox8xp6ibRq7SJxwFUgqemY")
+                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE5NTAzNDAsImV4cCI6MTcwMjAzNjc0MH0.Tc8_r_I6ZnxSOFIMQuc-d565agsY_-50A54O6p5CMow")
                 .header("content-type", "application/json")
                 .when()
                 .get("/api/studyfolders")
@@ -92,6 +92,17 @@ public class ApiTests {
                 .body("title", equalTo("testFolder2")) // Assert 'title' field in the response body
                 .body("description", equalTo("A test folder2")) // Assert 'description' field in the response body
                 .log().all(); // Log response for debugging purposes
+    }
+    @Test
+    public void testDeleteStudyFolder() {
+        given()
+                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE5NTAzNDAsImV4cCI6MTcwMjAzNjc0MH0.Tc8_r_I6ZnxSOFIMQuc-d565agsY_-50A54O6p5CMow")
+                .header("Content-Type", "application/json")
+                .when()
+                .delete("/api/studyfolders/{folderId}", "65635676cd44ec3fc70fbcdf")
+                .then()
+                .statusCode(200)
+                .log().all();
     }
     @Test
     public void testGetAllFlashcardsInStudySet() {
