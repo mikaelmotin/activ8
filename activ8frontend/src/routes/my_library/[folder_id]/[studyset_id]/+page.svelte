@@ -18,10 +18,9 @@
         errormsg = false;
     }
 
-// Fetch study set data for editing
-const fetchStudySetData = async () => {
-};
-    
+    const fetchData = async () => {
+        // Fetch data from the database if needed
+    };
 
     // Input values
     let title = "";
@@ -41,107 +40,56 @@ const fetchStudySetData = async () => {
         flashcards = [...flashcards, { term: "", definition: "" }];
         flashcards = [...flashcards]; // Ensure reactivity by creating a new array reference
         console.log(flashcards);
-        console.log("addFlashcards")
     }
 
     const createStudySet = async () => {
-    console.log("Creating study set...");
+        if (
+            !title.trim() ||
+            !description.trim() ||
+            flashcards.some(
+                (card) => !card.term.trim() || !card.definition.trim(),
+            ) ||
+            flashcards.length <= 0
+        ) {
+            displayErrorMsg();
+            // Check if any of the input values are empty
+            console.error(
+                "Please fill in all the fields for study set and flashcards.",
+            );
+            return;
+        }
 
-    async function fetchStudySetData() {
-        // Make API call to fetch study set data based on studyset_id
-        // Update title and description with fetched data
-        // Optionally, fetch existing flashcards and update flashcards array
         try {
-        const response = await fetch(`http://localhost:8080/api/studysets`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        });
-
-        if (response.ok) {
-            const studySetData = await response.json();
-
-            // Update title and description with fetched data
-            title = studySetData.title;
-            description = studySetData.description;
-
-            // Optionally, fetch existing flashcards and update flashcards array
-            // Implement this part based on your API endpoint for fetching flashcards
-            // For example:
-            const flashcardsResponse = await fetch(`http://localhost:8080/api/flashcards`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await fetch(
+                "http://localhost:8080/api/studysets",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        studyFolderId: data.folder_id,
+                        title: title,
+                        description: description,
+                    }),
                 },
-                credentials: "include",
-            });
+            );
 
-            if (flashcardsResponse.ok) {
-                const flashcardsData = await flashcardsResponse.json();
-                flashcards = flashcardsData; // Update flashcards array with fetched data
+            if (response.ok) {
+                const newStudySet = await response.json();
+                createFlashcards(newStudySet.id);
+                goto("./" + newStudySet.id)
+            } else {
+                console.error("apapapapa Request failed with status:", response.status);
+
             }
-        } else {
-            console.error("Failed to fetch study set data:", response.status);
+        } catch (error) {
+            console.error("Network error:", error);
         }
-    } catch (error) {
-        console.error("Network error:", error);
-    }
-    }
-
-    onMount(() => {
-        fetchStudySetData();
-    });
-
-
-    // Validate input
-    if (!title.trim() || !description.trim() || flashcards.length === 0) {
-        console.error("Validation failed:", title, description, flashcards);
-        displayErrorMsg();
-        return;
-    }
-
-    // Validate flashcards
-    if (flashcards.some((card) => !card.term.trim() || !card.definition.trim())) {
-        console.error("Flashcard validation failed:", flashcards);
-        displayErrorMsg();
-        return;
-    }
-
-    try {
-        const response = await fetch("http://localhost:8080/api/studysets", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                studyFolderId: data.folder_id,
-                title: title,
-                description: description,
-            }),
-        });
-
-        if (response.ok) {
-            const newStudySet = await response.json();
-            console.log("Study set created:", newStudySet);
-            
-            // Assuming `createFlashcards` is a function that creates flashcards
-            createFlashcards(newStudySet.id);
-
-            // Assuming `goto` is a function to navigate to a different page
-            goto("./" + newStudySet.id);
-        } else {
-            console.error("Request failed with status:", response.status);
-        }
-    } catch (error) {
-        console.error("Network error:", error);
-    }
-};
+    };
 
     const createFlashcards = async (studySetId) => {
-        console.log("Creating flashcard...")
         flashcards.forEach(async (flashcard) => {
             let createdFlashcard = await fetch(
                 "http://localhost:8080/api/flashcards/" + studySetId,
@@ -194,12 +142,13 @@ const fetchStudySetData = async () => {
         <div class="flex flex-col mt-4 mx-12 bg-white w-[80%] h-full">
             <div class="flex justify-between w-full">
                 <p class="mt-4 ml-4 text-4xl font-bold">
-                    Create a New Study Set
+                    Edit Study Set
                 </p>
+                <!-- Edit button below, should start study session. Needs one test and one-->
                 <button
                     on:click={createStudySet}
                     class="mt-4 mr-4 bg-blue-500 rounded-full p-2 font-semibold text-white hover:scale-110 duration-300"
-                    >Create Study Set</button
+                    >Start Session</button
                 >
             </div>
             <div class="flex flex-col mt-12 mx-12 self-center">
@@ -212,12 +161,12 @@ const fetchStudySetData = async () => {
                 <p class="text-2xl">Title</p>
 
                 <input
-                on:input={removeErrorMsg}
-                bind:value={data.studySetId}
-                name="term"
-                class="border-b-4 mb-8 border-black w-72 outline-none font-semibold text-lg text-center focus:border-[#008DD5]"
-                type="text"
-            />
+                    on:input={removeErrorMsg}
+                    bind:value={title}
+                    name="term"
+                    class="border-b-4 mb-8 border-black w-72 outline-none font-semibold text-lg text-center focus:border-[#008DD5]"
+                    type="text"
+                />
 
                 <p class="text-2xl">Description</p>
                 <textarea
@@ -230,16 +179,12 @@ const fetchStudySetData = async () => {
                 ></textarea>
             </div>
             <div class="mt-20 mx-2">
-                {#each flashcards as flashcard, index (flashcard.term + flashcard.definition)}
-                  <div on:input={removeErrorMsg}>
-                    <FlashcardComponent
-                      {flashcard}
-                      {removeFlashcard}
-                      {index}
-                    />
-                  </div>
+                {#each flashcards as flashcard, index}
+                    <div on:input={removeErrorMsg}>
+                        <FlashcardComponent {flashcard} {removeFlashcard} {index} />
+                    </div>
                 {/each}
-              </div>
+            </div>
             <div
                 class="self-center mt-12 border-dotted border-4 w-1/3 hover:scale-110 duration-300 outline-none"
             >
@@ -252,12 +197,8 @@ const fetchStudySetData = async () => {
             <button
                 on:click={createStudySet}
                 class="mt-20 mr-4 bg-blue-500 rounded-full w-1/3 self-center p-2 font-semibold text-white hover:scale-110 duration-300"
-                >Create Study Set</button
+                >Save Study Set</button
             >
         </div>
-    </div>
-
-    
-    
-    </RouteGuard
+    </div></RouteGuard
 >
