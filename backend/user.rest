@@ -1,0 +1,144 @@
+// Sign up
+POST http://localhost:8080/api/auth/signup HTTP/1.1
+content-type: application/json
+
+{
+    "username": "user102",
+    "email": "user102@example.com",
+    "password": "apa123"
+}
+content-type: application/json
+###
+
+// Sign in
+POST http://localhost:8080/api/auth/signin HTTP/1.1
+content-type: application/json
+
+{
+    "username": "user102",
+    "password": "apa123"
+}
+###
+
+
+    // --- STUDYFOLDERS --- //
+
+// Create StudyFolder
+# @no-cookie-jar
+POST http://localhost:8080/api/studyfolders HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+
+{
+    "title": "User 102 Title",
+    "description": "User 102 desc."
+}
+###
+
+// Update StudyFolder
+PUT http://localhost:8080/api/studyfolders/6567875586dcd351d6f3515d HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+
+{
+    "title": "User 102 Title !U",
+    "description": "User 102 desc. !U"
+}
+###
+
+// Get All StudyFolders
+GET http://localhost:8080/api/studyfolders HTTP/1.1
+Cookie: //COOKIE_KEY//////////
+content-type: application/json
+###
+
+// Get StudyFolder
+GET http://localhost:8080/api/studyfolders/6567875586dcd351d6f3515d HTTP/1.1
+Cookie: //COOKIE_KEY//////////
+content-type: application/json
+###
+
+// Delete StudyFolder
+DELETE  http://localhost:8080/api/studyfolders/6567875586dcd351d6f3515d HTTP/1.1
+Cookie: //COOKIE_KEY//////////
+content-type: application/json
+###
+
+    // --- STUDYSETS --- //
+
+// Create StudySet
+POST http://localhost:8080/api/studysets HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+
+{
+    "studyFolderId": "6567875586dcd351d6f3515d",
+    "title": "User 102 StudySet Title",
+    "description": "User 102 StudySet Title"
+}
+###
+
+// Update StudySet
+PUT http://localhost:8080/api/studysets/6564891808ea0340f75691d3 HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+
+{
+    "studyFolderId": "6567875586dcd351d6f3515d",
+    "title": "User 102 StudySet Title !U",
+    "description": "User 102 StudySet Title !U"
+}
+###
+
+// GET StudySets
+GET http://localhost:8080/api/studysets/all/6567875586dcd351d6f3515d HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+###
+
+// GET StudySet
+GET http://localhost:8080/api/studysets/6564891808ea0340f75691d3 HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+###
+
+    // --- FLASHCARDS --- //
+
+// Create Flashcard
+POST http://localhost:8080/api/flashcards/6567877386dcd351d6f3515e HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+
+{
+    "term": "Why should the Tip be sharp?",
+    "definition": "U know why..."
+}
+###
+
+// Update Flashcard
+PUT http://localhost:8080/api/flashcards/6567a2a645f8596fdbd016ae HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+
+{
+    "studySetId": "6567877386dcd351d6f3515e",
+    "term": "Why should the Tip be sharp? !U",
+    "definition": "U know why... !U"
+}
+###
+// Get all Flashcards in a study set
+GET http://localhost:8080/api/flashcards/all/6567877386dcd351d6f3515e HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+###
+
+// Get Flashcard
+GET http://localhost:8080/api/flashcards/65679db3b49575663458cc48 HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+content-type: application/json
+###
+
+// Delete Flashcard
+DELETE http://localhost:8080/api/flashcards/65678930cf4a1f6262c11850 HTTP/1.1
+Cookie: activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo;
+###
