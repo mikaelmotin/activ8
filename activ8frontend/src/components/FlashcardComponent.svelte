@@ -1,13 +1,11 @@
 <script>
-    import { fade } from 'svelte/transition';
-
     export let flashcard;
     export let removeFlashcard;
     export let index;
 </script>
   
 
-<div class="flex flex-col w-full h-48 mb-4 shadow-md rounded-lg" transition:fade="{{ duration: 300 }}" on:outroend={() => removeFlashcard(index)}>
+<div class="flex flex-col w-full h-48 mb-4 shadow-md rounded-lg">
 
  
 
