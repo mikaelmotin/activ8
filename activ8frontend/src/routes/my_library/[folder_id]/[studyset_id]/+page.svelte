@@ -5,7 +5,11 @@
     import FlashcardComponent from "../../../../components/FlashcardComponent.svelte";
 
     //folder_id:
+
     export let data;
+    console.log(data.studyset.title)
+    console.log(data.flashcards)
+ 
     console.log(data);
 
     // Error message:
@@ -18,16 +22,20 @@
         errormsg = false;
     }
 
-    const fetchData = async () => {
-        // Fetch data from the database if needed
-    };
+    onMount(() => {
+
+        
+    });
 
     // Input values
-    let title = "";
-    let description = "";
+    let title =  data.studyset.title
+    let description = data.studyset.description;
+
+    // List with the flashcards (initializing with old flashcards)
+    let flashcards = data.flashcards || [];
 
     // List with the flashcards:
-    let flashcards = [{ term: "", definition: "" }];
+    // let flashcards = [{ term: "", definition: "" }];
 
     // Update the removeFlashcard function
     function removeFlashcard(index) {
@@ -42,7 +50,7 @@
         console.log(flashcards);
     }
 
-    const createStudySet = async () => {
+    const saveStudySet = async () => {
         if (
             !title.trim() ||
             !description.trim() ||
@@ -52,7 +60,6 @@
             flashcards.length <= 0
         ) {
             displayErrorMsg();
-            // Check if any of the input values are empty
             console.error(
                 "Please fill in all the fields for study set and flashcards.",
             );
@@ -61,38 +68,62 @@
 
         try {
             const response = await fetch(
-                "http://localhost:8080/api/studysets",
+                `http://localhost:8080/api/studysets/` + data.studyset_id,
                 {
-                    method: "POST",
+                    method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     credentials: "include",
                     body: JSON.stringify({
-                        studyFolderId: data.folder_id,
                         title: title,
                         description: description,
+                        // Include any other fields you want to update
                     }),
                 },
             );
 
             if (response.ok) {
-                const newStudySet = await response.json();
-                createFlashcards(newStudySet.id);
-                goto("./" + newStudySet.id)
-            } else {
-                console.error("apapapapa Request failed with status:", response.status);
+                const updatedStudySet = await response.json();
 
+                // Combine old and new flashcards
+                const allFlashcards = [...flashcards, ...updatedStudySet.flashcards];
+
+                createFlashcards(updatedStudySet.id, allFlashcards);
+                goto("./" + updatedStudySet.id);
+            } else {
+                console.error("Request failed with status:", response.status);
             }
         } catch (error) {
             console.error("Network error:", error);
         }
-    };
+    }
 
-    const createFlashcards = async (studySetId) => {
-        flashcards.forEach(async (flashcard) => {
-            let createdFlashcard = await fetch(
-                "http://localhost:8080/api/flashcards/" + studySetId,
+
+const createFlashcards = async (studySetId) => {
+    // Iterate through each flashcard
+    for (const flashcard of flashcards) {
+        // Check if the flashcard has an ID (indicating it's an existing one)
+        if (flashcard.id) {
+            // Update existing flashcard
+            await fetch(
+                `http://localhost:8080/api/flashcards/`+flashcard.id,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        term: flashcard.term,
+                        definition: flashcard.definition,
+                    }),
+                    credentials: "include",
+                },
+            );
+        } else {
+            // Create new flashcard
+            await fetch(
+                `http://localhost:8080/api/flashcards/` +studySetId,
                 {
                     method: "POST",
                     headers: {
@@ -106,8 +137,11 @@
                     credentials: "include",
                 },
             );
-        });
-    };
+        }
+    }
+};
+
+
 </script>
 
 <RouteGuard>
@@ -146,7 +180,7 @@
                 </p>
                 <!-- Edit button below, should start study session. Needs one test and one-->
                 <button
-                    on:click={createStudySet}
+                    on:click={saveStudySet}
                     class="mt-4 mr-4 bg-blue-500 rounded-full p-2 font-semibold text-white hover:scale-110 duration-300"
                     >Start Session</button
                 >
@@ -195,7 +229,7 @@
                 >
             </div>
             <button
-                on:click={createStudySet}
+                on:click={saveStudySet}
                 class="mt-20 mr-4 bg-blue-500 rounded-full w-1/3 self-center p-2 font-semibold text-white hover:scale-110 duration-300"
                 >Save Study Set</button
             >
