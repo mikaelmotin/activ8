@@ -111,7 +111,7 @@
 </script>
 
 <RouteGuard>
-    <div class="flex flex-col w-screen h-[100%] bg-[#ECF0F5] items-center">
+    <div class="flex flex-col w-screen min-h-screen h-[100%] bg-[#ECF0F5] items-center">
         <nav class="flex w-full mt-4">
             <div style="width: 100%; height: 100%; position: relative">
                 <div
@@ -139,7 +139,7 @@
         </nav>
 
         <!-- "White Canvas" -->
-        <div class="flex flex-col mt-4 mx-12 bg-white w-[80%] h-full">
+        <div class="flex flex-col mt-4 mx-12 bg-white w-[80%] h-full min-h-screen">
             <div class="flex justify-between w-full">
                 <p class="mt-4 ml-4 text-4xl font-bold">
                     Create a New Study Set
