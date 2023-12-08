@@ -139,7 +139,7 @@
         </nav>
 
         <!-- "White Canvas" -->
-        <div class="flex flex-col mt-4 mx-12 bg-white w-[80%] h-full min-h-screen">
+        <div class="flex flex-col mt-4 mx-12 bg-white w-[80%] h-full">
             <div class="flex justify-between w-full">
                 <p class="mt-4 ml-4 text-4xl font-bold">
                     Create a New Study Set
@@ -195,7 +195,7 @@
             </div>
             <button
                 on:click={createStudySet}
-                class="mt-20 mr-4 bg-blue-500 rounded-full w-1/3 self-center p-2 font-semibold text-white hover:scale-110 duration-300"
+                class="mt-20 mb-20 mr-4 bg-blue-500 rounded-full w-1/3 self-center p-2 font-semibold text-white hover:scale-110 duration-300"
                 >Create Study Set</button
             >
         </div>
