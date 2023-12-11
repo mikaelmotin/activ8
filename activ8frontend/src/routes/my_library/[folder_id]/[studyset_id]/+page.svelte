@@ -8,9 +8,16 @@
 
     export let data;
     console.log(data.studyset.title)
-    console.log(data.flashcards)
+    console.log("flashcards" + data.flashcards)
+    console.log("Study Set ID:", data.studyset_id);
+    console.log("Study Folder ID:", data.folder_id);
+
+
+
+    
  
     console.log(data);
+
 
     // Error message:
     let errormsg = false;
@@ -35,7 +42,6 @@
     let flashcards = data.flashcards || [];
 
     // List with the flashcards:
-    // let flashcards = [{ term: "", definition: "" }];
 
     // Update the removeFlashcard function
     function removeFlashcard(index) {
@@ -67,38 +73,48 @@
         }
 
         try {
-            const response = await fetch(
-                `http://localhost:8080/api/studysets/` + data.studyset_id,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        title: title,
-                        description: description,
-                        // Include any other fields you want to update
-                    }),
-                },
-            );
+    const response = await fetch(
+        `http://localhost:8080/api/studysets/` + data.studyset_id,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                studyFolderId: data.folder_id,
+                title: title,
+                description: description,
+                flashcards: flashcards,
+            }),
+        },
+    );
 
-            if (response.ok) {
-                const updatedStudySet = await response.json();
+    if (response.ok) {
+        try {
+            // Attempt to parse the response as JSON
+            const updatedStudySet = await response.json();
+            if (updatedStudySet) {
+                // Log the updated study set
+                console.log("Updated Study Set:", updatedStudySet);
 
-                // Combine old and new flashcards
-                const allFlashcards = [...flashcards, ...updatedStudySet.flashcards];
-
+                // Rest of your code
+                const newFlashcards = updatedStudySet.flashcards || [];
+                const allFlashcards = [...flashcards, ...newFlashcards];
                 createFlashcards(updatedStudySet.id, allFlashcards);
                 goto("./" + updatedStudySet.id);
             } else {
-                console.error("Request failed with status:", response.status);
+                console.error("Response did not contain valid JSON:", response.status, response.statusText);
             }
-        } catch (error) {
-            console.error("Network error:", error);
+        } catch (jsonError) {
+            console.error("Error parsing JSON from response:", jsonError);
         }
+    } else {
+        console.error("Request failed with status:", response.status, response.statusText);
     }
-
+} catch (error) {
+    console.error("Network error:", error);
+}}
 
 const createFlashcards = async (studySetId) => {
     // Iterate through each flashcard
