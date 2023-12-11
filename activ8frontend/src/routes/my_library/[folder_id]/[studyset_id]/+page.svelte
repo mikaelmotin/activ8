@@ -10,7 +10,7 @@
     console.log(data.studyset.title)
     console.log("flashcards" + data.flashcards)
     console.log("Study Set ID:", data.studyset_id);
-    console.log("Study Folder ID:", data.folder_id);
+    console.log("Study Folder ID:", data.studyset_id);
 
 
 
@@ -57,89 +57,97 @@
     }
 
     const saveStudySet = async () => {
-        if (
-            !title.trim() ||
-            !description.trim() ||
-            flashcards.some(
-                (card) => !card.term.trim() || !card.definition.trim(),
-            ) ||
-            flashcards.length <= 0
-        ) {
-            displayErrorMsg();
-            console.error(
-                "Please fill in all the fields for study set and flashcards.",
-            );
-            return;
-        }
-
-        try {
-    const response = await fetch(
-        `http://localhost:8080/api/studysets/` + data.studyset_id,
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                studyFolderId: data.folder_id,
-                title: title,
-                description: description,
-                flashcards: flashcards,
-            }),
-        },
-    );
-
-    if (response.ok) {
-        try {
-            // Attempt to parse the response as JSON
-            const updatedStudySet = await response.json();
-            if (updatedStudySet) {
-                // Log the updated study set
-                console.log("Updated Study Set:", updatedStudySet);
-
-                // Rest of your code
-                const newFlashcards = updatedStudySet.flashcards || [];
-                const allFlashcards = [...flashcards, ...newFlashcards];
-                createFlashcards(updatedStudySet.id, allFlashcards);
-                goto("./" + updatedStudySet.id);
-            } else {
-                console.error("Response did not contain valid JSON:", response.status, response.statusText);
-            }
-        } catch (jsonError) {
-            console.error("Error parsing JSON from response:", jsonError);
-        }
-    } else {
-        console.error("Request failed with status:", response.status, response.statusText);
+    if (
+        !title.trim() ||
+        !description.trim() ||
+        flashcards.some(
+            (card) => !card.term.trim() || !card.definition.trim(),
+        ) ||
+        flashcards.length <= 0
+    ) {
+        displayErrorMsg();
+        console.error(
+            "Please fill in all the fields for study set and flashcards.",
+        );
+        return;
     }
-} catch (error) {
-    console.error("Network error:", error);
-}}
 
-const createFlashcards = async (studySetId) => {
+    try {
+        // Create new flashcards
+        const createdFlashcards = await createFlashcards(data.studyset_id, flashcards);
+
+        // Save or update the study set
+        const response = await fetch(
+            `http://localhost:8080/api/studysets/` + data.studyset_id,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    studyFolderId: data.folder_id,
+                    title: title,
+                    description: description,
+                    flashcards: createdFlashcards,
+                }),
+            },
+        );
+
+        if (response.ok) {
+            try {
+                // Attempt to parse the response as JSON
+                const updatedStudySet = await response.json();
+                if (updatedStudySet) {
+                    // Log the updated study set
+                    console.log("Updated Study Set:", updatedStudySet);
+
+                    // Redirect to the updated study set
+                    goto("./" + updatedStudySet.id);
+                } else {
+                    console.error("Response did not contain valid JSON:", response.status, response.statusText);
+                }
+            } catch (jsonError) {
+                console.error("Error parsing JSON from response:", jsonError);
+            }
+        } else {
+            console.error("Request failed with status:", response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+};
+
+const createFlashcards = async (studySetId, flashcards) => {
+    // Array to store promises for each flashcard request
+    const flashcardPromises = [];
+
     // Iterate through each flashcard
     for (const flashcard of flashcards) {
-        // Check if the flashcard has an ID (indicating it's an existing one)
         if (flashcard.id) {
-            // Update existing flashcard
-            await fetch(
-                `http://localhost:8080/api/flashcards/`+flashcard.id,
+            // If the flashcard has an ID, update the existing flashcard
+            const updatePromise = fetch(
+                `http://localhost:8080/api/flashcards/` + flashcard.id,
                 {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
+                        flashcardId: flashcard.id,
+                        studySetId: data.studyset_id,
                         term: flashcard.term,
                         definition: flashcard.definition,
                     }),
                     credentials: "include",
                 },
             );
+
+            flashcardPromises.push(updatePromise);
         } else {
-            // Create new flashcard
-            await fetch(
-                `http://localhost:8080/api/flashcards/` +studySetId,
+            // If no ID is present, create a new flashcard
+            const createPromise = fetch(
+                `http://localhost:8080/api/flashcards/` + studySetId,
                 {
                     method: "POST",
                     headers: {
@@ -152,9 +160,28 @@ const createFlashcards = async (studySetId) => {
                     }),
                     credentials: "include",
                 },
-            );
+            )
+                .then(response => response.json()) // Assuming the server responds with the created flashcard
+                .then(createdFlashcard => {
+                    console.log(`New flashcard created with ID: ${createdFlashcard.id}`);
+                    return createdFlashcard;
+                })
+                .catch(error => {
+                    console.error("Error creating flashcard:", error);
+                    return null;
+                });
+
+            flashcardPromises.push(createPromise);
         }
     }
+
+    // Wait for all flashcard requests to complete
+    const flashcardResponses = await Promise.all(flashcardPromises);
+
+    // Extract the updated or created flashcards from the responses
+    const resultFlashcards = flashcardResponses.filter(Boolean); // Filter out any null values
+
+    return resultFlashcards;
 };
 
 
