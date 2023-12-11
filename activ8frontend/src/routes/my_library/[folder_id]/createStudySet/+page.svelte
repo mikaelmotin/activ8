@@ -111,7 +111,7 @@
 </script>
 
 <RouteGuard>
-    <div class="flex flex-col w-screen h-[100%] bg-[#ECF0F5] items-center">
+    <div class="flex flex-col w-screen min-h-screen h-[100%] bg-[#ECF0F5] items-center">
         <nav class="flex w-full mt-4">
             <div style="width: 100%; height: 100%; position: relative">
                 <div
@@ -195,7 +195,7 @@
             </div>
             <button
                 on:click={createStudySet}
-                class="mt-20 mr-4 bg-blue-500 rounded-full w-1/3 self-center p-2 font-semibold text-white hover:scale-110 duration-300"
+                class="mt-20 mb-20 mr-4 bg-blue-500 rounded-full w-1/3 self-center p-2 font-semibold text-white hover:scale-110 duration-300"
                 >Create Study Set</button
             >
         </div>
