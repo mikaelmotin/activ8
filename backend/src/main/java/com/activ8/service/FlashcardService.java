@@ -2,13 +2,11 @@ package com.activ8.service;
 
 import com.activ8.model.Flashcard;
 import com.activ8.repository.FlashcardRepository;
-import com.activ8.repository.StudySetRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
