@@ -184,6 +184,10 @@ const createFlashcards = async (studySetId, flashcards) => {
     return resultFlashcards;
 };
 
+function goToSession() {
+        goto("./");
+    }
+
 
 </script>
 
@@ -223,7 +227,7 @@ const createFlashcards = async (studySetId, flashcards) => {
                 </p>
                 <!-- Edit button below, should start study session. Needs one test and one-->
                 <button
-                    on:click={saveStudySet}
+                    on:click={goToSession}
                     class="mt-4 mr-4 bg-blue-500 rounded-full p-2 font-semibold text-white hover:scale-110 duration-300"
                     >Start Session</button
                 >
