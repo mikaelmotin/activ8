@@ -41,14 +41,6 @@
     // List with the flashcards (initializing with old flashcards)
     let flashcards = data.flashcards || [];
 
-    // List with the flashcards:
-
-    // Update the removeFlashcard function
-    /*function removeFlashcard(index) {
-        flashcards = flashcards.filter((_, i) => i !== index);
-        flashcards = [...flashcards]; // Ensure reactivity by creating a new array reference
-    }*/
-
     // Update the addFlashcard function
     function addFlashcard() {
         flashcards = [...flashcards, { term: "", definition: "" }];

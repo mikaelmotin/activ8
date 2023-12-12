@@ -3,6 +3,43 @@
 
     // Studyset data:
     export let data;
+    let editMode = false;
+
+    const removeStudySet = async (studySetId) => {
+    try {
+        const response = await fetch(
+            `http://localhost:8080/api/studysets/${studySetId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            },
+        );
+
+        if (response.ok) {
+            console.log("Study Set removed successfully");
+
+            // Remove the study set from the local data
+            const indexToRemove = data.studysets.findIndex((studyset) => studyset.id === studySetId);
+
+            if (indexToRemove !== -1) {
+                // Remove the study set from the local data
+                data.studysets.splice(indexToRemove, 1);
+                data.studysets = [...data.studysets]; // Ensure reactivity by creating a new array reference
+            }
+        } else {
+            console.error("Request failed with status:", response.status);
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+};
+
+    const toggleEditMode = () => {
+        editMode = !editMode;
+    };
 
 </script>
 
@@ -36,8 +73,14 @@
                 <button
                     class="border border-gray-500 rounded"
                     style="width: 100px; height: 40px; position: absolute; right: 180px; top: 25px; margin-right: 10px;"
-                    >Edit study set</button
+                    on:click={toggleEditMode}
                 >
+                    {#if editMode}
+                        Done
+                    {:else}
+                        Edit study set
+                    {/if}
+                </button>
                 <a href="{window.location.href}/createStudySet">
                     <button
                         class="border border-gray-500 rounded"
@@ -79,10 +122,19 @@
                     <div class="flex justify-center w-full">
                         <div class="grid mt-4 grid-cols-2 w-full h-full">
                             {#each data.studysets as studyset (studyset.id)}
-                                <a
-                                    href="{window.location.href}/{studyset.id}"
-                                    class="flex flex-col bg-[#00D5AF] w-96 h-32 rounded-xl hover:scale-105 hover:shadow-xl duration-300 cursor-pointer"
+                            <a
+                        href={editMode ? "" : `${window.location.href}/${studyset.id}`}
+                        class="flex flex-col bg-[#00D5AF] w-96 h-32 rounded-xl hover:scale-105 hover:shadow-xl duration-300 relative"
+                    >
+                            {#if editMode}
+                                <button
+                                    class="absolute z-10 top-2 right-2 p-2 text-red-500"
+                                    on:click={() => removeStudySet(studyset.id)}
                                 >
+                                    &#10006;
+                                </button>
+                            {/if}
+
                                     <p
                                         class="truncate mt-4 ml-4 text-white text-xl font-semibold"
                                     >
