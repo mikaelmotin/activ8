@@ -3,46 +3,51 @@ package com.activ8.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.activ8.model.FreeRoamStudySession;
 import com.activ8.model.StudySession;
-import com.activ8.model.User;
-import com.activ8.repository.StudySessionRepository;
+import com.activ8.model.StudySessionLog;
+
+import com.activ8.repository.StudySessionLogRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StudySessionService {
+    
+    private StudySession studySession;
 
     @Autowired
-    private StudySessionRepository studySessionRepository;
+    private StudySessionLogRepository studySessionRepository;
 
     @Autowired
-    public StudySessionService(StudySessionRepository studySessionRepository) {
+    public StudySessionService(StudySessionLogRepository studySessionRepository) {
         this.studySessionRepository = studySessionRepository;
     }
 
-    public StudySession startStudySession(User user, StudySession studySession) {
-        //studySession.setUser(user);
-        //studySession.setStartTime(LocalDateTime.now());
-        return studySessionRepository.save(studySession);
+    public void startFreeRoamStudySession(String userId) {
+        this.studySession = new FreeRoamStudySession(userId);
+        studySession.start(userId);
+    }
+
+    public void nextCard() {
+        studySession.nextCard();
     }
 
     public void endStudySession(StudySession studySession) {
         //studySession.setEndTime(LocalDateTime.now());
-        studySessionRepository.save(studySession);
+
     }
 
-    public List<StudySession> getAllStudySessions() {
-        return studySessionRepository.findAll();
+    public List<StudySessionLog> getAllStudySessions(String userId) {
+        return studySessionRepository.findAllByUserId(userId);
     }
 
-    public Optional<StudySession> getStudySessionById(String id) {
+    public Optional<StudySessionLog> getStudySessionById(String id) {
         return studySessionRepository.findById(id);
     }
 
     public void deleteStudySession(String id) {
         studySessionRepository.deleteById(id);
     }
-
-    // Other methods as needed
 }

@@ -58,7 +58,7 @@ public class FlashcardController {
   // POST REQUESTS - Used to create data
   @PostMapping("/{studySetId}")
   public ResponseEntity<?> createFlashcard(@PathVariable String studySetId, @RequestBody CreateFlashcardDTO flashcardDTO) {
-    Flashcard flashcard = new SimpleFlashcard(studySetId, flashcardDTO.term(), flashcardDTO.definition());
+    Flashcard flashcard = new SimpleFlashcard(studySetId, flashcardDTO.term(), flashcardDTO.definition(), flashcardDTO.difficulty());
     Flashcard createdFlashcard = flashcardService.saveFlashcard(flashcard);
 
 
@@ -75,7 +75,8 @@ public class FlashcardController {
         flashcardId, 
         updateFlashcardDTO.studySetId(), 
         updateFlashcardDTO.term(), 
-        updateFlashcardDTO.definition()
+        updateFlashcardDTO.definition(),
+        updateFlashcardDTO.difficulty()
     );
 
     Flashcard updatedFlashcard = flashcardService.saveFlashcard(flashcard);

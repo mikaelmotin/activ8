@@ -1,10 +1,12 @@
 package com.activ8.dto;
 
-public record UpdateFlashcardDTO( 
+import com.activ8.model.EDifficulty;
+
+public record UpdateFlashcardDTO(
     String studySetId,
     String term,
-    String definition
+    String definition,
+    EDifficulty difficulty
     ) {
 
     }
-

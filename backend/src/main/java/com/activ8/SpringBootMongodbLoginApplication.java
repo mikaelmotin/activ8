@@ -1,55 +1,35 @@
 package com.activ8;
 
+import com.activ8.eventbus.EventBus;
+import com.activ8.eventbus.subscribers.StudySessionStartedEventSubscriber;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.activ8.controller.AuthController;
-import com.activ8.model.User;
-import com.activ8.payload.request.SignupRequest;
-import com.activ8.repository.UserRepository;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-public class SpringBootMongodbLoginApplication implements CommandLineRunner{
-	@Autowired
-	UserRepository userRepository;
+@ComponentScan({"com.activ8", "com.activ8.eventbus.subscribers"})
+public class SpringBootMongodbLoginApplication implements CommandLineRunner {
 
-	@Autowired
-	AuthController authController;
-	
-	public static void main(String[] args) {
-		SpringApplication.run(SpringBootMongodbLoginApplication.class, args);
-	}
+    @Autowired
+    private EventBus eventBus;
 
-	@Override
-	public void run(String... args) throws Exception {
-		//createUsers();
-		//showAllUsers();
-		System.out.println("APPLICATION STARTED");
-	}
+    @Autowired
+    private StudySessionStartedEventSubscriber studySessionStartedSubscriber;
 
-	private void createUsers() {
-		
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootMongodbLoginApplication.class, args);
+    }
 
-		//authController.registerUser(new SignupRequest());
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("APPLICATION STARTED");
 
-	// private void showAllUsers() {
-	// 	authController.authenticateUser(null)
-	// }
+        // Subscribe StudySessionStartedSubscriber to EventBus
+        eventBus.subscribe(studySessionStartedSubscriber);
 
-
-
-
-	// public String getItemDetails(User user) {
-
-	// 	System.out.println(
-	// 	"Name: " + user.getUsername() + 
-	// 	", \nPass: " + user.getPassword() +
-	// 	", \nEmail: " + user.getEmail()
-	// 	);
-		
-	// 	return "";
-	// }
+        // Rest of your application initialization logic...
+    }
 }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Service
 public class FlashcardService {
 
@@ -18,6 +20,8 @@ public class FlashcardService {
 
     @Autowired
     StudySetService studySetService;
+
+    private ObjectMapper objectMapper;
 
     @Transactional
     public Flashcard saveFlashcard(Flashcard flashcard) {
@@ -49,5 +53,14 @@ public class FlashcardService {
         
         
         return false;
+    }
+
+    public String convertFlashcardToJson(Flashcard flashcard) {
+        try {
+            return objectMapper.writeValueAsString(flashcard);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{error}";
+        }
     }
 }
