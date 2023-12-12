@@ -9,7 +9,8 @@ import jakarta.validation.constraints.Size;
 
 @Document(collection = "studysets")
 public record StudySet(
-        @Id String id,
+        @Id
+        String id,
         String ownerId,
         String studyFolderId,
         @NotBlank @Size(max = 100) String title,

@@ -1,18 +1,18 @@
-package com.activ8.repository;
+  package com.activ8.repository;
 
-import java.util.List;
-import java.util.Optional;
+  import java.util.List;
+  import java.util.Optional;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+  import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.activ8.model.Flashcard;
+  import com.activ8.model.Flashcard;
 
-public interface FlashcardRepository extends MongoRepository<Flashcard, String> {
-  List<Flashcard> findAllByStudySetId(String studySetId);
-  
-  Optional<Flashcard> findById(String id);
+  public interface FlashcardRepository extends MongoRepository<Flashcard, String> {
+    List<Flashcard> findAllByStudySetId(String studySetId);
 
-  void deleteById(String id);
-  
-}
+    Optional<Flashcard> findById(String id);
+
+    void deleteById(String id);
+
+  }
 

@@ -1,4 +1,4 @@
-package com.activ8.rest;
+package com.activ8.API;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ApiTests {
-    //Response response =
+    //Server needs to be running (Run SpringBootMongodbLoginApplication.java)
     @BeforeEach
     public void setup() {
         RestAssured.baseURI = "http://localhost:8080"; // Set the base URI for all requests

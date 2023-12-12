@@ -1,5 +1,5 @@
 package com.activ8.model;
-import com.activ8.repository.FlashcardRepository;
+import com.activ8.service.FlashcardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Component;
@@ -11,29 +11,29 @@ public class FlashcardFrequencyManager implements FrequencyManager {
 
     private final Map<EDifficulty, List<Flashcard>> flashcardsDifficultyMap = new HashMap<>();
     private final Map<EDifficulty, Integer> difficultyCounters = new HashMap<>();
-    private final List<EDifficulty> difficultyProbabilities;
+    private List<EDifficulty> difficultyProbabilities = new ArrayList<>();
 
     private EDifficulty lastGeneratedDifficulty;
     private Flashcard lastGeneratedFlashcard;
 
-    private final FlashcardRepository flashcardRepository;
+    private final FlashcardService flashcardService;
 
     @Autowired
     private MongoOperations mongoOperations;
 
 
-    public FlashcardFrequencyManager(FlashcardRepository flashcardRepository) {
-        this.flashcardRepository = flashcardRepository;
+    public FlashcardFrequencyManager(FlashcardService flashcardService) {
+        this.flashcardService = flashcardService;
+        difficultyProbabilities = new ArrayList<>(Arrays.asList(EDifficulty.HARD, EDifficulty.MEDIUM, EDifficulty.EASY));
 
-        difficultyProbabilities = List.of(EDifficulty.HARD, EDifficulty.MEDIUM, EDifficulty.EASY);
         difficultyProbabilities.forEach(difficulty -> difficultyCounters.put(difficulty, 0));
 
-        initializeFlashcards();
+        initializeFlashcards("actualStudySetId");
     }
 
     // Fetch flashcards from MongoDB and initialize the difficulty map
-    private void initializeFlashcards() {
-        List<Flashcard> flashcards = flashcardRepository.findAll(); // Fetch all flashcards from the repository
+    private void initializeFlashcards(String studySetId) {
+        List<Flashcard> flashcards = flashcardService.getAllFlashcardsInStudySet(studySetId); // Fetch all flashcards from the repository
         for (EDifficulty difficulty : difficultyProbabilities) {
             List<Flashcard> flashcardsByDifficulty = // Filter flashcards by difficulty
                     flashcards.stream()
@@ -89,17 +89,19 @@ public class FlashcardFrequencyManager implements FrequencyManager {
     }
 
     private void removeFromDifficulty(EDifficulty difficulty, Flashcard flashcard) {
-        List<Flashcard> flashcards = flashcardsDifficultyMap.get(difficulty);
-        if (flashcards != null) {
-            flashcards.remove(flashcard);
-            difficultyCounters.put(difficulty, difficultyCounters.get(difficulty) - 1);
+        List<Flashcard> flashcards = flashcardsDifficultyMap.getOrDefault(difficulty, new ArrayList<>());
+        if (!flashcards.isEmpty()) {
+            flashcards.removeIf(card -> card.equals(flashcard)); // Remove the flashcard using removeIf
+            flashcardsDifficultyMap.put(difficulty, flashcards); // Update the map with the modified list
+            difficultyCounters.put(difficulty, difficultyCounters.getOrDefault(difficulty, 0) - 1); // Update counter
         }
     }
 
     private void addToDifficulty(EDifficulty difficulty, Flashcard flashcard) {
-        List<Flashcard> flashcards = flashcardsDifficultyMap.computeIfAbsent(difficulty, k -> new ArrayList<>());
+        List<Flashcard> flashcards = new ArrayList<>(flashcardsDifficultyMap.getOrDefault(difficulty, new ArrayList<>()));
         flashcards.add(flashcard);
-        difficultyCounters.put(difficulty, difficultyCounters.get(difficulty) + 1);
+        flashcardsDifficultyMap.put(difficulty, flashcards);
+        difficultyCounters.put(difficulty, difficultyCounters.getOrDefault(difficulty, 0) + 1);
     }
 
     private EDifficulty selectRandomDifficulty() {
