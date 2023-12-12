@@ -44,10 +44,10 @@
     // List with the flashcards:
 
     // Update the removeFlashcard function
-    function removeFlashcard(index) {
+    /*function removeFlashcard(index) {
         flashcards = flashcards.filter((_, i) => i !== index);
         flashcards = [...flashcards]; // Ensure reactivity by creating a new array reference
-    }
+    }*/
 
     // Update the addFlashcard function
     function addFlashcard() {
@@ -184,8 +184,33 @@ const createFlashcards = async (studySetId, flashcards) => {
     return resultFlashcards;
 };
 
-function goToSession() {
-        goto("./");
+async function removeFlashcard(index) {
+        const flashcardToDelete = flashcards[index];
+
+        if (flashcardToDelete.id) {
+            // If the flashcard has an ID, send a DELETE request to remove it from the server
+            try {
+                const response = await fetch(
+                    `http://localhost:8080/api/flashcards/` + flashcardToDelete.id,
+                    {
+                        method: "DELETE",
+                        credentials: "include",
+                    }
+                );
+
+                if (!response.ok) {
+                    console.error("Failed to delete flashcard:", response.status, response.statusText);
+                    return;
+                }
+            } catch (error) {
+                console.error("Network error:", error);
+                return;
+            }
+        }
+
+        // Remove the flashcard from the local state
+        flashcards = flashcards.filter((_, i) => i !== index);
+        flashcards = [...flashcards]; // Ensure reactivity by creating a new array reference
     }
 
 
@@ -227,7 +252,7 @@ function goToSession() {
                 </p>
                 <!-- Edit button below, should start study session. Needs one test and one-->
                 <button
-                    on:click={goToSession}
+                    on:click={saveStudySet}
                     class="mt-4 mr-4 bg-blue-500 rounded-full p-2 font-semibold text-white hover:scale-110 duration-300"
                     >Start Session</button
                 >

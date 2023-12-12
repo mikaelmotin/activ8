@@ -38,11 +38,14 @@
                     style="width: 100px; height: 40px; position: absolute; right: 180px; top: 25px; margin-right: 10px;"
                     >Edit study set</button
                 >
-                <button
-                    class="border border-gray-500 rounded"
-                    style="width: 100px; height: 40px; position: absolute; right: 300px; top: 25px;"
-                    >Add study set</button
-                >
+                <a href="{window.location.href}/createStudySet">
+                    <button
+                        class="border border-gray-500 rounded"
+                        style="width: 100px; height: 40px; position: absolute; right: 300px; top: 25px;"
+                    >
+                        Add study set
+                    </button>
+                </a>
             </div>
         </nav>
         <div class="flex mt-4 mx-12 bg-white w-[80%] h-full justify-center">
