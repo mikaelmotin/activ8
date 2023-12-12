@@ -107,7 +107,6 @@ public class StudyFolderController {
      if(studyFolderService.deleteStudyFolder(userDetails.getId(), studyFolderId)) {
        return ResponseEntity.ok().body("StudyFolder " + studyFolderId + " successfully deleted");
      }
-     // IF I DELETE A STUDYFOLDER, SHOULD I DELETE ALL STUDY SETS IN THAT FOLDER?
     
      return ResponseEntity.ok().body("Error while deleting: " + studyFolderId);
   }

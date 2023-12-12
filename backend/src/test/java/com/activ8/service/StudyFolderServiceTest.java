@@ -1,5 +1,6 @@
 package com.activ8.service;
 import com.activ8.model.StudyFolder;
+import com.activ8.model.StudySet;
 import com.activ8.repository.StudyFolderRepository;
 import com.activ8.service.StudyFolderService;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,8 @@ class StudyFolderServiceTest {
 
     @Mock
     private StudyFolderRepository studyFolderRepository;
+    @Mock
+    private StudySetService studySetService;
 
     @InjectMocks
     private StudyFolderService studyFolderService;
@@ -69,16 +72,24 @@ class StudyFolderServiceTest {
     @Test
     void testDeleteStudyFolder() {
         String userId = "user123";
-        String studyFolderId = "folder456";
+        String folderId = "folder456";
 
-        StudyFolder studyFolder = new StudyFolder(studyFolderId, userId, "test", "A test folder");
-        when(studyFolderRepository.findById(studyFolderId)).thenReturn(Optional.of(studyFolder));
-        when(studyFolderRepository.existsById(studyFolderId)).thenReturn(true);
+        StudyFolder studyFolder = new StudyFolder(folderId, userId, "test", "A test folder");
+        when(studyFolderRepository.findById(folderId)).thenReturn(Optional.of(studyFolder));
 
-        boolean deleted = studyFolderService.deleteStudyFolder(userId, studyFolderId);
+        List<StudySet> studySets = new ArrayList<>();
+        // Populate studySets list with test data
+        StudySet testStudySet = new StudySet(userId,folderId,"test","A test set");
+        studySets.add(testStudySet);
+
+        when(studySetService.getAllStudySets(folderId)).thenReturn(studySets);
+        when(studySetService.deleteStudySet(userId, testStudySet.id())).thenReturn(true); // Mock the deleteStudySet method
+
+        boolean deleted = studyFolderService.deleteStudyFolder(userId, folderId);
 
         assertTrue(deleted);
-        verify(studyFolderRepository, times(1)).findById(studyFolderId);
+        verify(studyFolderRepository, times(1)).findById(folderId);
+        verify(studySetService, times(studySets.size())).deleteStudySet(userId, testStudySet.id()); // Verify that deleteStudySet was called for each studySet
         verify(studyFolderRepository, times(1)).delete(studyFolder);
     }
 }

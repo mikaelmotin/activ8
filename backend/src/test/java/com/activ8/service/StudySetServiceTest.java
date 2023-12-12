@@ -1,5 +1,8 @@
 package com.activ8.service;
 
+import com.activ8.model.EDifficulty;
+import com.activ8.model.Flashcard;
+import com.activ8.model.SimpleFlashcard;
 import com.activ8.model.StudySet;
 import com.activ8.service.StudySetService;
 import com.activ8.repository.StudySetRepository;
@@ -19,6 +22,8 @@ class StudySetServiceTest {
 
     @Mock
     private StudySetRepository studySetRepository;
+    @Mock
+    private FlashcardService flashcardService;
 
     @InjectMocks
     private StudySetService studySetService;
@@ -65,5 +70,28 @@ class StudySetServiceTest {
         assertTrue(retrievedStudySet.isPresent());
         assertEquals(studySet, retrievedStudySet.get());
         verify(studySetRepository, times(1)).findById(studySetId);
+    }
+    @Test
+    void testDeleteStudySet() {
+        String userId = "user123";
+        String studySetId = "studySet456";
+
+        StudySet studySet = new StudySet(studySetId,"100","101","test","A test set");
+        when(studySetRepository.findById(studySetId)).thenReturn(Optional.of(studySet));
+
+        List<Flashcard> flashcards = new ArrayList<>();
+        Flashcard testFlashcard = new SimpleFlashcard("studySet456", "test", "A card for testing", EDifficulty.MEDIUM);
+        flashcardService.saveFlashcard(testFlashcard);
+        flashcards.add(testFlashcard);
+
+        when(flashcardService.getAllFlashcardsInStudySet(studySetId)).thenReturn(flashcards);
+        when(flashcardService.deleteFlashcard(userId, testFlashcard.getId())).thenReturn(true); // Mock the deleteFlashcard method
+
+        boolean deleted = studySetService.deleteStudySet(userId, studySetId);
+
+        assertTrue(deleted);
+        verify(studySetRepository, times(1)).findById(studySetId);
+        verify(flashcardService, times(flashcards.size())).deleteFlashcard(userId,testFlashcard.getId()); // Verify that deleteFlashcard was called for each flashcard
+        verify(studySetRepository, times(1)).delete(studySet);
     }
 }

@@ -6,14 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.activ8.dto.CreateStudySetDTO;
 import com.activ8.model.StudySet;
@@ -118,7 +111,17 @@ public class StudySetController {
     return ResponseEntity.ok().body(updatedStudySet);
   }
 
-  // DELETE NOT IMPLEMENTED THINK ABOUT THIS, SHOULD IT ALSO DELETE ALL
-  // FLASHCARDS?
+  @DeleteMapping("/{studySetId}")
+  public ResponseEntity<?> deleteStudySet(
+          @AuthenticationPrincipal UserDetailsImpl userDetails,
+          @PathVariable String studySetId) {
+
+    if (studySetService.deleteStudySet(userDetails.getId(), studySetId)) {
+      return ResponseEntity.ok().body("Study set " + studySetId + " and its flashcards successfully deleted");
+    }
+
+    return ResponseEntity.ok().body("Error while deleting study set " + studySetId);
+  }
+
 
 }
