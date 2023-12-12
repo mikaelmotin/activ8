@@ -16,15 +16,15 @@ public class StudySession {
     private StudySetRepository studySetRepository;
     private FlashcardService flashcardService; // Inject FlashcardService
     private Optional<StudySet> studySet;
-    private FlashcardFrequencyManager flashcardFrequencyManager;
+    private FrequencyManagerImpl frequencyManager;
     private String userId;
     private List<Flashcard> flashcardsToStudy;
     private int currentIndex;
 
-    public StudySession(StudySetRepository studySetRepository, FlashcardService flashcardService, String studySetId, FlashcardFrequencyManager flashcardFrequencyManager, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public StudySession(StudySetRepository studySetRepository, FlashcardService flashcardService, String studySetId, FrequencyManagerImpl frequencyManager, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         this.studySetRepository = studySetRepository;
         this.flashcardService = flashcardService; // Initialize FlashcardService
-        this.flashcardFrequencyManager = flashcardFrequencyManager;
+        this.frequencyManager = frequencyManager;
         this.userId = userDetails.getId();
 
         this.startNewSession(studySetId, userDetails);
