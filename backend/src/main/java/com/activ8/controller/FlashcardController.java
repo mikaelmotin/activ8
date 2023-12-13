@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.activ8.model.Flashcard;
 import com.activ8.model.SimpleFlashcard;
-import com.activ8.service.*;
+import com.activ8.service.FlashcardService;
 import com.activ8.service.StudySetService;
 import com.activ8.service.UserDetailsImpl;
 import com.activ8.dto.CreateFlashcardDTO;
@@ -58,7 +58,7 @@ public class FlashcardController {
   // POST REQUESTS - Used to create data
   @PostMapping("/{studySetId}")
   public ResponseEntity<?> createFlashcard(@PathVariable String studySetId, @RequestBody CreateFlashcardDTO flashcardDTO) {
-    Flashcard flashcard = new SimpleFlashcard(studySetId, flashcardDTO.term(), flashcardDTO.definition(),flashcardDTO.difficulty());
+    Flashcard flashcard = new SimpleFlashcard(studySetId, flashcardDTO.term(), flashcardDTO.definition());
     Flashcard createdFlashcard = flashcardService.saveFlashcard(flashcard);
 
 
@@ -76,8 +76,8 @@ public class FlashcardController {
         updateFlashcardDTO.studySetId(), 
         updateFlashcardDTO.term(), 
         updateFlashcardDTO.definition(),
-            updateFlashcardDTO.difficulty()
-        );
+        updateFlashcardDTO.difficulty()
+    );
 
     Flashcard updatedFlashcard = flashcardService.saveFlashcard(flashcard);
    

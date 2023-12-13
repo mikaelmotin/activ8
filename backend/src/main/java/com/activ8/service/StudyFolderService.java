@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.activ8.model.Flashcard;
 import com.activ8.model.StudyFolder;
 import com.activ8.repository.StudyFolderRepository;
 import com.activ8.service.StudySetService;
