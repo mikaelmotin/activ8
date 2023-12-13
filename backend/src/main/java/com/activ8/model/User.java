@@ -27,14 +27,17 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    private int points;
+
     public User() {
 
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, int points) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.points = points;
     }
 
     public String getId() {
@@ -67,6 +70,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+        public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
     
 }

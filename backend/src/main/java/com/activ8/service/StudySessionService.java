@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.activ8.eventbus.EventBus;
+import com.activ8.eventbus.events.FlashcardFlippedEvent;
 import com.activ8.eventbus.events.StudySessionCompletedEvent;
 import com.activ8.eventbus.events.StudySessionStartedEvent;
 import com.activ8.model.EDifficulty;
@@ -82,6 +83,10 @@ public class StudySessionService {
         } catch (Exception e) {
             logger.error("Error ending FreeRoamStudySession for user {}: {}", userId, e.getMessage(), e);
         }
+    }
+
+    public void toggleFlashCardFlipped(String userId, String flashcardId) {
+        eventBus.publish(new FlashcardFlippedEvent(userId, flashcardId));
     }
 
     // Database related operations:

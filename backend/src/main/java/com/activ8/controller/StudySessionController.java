@@ -8,6 +8,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.activ8.dto.FlashcardDifficultyDTO;
+import com.activ8.dto.FlashcardFlippedDTO;
+import com.activ8.eventbus.EventBus;
+import com.activ8.eventbus.events.FlashcardFlippedEvent;
 import com.activ8.model.Flashcard;
 import com.activ8.model.StudySessionLog;
 import com.activ8.service.StudySessionService;
@@ -20,6 +23,9 @@ public class StudySessionController {
 
     @Autowired
     private StudySessionService studySessionService;
+
+    @Autowired
+    private EventBus eventBus;
 
     // GET REQUESTS
 
@@ -44,7 +50,7 @@ public class StudySessionController {
             return ResponseEntity.ok().body(flashcard);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok("Couldn't deliver next card");
+            return ResponseEntity.badRequest().body("Couldn't deliver next card");
         }
     }
 
@@ -59,12 +65,13 @@ public class StudySessionController {
             @PathVariable String studySetId) {
         try {
             studySessionService.startFreeRoamStudySession(userDetails.getId(), studySetId);
+            return ResponseEntity.ok("startSession success");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok("startSession failed");
+            return ResponseEntity.badRequest().body("startSession failed");
         }
 
-        return ResponseEntity.ok("startSession success");
+
     }
 
     /**
@@ -78,38 +85,44 @@ public class StudySessionController {
             @PathVariable String flashcardId, @RequestBody FlashcardDifficultyDTO flashcardDifficultyDTO) {
         try {
             studySessionService.assignDifficultyToFlashcard(
-                    userDetails.getId(), 
+                    userDetails.getId(),
                     flashcardId,
                     flashcardDifficultyDTO.getDifficultyEnum());
-        
-        
+
             return ResponseEntity.ok("assigned difficulty to flashcard successfully");
-        
+
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok("assign difficulty to flashcard failed");
+            return ResponseEntity.badRequest().body("assign difficulty to flashcard failed");
         }
     }
 
-
     /**
-     * Ends the active studysession for the user 
+     * Ends the active studysession for the user
      * 
      * @param userDetails User details of the authenticated user
      * @return success/failure to end session
      */
     @PostMapping("/endSession")
     public ResponseEntity<?> endStudySession(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-    try {
-        studySessionService.endStudySession(userDetails.getId());;
-        return ResponseEntity.ok("Study session ended successfully");
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.ok("Failed to end study session");
+        try {
+            studySessionService.endStudySession(userDetails.getId());
+            ;
+            return ResponseEntity.ok("Study session ended successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to end study session");
+        }
     }
-}
 
-
-
-
+    @PostMapping("/flipCard")
+    public ResponseEntity<?> flipCard(@RequestBody FlashcardFlippedDTO flashcardFlippedDTO) {
+        try {
+            studySessionService.toggleFlashCardFlipped(flashcardFlippedDTO.userId(), flashcardFlippedDTO.flashcardId());
+            return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error in publishing FlashcardFlippedEvent");
+        }
+    }
 }

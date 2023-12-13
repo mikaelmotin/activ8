@@ -1,5 +1,7 @@
 package com.activ8.eventbus.events;
 
-public class RightOrWrongEvent implements Event {
+public record RightOrWrongEvent(
+    // Attributes
+) implements Event {
     
 }

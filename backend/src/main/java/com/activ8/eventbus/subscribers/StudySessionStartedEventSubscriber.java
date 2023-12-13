@@ -10,8 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
+import org.springframework.transaction.annotation.Transactional;
 
 import com.activ8.service.FlashcardService;
 import com.activ8.service.StudySessionService;
@@ -25,8 +24,9 @@ public class StudySessionStartedEventSubscriber implements Subscriber {
     @Autowired
     StudySessionService studySessionService;
 
-        private static final Logger logger = LoggerFactory.getLogger(StudySessionCompletedEventSubscriber.class);
+    private static final Logger logger = LoggerFactory.getLogger(StudySessionCompletedEventSubscriber.class);
 
+    @Transactional
     @Override
     public void handleEvent(Event event) {
         try {
