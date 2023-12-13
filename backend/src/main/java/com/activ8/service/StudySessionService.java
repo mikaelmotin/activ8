@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.activ8.eventbus.EventBus;
+import com.activ8.eventbus.events.StudySessionCompletedEvent;
 import com.activ8.eventbus.events.StudySessionStartedEvent;
 import com.activ8.model.EDifficulty;
 import com.activ8.model.Flashcard;
@@ -17,6 +18,10 @@ import com.activ8.repository.StudySessionLogRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Service
 public class StudySessionService {
@@ -33,7 +38,8 @@ public class StudySessionService {
     @Autowired
     private StudySessionManager studySessionManager;
 
-    private StudySession studySession;
+    private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
+
 
     @Transactional
     public void startFreeRoamStudySession(String userId, String studySetId) {
@@ -44,11 +50,10 @@ public class StudySessionService {
             studySessionManager.getSession(userId).start(studySetId);
 
 
-            eventBus.publish(new StudySessionStartedEvent(studySession, userId, studySetId, LocalDateTime.now()));
+            eventBus.publish(new StudySessionStartedEvent(studySessionManager.getSession(userId).toString(), userId, studySetId, LocalDateTime.now()));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error starting FreeRoamStudySession for user {} with studySetId {}: {}", userId, studySetId, e.getMessage(), e);
         }
-        
     }
 
     public Flashcard nextCard(String userId) {
@@ -62,8 +67,21 @@ public class StudySessionService {
     }
 
     public void endStudySession(String userId) {
-        studySessionManager.getSession(userId).end();
-        studySessionManager.removeSession(userId);
+        try {
+            studySessionManager.getSession(userId).end();
+            /*eventBus.publish(new StudySessionCompletedEvent(
+                    studySessionManager.getSession(userId), 
+                    userId, 
+                    0, 
+                    LocalDateTime.now()
+                    
+            ));*/
+
+            studySessionManager.removeSession(userId);
+
+        } catch (Exception e) {
+            logger.error("Error ending FreeRoamStudySession for user {}: {}", userId, e.getMessage(), e);
+        }
     }
 
     // Database related operations:
@@ -73,5 +91,10 @@ public class StudySessionService {
 
     public Optional<StudySessionLog> getStudySessionLogById(String id) {
         return studySessionRepository.findById(id);
+    }
+
+    public StudySessionLog saveStudySessionLog(StudySessionLog studySessionLogToSave) {
+        StudySessionLog savedStudySessionLog = studySessionRepository.save(studySessionLogToSave);
+        return savedStudySessionLog;
     }
 }
