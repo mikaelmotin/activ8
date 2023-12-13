@@ -98,7 +98,7 @@ public class StudySessionController {
      * @param userDetails User details of the authenticated user
      * @return success/failure to end session
      */
-    @PostMapping("/endSession/")
+    @PostMapping("/endSession")
     public ResponseEntity<?> endStudySession(@AuthenticationPrincipal UserDetailsImpl userDetails) {
     try {
         studySessionService.endStudySession(userDetails.getId());;

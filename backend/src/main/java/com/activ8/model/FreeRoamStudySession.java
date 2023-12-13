@@ -1,24 +1,15 @@
 package com.activ8.model;
 
 import com.activ8.eventbus.EventBus;
-import com.activ8.eventbus.events.FlashcardFlippedEvent;
-import com.activ8.eventbus.events.StudySessionCompletedEvent;
-import com.activ8.eventbus.events.StudySessionProgressEvent;
-import com.activ8.eventbus.events.StudySessionStartedEvent;
 import com.activ8.service.FlashcardService;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 
 public class FreeRoamStudySession implements StudySession {
 
-    @Autowired
-    private EventBus eventBus;
 
     private FlashcardService flashcardService;
-
     private String studySetId;
     private boolean isStarted;
 
@@ -36,7 +27,7 @@ public class FreeRoamStudySession implements StudySession {
         if (!isStarted) {
             isStarted = true;
         }
-        // FlashcardfrequencyManager should already have been initialized?
+        // FlashcardfrequencyManager should already have been initialized
 
     }
 
