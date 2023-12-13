@@ -1,6 +1,7 @@
 export const load = ({ fetch, params }) => {
     console.log(params);
     const folder_id = params.folder_id;
+    const studyset_id = params.studyset_id;
 
     const fetchStudySets = async (id) => {
         try {
@@ -29,6 +30,7 @@ export const load = ({ fetch, params }) => {
 
     return {
         studysets: fetchStudySets(params),
-        folder_id: folder_id
+        folder_id: folder_id,
+        studyset_id: studyset_id
     };
 }
