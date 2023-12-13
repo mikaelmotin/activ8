@@ -53,4 +53,14 @@ public class UserService {
         System.out.println("Wrong Password or Username!");
         return Optional.empty(); // Return empty optional if authentication fails
     }
+    public Optional<String> getUserIdByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return Optional.of(user.getId());
+        } else {
+            return Optional.empty();
+        }
+    }
 }

@@ -40,7 +40,7 @@ class FlashcardServiceTest {
     @Test
     void testSaveFlashcard() {
         Flashcard flashcardToSave = new SimpleFlashcard("2222", "test", "A card for testing", EDifficulty.MEDIUM);
-        when(flashcardRepository.save(any(Flashcard.class))).thenReturn(flashcardToSave);
+        when(flashcardRepository.save(any(Flashcard.    class))).thenReturn(flashcardToSave);
 
         Flashcard savedFlashcard = flashcardService.saveFlashcard(flashcardToSave);
 
