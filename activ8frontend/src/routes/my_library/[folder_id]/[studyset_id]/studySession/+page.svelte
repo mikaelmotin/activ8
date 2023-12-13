@@ -7,19 +7,10 @@
   let front = '';
   let back = '';
   let isFlipped = false;
+  export let studyset_id;
 
-  export const load = ({params }) => {
-    console.log(params);
-    const folder_id = params.folder_id;
-    const studyset_id = params.studyset_id;
-    const user_id = params.user_id;
 
-    return {
-        folder_id: folder_id,
-        studyset_id: studyset_id,
-        user_id: user_id
-    };
-}
+  
   // WebSocket and Stomp.js code
   let stompClient;
 
@@ -92,7 +83,7 @@
 
   async function assignDifficulty(difficulty) {
     try {
-      const response = await fetch('http://localhost:8080/api/studysessions/assignDifficulty/6579ebf345d0d2509e1a8e03', {
+      const response = await fetch('http://localhost:8080/api/studysessions/assignDifficulty/' + studyset_id, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +135,7 @@
 
   // Start the session when the component mounts
   onMount(() => {
-    startSession('6579ebf345d0d2509e1a8e03'); // Replace with your actual study set ID
+    startSession(studyset_id); // Replace with your actual study set ID
   });
 </script>
 
