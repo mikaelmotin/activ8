@@ -40,12 +40,14 @@ public class StudySessionService {
         try {
             // if(studySessionManager.getSession(userId) != null) {
                 studySessionManager.addSession(userId, new FreeRoamStudySession(studySetId, flashcardService));
+                
             //}
             studySessionManager.getSession(userId).start(studySetId);
+            //eventBus.publish(new StudySessionStartedEvent(studySession, userId, studySetId, LocalDateTime.now()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //eventBus.publish(new StudySessionStartedEvent(studySession, userId, studySetId, LocalDateTime.now()));
+        
     }
 
     public Flashcard nextCard(String userId) {
@@ -60,7 +62,7 @@ public class StudySessionService {
 
     public void endStudySession(String userId) {
         studySessionManager.getSession(userId).end();
-
+        studySessionManager.removeSession(userId);
     }
 
     // Database related operations:
