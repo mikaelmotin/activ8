@@ -38,12 +38,13 @@ public class StudySessionService {
     @Transactional
     public void startFreeRoamStudySession(String userId, String studySetId) {
         try {
-            // if(studySessionManager.getSession(userId) != null) {
+            if(studySessionManager.getSession(userId) == null) {
                 studySessionManager.addSession(userId, new FreeRoamStudySession(studySetId, flashcardService));
-                
-            //}
+            }
             studySessionManager.getSession(userId).start(studySetId);
-            //eventBus.publish(new StudySessionStartedEvent(studySession, userId, studySetId, LocalDateTime.now()));
+
+
+            eventBus.publish(new StudySessionStartedEvent(studySession, userId, studySetId, LocalDateTime.now()));
         } catch (Exception e) {
             e.printStackTrace();
         }
