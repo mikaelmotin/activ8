@@ -10,6 +10,8 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.27.4",
+		"@types/sockjs-client": "^1.5.4",
+		"@types/stompjs": "^2.3.9",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.31",
 		"svelte": "^4.0.5",
@@ -18,6 +20,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@builder.io/sdk-svelte": "^0.1.16"
+		"@builder.io/sdk-svelte": "^0.1.16",
+		"sockjs-client": "^1.6.1",
+		"stompjs": "^2.3.3"
 	}
 }
