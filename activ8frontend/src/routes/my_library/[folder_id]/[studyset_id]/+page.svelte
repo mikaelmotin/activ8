@@ -33,6 +33,10 @@
 
         
     });
+    const goBack = () => {
+        // Use goto to navigate back to the study sets page
+        goto('./');
+    };
 
     // Input values
     let title =  data.studyset.title
@@ -56,7 +60,7 @@
         console.log(flashcards);
     }
 
-    const saveStudySet = async () => {
+    const saveSet = async () => {
     if (
         !title.trim() ||
         !description.trim() ||
@@ -71,6 +75,70 @@
         );
         return;
     }
+
+
+    try {
+        // Create new flashcards
+        const createdFlashcards = await createFlashcards(data.studyset_id, flashcards);
+
+        // Save or update the study set
+        const response = await fetch(
+            `http://localhost:8080/api/studysets/` + data.studyset_id,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    studyFolderId: data.folder_id,
+                    title: title,
+                    description: description,
+                    flashcards: createdFlashcards,
+                }),
+            },
+        );
+
+        if (response.ok) {
+            try {
+                // Attempt to parse the response as JSON
+                const updatedStudySet = await response.json();
+                if (updatedStudySet) {
+                    // Log the updated study set
+                    console.log("Updated Study Set:", updatedStudySet);
+
+                    // Redirect to the updated study set
+                    goto("./" + updatedStudySet.id);
+                } else {
+                    console.error("Response did not contain valid JSON:", response.status, response.statusText);
+                }
+            } catch (jsonError) {
+                console.error("Error parsing JSON from response:", jsonError);
+            }
+        } else {
+            console.error("Request failed with status:", response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+};
+
+    const saveStartSession = async () => {
+    if (
+        !title.trim() ||
+        !description.trim() ||
+        flashcards.some(
+            (card) => !card.term.trim() || !card.definition.trim(),
+        ) ||
+        flashcards.length <= 0
+    ) {
+        displayErrorMsg();
+        console.error(
+            "Please fill in all the fields for study set and flashcards.",
+        );
+        return;
+    }
+
 
     try {
         // Create new flashcards
@@ -222,11 +290,17 @@ const createFlashcards = async (studySetId, flashcards) => {
                 <p class="mt-4 ml-4 text-4xl font-bold">
                     Edit Study Set
                 </p>
+                <button
+                on:click={goBack}
+                class="mt-0 ml-4 font-light text-black hover:text-blue-500 focus:outline-none transition-colors duration-300"
+            >Back to Sets</button>
                 <!-- Edit button below, should start study session. Needs one test and one-->
                 <button
-                    on:click={saveStudySet}
+                    on:click={saveStartSession}
                     class="mt-4 mr-4 bg-blue-500 rounded-full p-2 font-semibold text-white hover:scale-110 duration-300"
                 >Start Session</button>
+
+
             </div>
             <div class="flex flex-col mt-12 mx-12 self-center">
                 {#if errormsg}
@@ -272,7 +346,7 @@ const createFlashcards = async (studySetId, flashcards) => {
                 >
             </div>
             <button
-                on:click={saveStudySet}
+                on:click={saveSet}
                 class="mt-20 mr-4 bg-blue-500 rounded-full w-1/3 self-center p-2 font-semibold text-white hover:scale-110 duration-300"
                 >Save Study Set</button
             >
