@@ -3,11 +3,15 @@
   import { onMount } from 'svelte';
   import SockJS from 'sockjs-client';
   import Stomp from 'stompjs';
+  import { goto } from "$app/navigation";
+
+
 
   let front = '';
   let back = '';
   let isFlipped = false;
   export let studyset_id;
+
 
 
   
@@ -29,6 +33,12 @@
       stompClient.disconnect();
       console.log('Disconnected');
     }
+  }
+  async function endSession() {
+    disconnect(); // Disconnect from WebSocket
+    // You may want to add additional logic for ending the session on the server
+    console.log('Session ended');
+    goto("./")
   }
 
   async function startSession(studySetId) {
@@ -160,6 +170,8 @@
           </button>
         </div>
       </div>
+      <!-- End Session Button -->
+      <button on:click={endSession} class="absolute top-4 right-4 px-4 py-2 bg-red-500 text-white rounded-md cursor-pointer">End Session</button>
     </div>
   </div>
 </main>
