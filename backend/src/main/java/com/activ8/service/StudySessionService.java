@@ -58,8 +58,8 @@ public class StudySessionService {
         studySessionManager.getSession(userId).assignDifficulty(flashcardToBeAssigned.get(), difficulty);
     }
 
-    public void endStudySession(StudySession studySession) {
-        // studySession.setEndTime(LocalDateTime.now());
+    public void endStudySession(String userId) {
+        studySessionManager.getSession(userId).end();
 
     }
 

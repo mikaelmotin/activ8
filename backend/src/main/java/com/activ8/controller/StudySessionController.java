@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import com.activ8.dto.FlashcardDifficultyDTO;
 import com.activ8.model.Flashcard;
 import com.activ8.model.StudySessionLog;
 import com.activ8.service.StudySessionService;
@@ -65,5 +66,50 @@ public class StudySessionController {
 
         return ResponseEntity.ok("startSession success");
     }
+
+    /**
+     * Updates the difficulty of a flashcard
+     * 
+     * @param userDetails User details of the authenticated user
+     * @return Success/failure
+     */
+    @PostMapping("/assignDifficulty/{flashcardId}")
+    public ResponseEntity<?> assignFlashcardDifficulty(@AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable String flashcardId, @RequestBody FlashcardDifficultyDTO flashcardDifficultyDTO) {
+        try {
+            studySessionService.assignDifficultyToFlashcard(
+                    userDetails.getId(), 
+                    flashcardId,
+                    flashcardDifficultyDTO.getDifficultyEnum());
+        
+        
+            return ResponseEntity.ok("assigned difficulty to flashcard successfully");
+        
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok("assign difficulty to flashcard failed");
+        }
+    }
+
+
+    /**
+     * Ends the active studysession for the user 
+     * 
+     * @param userDetails User details of the authenticated user
+     * @return success/failure to end session
+     */
+    @PostMapping("/endSession/")
+    public ResponseEntity<?> endStudySession(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    try {
+        studySessionService.endStudySession(userDetails.getId());;
+        return ResponseEntity.ok("Study session ended successfully");
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.ok("Failed to end study session");
+    }
+}
+
+
+
 
 }
