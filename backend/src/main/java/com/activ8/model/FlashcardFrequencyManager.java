@@ -1,12 +1,9 @@
 package com.activ8.model;
 import com.activ8.service.FlashcardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.stereotype.Component;
-
 import java.util.*;
 
-@Component
+
 public class FlashcardFrequencyManager implements FrequencyManager {
 
     private final Map<EDifficulty, List<Flashcard>> flashcardsDifficultyMap = new HashMap<>();
@@ -15,35 +12,42 @@ public class FlashcardFrequencyManager implements FrequencyManager {
 
     private EDifficulty lastGeneratedDifficulty;
     private Flashcard lastGeneratedFlashcard;
-
-    private final FlashcardService flashcardService;
-
-    @Autowired
-    private MongoOperations mongoOperations;
+    private DifficultySelectionStrategy difficultySelectionStrategy;
 
 
-    public FlashcardFrequencyManager(FlashcardService flashcardService) {
+    private FlashcardService flashcardService;
+
+
+    public FlashcardFrequencyManager(String studySetId, FlashcardService flashcardService, DifficultySelectionStrategy strategy) {
         this.flashcardService = flashcardService;
+        this.difficultySelectionStrategy = strategy;
         difficultyProbabilities = new ArrayList<>(Arrays.asList(EDifficulty.HARD, EDifficulty.MEDIUM, EDifficulty.EASY));
 
         difficultyProbabilities.forEach(difficulty -> difficultyCounters.put(difficulty, 0));
 
-        initializeFlashcards("actualStudySetId");
+        initializeFlashcards(studySetId);
     }
 
-    // Fetch flashcards from MongoDB and initialize the difficulty map
     private void initializeFlashcards(String studySetId) {
         List<Flashcard> flashcards = flashcardService.getAllFlashcardsInStudySet(studySetId); // Fetch all flashcards from the repository
-        for (EDifficulty difficulty : difficultyProbabilities) {
-            List<Flashcard> flashcardsByDifficulty = // Filter flashcards by difficulty
-                    flashcards.stream()
-                            .filter(flashcard -> flashcard.getDifficulty() == difficulty)
-                            .toList();
-
-            flashcardsDifficultyMap.put(difficulty, flashcardsByDifficulty);
-            difficultyCounters.put(difficulty, flashcardsByDifficulty.size());
+    
+        // Assign all flashcards to MEDIUM difficulty
+        List<Flashcard> mediumFlashcards = new ArrayList<>(flashcards);
+        flashcardsDifficultyMap.put(EDifficulty.MEDIUM, mediumFlashcards);
+    
+        // Initialize other difficulties with empty lists
+        for (EDifficulty difficulty : EDifficulty.values()) {
+            if (difficulty != EDifficulty.MEDIUM) {
+                flashcardsDifficultyMap.put(difficulty, new ArrayList<>());
+            }
         }
+    
+        // Update counters
+        difficultyCounters.put(EDifficulty.MEDIUM, mediumFlashcards.size());
+        difficultyCounters.put(EDifficulty.HARD, 0);
+        difficultyCounters.put(EDifficulty.EASY, 0);
     }
+    
     @Override
     public void assignInitialDifficulty(Map<Flashcard, EDifficulty> flashcards) {
         for (Flashcard flashcard : flashcards.keySet()) {
@@ -120,34 +124,20 @@ public class FlashcardFrequencyManager implements FrequencyManager {
     }
 
     public Flashcard generateNextCard(Map<EDifficulty, List<Flashcard>> flashcardsDifficultyMap) {
-        EDifficulty selectedDifficulty = selectRandomDifficulty();
-        List<Flashcard> flashcardsForDifficulty = flashcardsDifficultyMap.get(selectedDifficulty);
+        for (int attempt = 0; attempt < difficultyProbabilities.size(); attempt++) {
+            EDifficulty selectedDifficulty = difficultySelectionStrategy.selectDifficulty();
+            List<Flashcard> flashcardsForDifficulty = flashcardsDifficultyMap.get(selectedDifficulty);
 
-        if (flashcardsForDifficulty != null && !flashcardsForDifficulty.isEmpty()) {
-            Flashcard randomFlashcard;
-
-            do {
-                // Select a random index from the list
-                int randomIndex = new Random().nextInt(flashcardsForDifficulty.size());
-
-                // Get the random flashcard
-                randomFlashcard = flashcardsForDifficulty.get(randomIndex);
-            } while (randomFlashcard == lastGeneratedFlashcard);
-
-            // Update the last generated flashcard
-            lastGeneratedFlashcard = randomFlashcard;
-
-            // Now you can work with 'randomFlashcard'...
-            System.out.println("Generated next card with difficulty: " + selectedDifficulty + ", Flashcard: " + randomFlashcard.getDefinition());
-
-            return randomFlashcard;
+            if (flashcardsForDifficulty != null && !flashcardsForDifficulty.isEmpty()) {
+                Flashcard randomFlashcard = flashcardsForDifficulty.get(new Random().nextInt(flashcardsForDifficulty.size()));
+                if (randomFlashcard != lastGeneratedFlashcard) {
+                    lastGeneratedFlashcard = randomFlashcard;
+                    return randomFlashcard;
+                }
+            }
         }
 
-        // Handle the case where no flashcards are found for the selected difficulty
-        System.out.println("No flashcards found for the selected difficulty: " + selectedDifficulty);
-
-        // Retry with a different difficulty
-        return generateNextCard(flashcardsDifficultyMap);
+        System.out.println("No suitable flashcard found");
+        return null; // Or handle this case as per your requirement
     }
-
 }

@@ -2,52 +2,73 @@ package com.activ8.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.activ8.eventbus.EventBus;
+import com.activ8.eventbus.events.StudySessionStartedEvent;
+import com.activ8.model.EDifficulty;
+import com.activ8.model.Flashcard;
 import com.activ8.model.FreeRoamStudySession;
 import com.activ8.model.StudySession;
 import com.activ8.model.StudySessionLog;
-
+import com.activ8.model.StudySessionManager;
 import com.activ8.repository.StudySessionLogRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StudySessionService {
-    
-    private StudySession studySession;
+
+    @Autowired
+    private FlashcardService flashcardService;
 
     @Autowired
     private StudySessionLogRepository studySessionRepository;
 
     @Autowired
-    public StudySessionService(StudySessionLogRepository studySessionRepository) {
-        this.studySessionRepository = studySessionRepository;
+    private EventBus eventBus;
+
+    @Autowired
+    private StudySessionManager studySessionManager;
+
+    private StudySession studySession;
+
+    @Transactional
+    public void startFreeRoamStudySession(String userId, String studySetId) {
+        try {
+            // if(studySessionManager.getSession(userId) != null) {
+                studySessionManager.addSession(userId, new FreeRoamStudySession(studySetId, flashcardService));
+            //}
+            studySessionManager.getSession(userId).start(studySetId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //eventBus.publish(new StudySessionStartedEvent(studySession, userId, studySetId, LocalDateTime.now()));
     }
 
-    public void startFreeRoamStudySession(String userId) {
-        this.studySession = new FreeRoamStudySession(userId);
-        studySession.start(userId);
+    public Flashcard nextCard(String userId) {
+        return studySessionManager.getSession(userId).nextCard();
     }
 
-    public void nextCard() {
-        studySession.nextCard();
+    public void assignDifficultyToFlashcard(String userId, String flashcardId, EDifficulty difficulty) {
+        Optional<Flashcard> flashcardToBeAssigned = flashcardService.getFlashcard(flashcardId);
+
+        studySessionManager.getSession(userId).assignDifficulty(flashcardToBeAssigned.get(), difficulty);
     }
 
     public void endStudySession(StudySession studySession) {
-        //studySession.setEndTime(LocalDateTime.now());
+        // studySession.setEndTime(LocalDateTime.now());
 
     }
 
-    public List<StudySessionLog> getAllStudySessions(String userId) {
+    // Database related operations:
+    public List<StudySessionLog> getAllStudySessionLogs(String userId) {
         return studySessionRepository.findAllByUserId(userId);
     }
 
-    public Optional<StudySessionLog> getStudySessionById(String id) {
+    public Optional<StudySessionLog> getStudySessionLogById(String id) {
         return studySessionRepository.findById(id);
-    }
-
-    public void deleteStudySession(String id) {
-        studySessionRepository.deleteById(id);
     }
 }

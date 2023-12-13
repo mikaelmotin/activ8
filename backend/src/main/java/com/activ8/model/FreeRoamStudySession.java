@@ -17,55 +17,51 @@ public class FreeRoamStudySession implements StudySession {
     @Autowired
     private EventBus eventBus;
 
+    private FlashcardService flashcardService;
+
     private String studySetId;
     private boolean isStarted;
-    private FlashcardService flashcardService;
-    private FlashcardFrequencyManager flashcardFrequencyManager;
-    private SimpMessagingTemplate messagingTemplate;
 
-    public FreeRoamStudySession(String studySetId) {
+    private FlashcardFrequencyManager flashcardFrequencyManager;
+
+
+    public FreeRoamStudySession(String studySetId, FlashcardService flashcardService) {
+        this.flashcardService = flashcardService;
         this.studySetId = studySetId;
-        this.flashcardFrequencyManager = new FlashcardFrequencyManager(null); //Skapa med FlashcardsService?
+        this.flashcardFrequencyManager = new FlashcardFrequencyManager(studySetId, flashcardService, new RandomDifficultySelectionStrategy()); 
     }
 
     @Override
     public void start(String userId) {
         if (!isStarted) {
             isStarted = true;
-            eventBus.publish(new StudySessionStartedEvent(this, userId, studySetId, LocalDateTime.now()));
         }
-        // Logic
+        // FlashcardfrequencyManager should already have been initialized?
+
     }
 
     @Override
     public void end() {
-        // Cleanup logic
-        // Log event for study session completion
-        //eventBus.publish(new StudySessionCompletedEvent(this));
-
+        flashcardFrequencyManager = null;
     }
 
     @Override
-    public void nextCard() {
-        // Logic to retrieve and display the next card
-        Flashcard nextFlashcard = flashcardFrequencyManager.generateNextCard(null);
-
-        // Notify frontend about the next card
-        notifyFrontendNextCard(nextFlashcard);
-
-        // Log event for study session progress
-        eventBus.publish(new StudySessionProgressEvent(this));
-
-        // Log event for flashcard flipped - not here tho
-        eventBus.publish(new FlashcardFlippedEvent(this));
-    }
-
-
-    private void notifyFrontendNextCard(Flashcard flashcard) {
-        // Logic to send a real-time signal to the frontend about the next card
+    public Flashcard nextCard() {
+        Flashcard nextFlashcard = flashcardFrequencyManager.generateNextCard(
+            flashcardFrequencyManager.getFlashcardsDifficultyMap()
+            );
         
-        String message = flashcardService.convertFlashcardToJson(flashcard);
-        messagingTemplate.convertAndSend("/topic/nextCard", message);
+        
+        return nextFlashcard;
+        // // Log event for study session progress
+        // eventBus.publish(new StudySessionProgressEvent(this));
 
+        // // Log event for flashcard flipped - not here tho
+        // eventBus.publish(new FlashcardFlippedEvent(this));
     }
+
+    public void assignDifficulty(Flashcard flashcard, EDifficulty difficulty) {
+        flashcardFrequencyManager.assignDifficulty(flashcard, difficulty);
+    }
+
 }
