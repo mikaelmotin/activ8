@@ -6,9 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.FlashcardFlippedEvent;
+import com.activ8.eventbus.events.FlashcardIteratedEvent;
+import com.activ8.eventbus.events.PointLimitReachedEvent;
 import com.activ8.eventbus.events.StudySessionCompletedEvent;
 import com.activ8.eventbus.events.StudySessionStartedEvent;
 import com.activ8.eventbus.subscribers.FlashcardFlippedEventSubscriber;
+import com.activ8.eventbus.subscribers.FlashcardIteratedEventSubscriber;
+import com.activ8.eventbus.subscribers.PointLimitReachedEventSubscriber;
 import com.activ8.eventbus.subscribers.StudySessionProgressEventSubscriber;
 import com.activ8.model.EDifficulty;
 import com.activ8.model.Flashcard;
@@ -46,6 +50,12 @@ public class StudySessionService {
     @Autowired
     FlashcardFlippedEventSubscriber flashcardFlippedEventSubscriber;
 
+    @Autowired
+    FlashcardIteratedEventSubscriber flashcardIteratedEventSubscriber;
+
+    @Autowired
+    PointLimitReachedEventSubscriber pointLimitReachedEventSubscriber;
+
     private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
 
     @Transactional
@@ -68,10 +78,26 @@ public class StudySessionService {
     public void initalizeSubscribers() {
         eventBus.subscribe(flashcardFlippedEventSubscriber);
         eventBus.subscribe(sessionProgressEventSubscriber);
+        eventBus.subscribe(flashcardIteratedEventSubscriber);
+        eventBus.subscribe(pointLimitReachedEventSubscriber);
     }
 
-    public Flashcard nextCard(String userId) {
-        return studySessionManager.getSession(userId).nextCard();
+    public void unsubscribeFromEventBus() {
+        eventBus.unsubscribe(flashcardFlippedEventSubscriber);
+        eventBus.unsubscribe(sessionProgressEventSubscriber);
+        eventBus.unsubscribe(flashcardIteratedEventSubscriber);
+    }
+
+    public Flashcard nextCard(String userId, String sessionId, String studySetId) {
+        try {
+            Flashcard flashCardToReturn = studySessionManager.getSession(userId).nextCard();
+            eventBus.publish(new FlashcardIteratedEvent(sessionId, userId, studySetId));
+
+            return flashCardToReturn;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void assignDifficultyToFlashcard(String userId, String flashcardId, EDifficulty difficulty) {
@@ -93,8 +119,9 @@ public class StudySessionService {
              * ));
              */
             // UNSUBSCRIBE HERE!!!!
-            studySessionManager.removeSession(userId);
 
+            unsubscribeFromEventBus();
+            studySessionManager.removeSession(userId);
         } catch (Exception e) {
             logger.error("Error ending FreeRoamStudySession for user {}: {}", userId, e.getMessage(), e);
         }

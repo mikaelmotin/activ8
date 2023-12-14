@@ -19,9 +19,6 @@ public class StudySessionProgress {
         this.individualFlashcardsFlipCount = new ConcurrentHashMap<>();
     }
 
-    public void incrementCardFlips() {
-        this.nFlashcardsFlipped++;
-    }
 
     public int getCardFlips() {
         return nFlashcardsFlipped;
@@ -37,6 +34,14 @@ public class StudySessionProgress {
 
     public int getnFlashcardsIterated() {
         return nFlashcardsIterated;
+    }
+
+
+    /**
+     * Records that a flashcard has been iterated (=User switched to next card).
+     */
+    public void recordFlashcardIterated() {
+        nFlashcardsIterated++;
     }
 
     /**

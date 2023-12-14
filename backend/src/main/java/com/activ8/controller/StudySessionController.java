@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.activ8.dto.FlashcardDifficultyDTO;
 import com.activ8.dto.FlashcardFlippedDTO;
+import com.activ8.dto.FlashcardIteratedDTO;
 import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.FlashcardFlippedEvent;
 import com.activ8.eventbus.events.StudySessionProgressEvent;
@@ -55,15 +56,25 @@ public class StudySessionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/nextCard")
-    public ResponseEntity<?> nextCard(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
-            Flashcard flashcard = studySessionService.nextCard(userDetails.getId());
-            return ResponseEntity.ok().body(flashcard);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Couldn't deliver next card");
-        }
+    @GetMapping("/nextCard/{studySetId}/{sessionId}") 
+    public ResponseEntity<?> nextCard(
+            @AuthenticationPrincipal UserDetailsImpl userDetails, 
+            @PathVariable String studySetId, 
+            @PathVariable String sessionId 
+        ) {
+            try {
+                Flashcard flashcard = studySessionService.nextCard(
+                        userDetails.getId(),  
+                        sessionId,
+                        studySetId
+                );
+
+
+                return ResponseEntity.ok().body(flashcard);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.badRequest().body("Couldn't deliver next card");
+            }
     }
 
     /**
