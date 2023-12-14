@@ -15,7 +15,7 @@
         if(isUserAuthenticated && browser) {
             sessionStorage.setItem("isAuthenticated", "true")
             isAuthenticated.set(true)
-            goto("/my_library")
+            goto("/dashboard")
 
         } else {
             goto("/signin")
