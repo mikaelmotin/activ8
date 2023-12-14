@@ -9,17 +9,34 @@
   export let data;
   let flashcardId;
 
-  console.log("Studyset Id", data.studyset_id, data)
+  console.log("allt kul", data)
+  console.log("allt kul", data)
+
 
   async function endSession() {
-    // You may want to add additional logic for ending the session on the server
-    console.log('Session ended');
-    goto("./");
+    try {
+      const response = await fetch('http://localhost:8080/api/studysessions/endSession', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      console.log('Session ended successfully');
+      goto('./'); // Redirect to the desired page after ending the session
+    } catch (error) {
+      console.error('Failed to end study session with error:', error);
+    }
   }
 
   async function startSession(studySetId) {
     try {
-      const response = await fetch(`http://localhost:8080/api/studysessions/start/${studySetId}`, {
+      const response = await fetch(`http://localhost:8080/api/studysessions/start/` + studySetId, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -32,12 +49,14 @@
       }
 
       // If session starts successfully, fetch the first flashcard
-      await getNextCard();
+      await nextCard();
+      console.log("start studysetid", studySetId)
+      console.log(studySetId)
     } catch (error) {
       console.error("Starting studysession failed with error: ", error);
     }
   }
-  async function getNextCard() {
+  async function nextCard() {
     try {
       const response = await fetch('http://localhost:8080/api/studysessions/nextCard', {
         method: 'GET',
@@ -54,7 +73,7 @@
       console.log("Next card triggered successfully");
 
       const cardData = await response.json();
-      console.log(cardData);
+      console.log("eyy its her first time coming to my house",cardData);
 
       // Set flashcardId when fetching the next card
       flashcardId = cardData.id;
@@ -69,7 +88,7 @@
 
   async function generateFlashcard() {
     // Recursively call itself if getting the next card fails
-    await getNextCard();
+    await nextCard();
   } 
   async function assignDifficulty(difficulty) {
     try {
