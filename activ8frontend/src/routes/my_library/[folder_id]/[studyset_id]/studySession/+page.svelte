@@ -1,131 +1,103 @@
 <script>
   import Flashcard from '../../../../../components/flashcard.svelte';
   import { onMount } from 'svelte';
-  import SockJS from 'sockjs-client';
-  import Stomp from 'stompjs';
   import { goto } from "$app/navigation";
-
-
 
   let front = '';
   let back = '';
   let isFlipped = false;
-  export let studyset_id;
+  export let data;
+  let difficulty = "MEDIUM";
 
+  console.log("Studyset Id", data.studyset_id, data)
 
-
-  
-  // WebSocket and Stomp.js code
-  let stompClient;
-
-  function connect() {
-    const socket = new SockJS('http://localhost:8080/ws');
-    stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, frame => {
-      console.log('Connected: ' + frame);
-      // You can add any initialization logic here if needed
-    });
-  }
-
-  function disconnect() {
-    if (stompClient) {
-      stompClient.disconnect();
-      console.log('Disconnected');
-    }
-  }
   async function endSession() {
-    disconnect(); // Disconnect from WebSocket
     // You may want to add additional logic for ending the session on the server
     console.log('Session ended');
-    goto("./")
+    goto("./");
   }
 
   async function startSession(studySetId) {
     try {
-      const response = await fetch('http://localhost:8080/api/studysessions/start/' + studySetId, {
+      const response = await fetch(`http://localhost:8080/api/studysessions/start/${studySetId}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       });
+
       if (!response.ok) {
-        console.log('Started!');
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      connect(); // Connect to WebSocket when the session starts
-      // Generate the first flashcard
-      await generateFlashcard();
+
+      // If session starts successfully, fetch the first flashcard
+      await getNextCard();
     } catch (error) {
-      console.error('Starting studysession failed with error: ', error);
+      console.error("Starting studysession failed with error: ", error);
+    }
+  }
+  async function getNextCard() {
+    try {
+      const response = await fetch('http://localhost:8080/api/studysessions/nextCard', {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      console.log("Next card triggered successfully");
+      // Set card data to display on the front and back
+      const cardData = await response.json();
+      console.log(cardData);
+
+      // Set card data to display on the front and back
+      setCardData(cardData.term, cardData.definition);
+    } catch (error) {
+      console.error("Getting next card failed with error: ", error);
+
+      // If getting the next card fails, call itself again
+      await generateFlashcard();
     }
   }
 
-  async function getNextCard() {
-  try {
-    const response = await fetch('http://localhost:8080/api/studysessions/nextCard', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const responseBody = await response.text();
-
-    if (responseBody.trim() !== '') {
-      const responseData = JSON.parse(responseBody);
-      console.log('Next card triggered successfully');
-      return responseData;
-    } else {
-      console.log('No card data found');
-      return null;
-    }
-  } catch (error) {
-    console.error('Getting next card failed with error: ', error);
-    return null;
-  }}
-
-  async function assignDifficulty(difficulty) {
+  async function generateFlashcard() {
+    // Recursively call itself if getting the next card fails
+    await getNextCard();
+  } 
+  async function assignDifficulty(difficulty, flashcardId) {
     try {
-      const response = await fetch('http://localhost:8080/api/studysessions/assignDifficulty/' + studyset_id, {
+      // Send the selected difficulty to the server
+      const response = await fetch('http://localhost:8080/api/studysessions/assignDifficulty/' + flashcardId, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          //USERiD
-
-          //FLÖASHCARDID
-          difficulty: difficulty
+          difficulty: difficulty,
+          flashcardId: flashcardId
         }),
         credentials: 'include',
       });
+      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
       console.log('Difficulty triggered successfully');
+      
+      // Generate the next flashcard after assigning difficulty
       await generateFlashcard();
     } catch (error) {
       console.error('Changing difficulty failed with error: ', error);
     }
   }
 
-  async function generateFlashcard() {
-    const nextCardData = await getNextCard();
-
-    if (nextCardData) {
-      setCardData(nextCardData.term, nextCardData.definition);
-    } else {
-      console.log('No card data found. Trying again...');
-      await generateFlashcard(); // Call itself again
-    }
-  }
 
   function setCardData(term, definition) {
     front = term;
@@ -145,7 +117,7 @@
 
   // Start the session when the component mounts
   onMount(() => {
-    startSession(studyset_id); // Replace with your actual study set ID
+    startSession(data.studyset_id);
   });
 </script>
 
