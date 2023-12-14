@@ -2,6 +2,8 @@ package com.activ8.controller;
 
 import java.util.List;
 
+import javax.naming.NameNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +15,7 @@ import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.FlashcardFlippedEvent;
 import com.activ8.model.Flashcard;
 import com.activ8.model.StudySessionLog;
+import com.activ8.service.FlashcardService;
 import com.activ8.service.StudySessionService;
 import com.activ8.service.UserDetailsImpl;
 
@@ -22,10 +25,13 @@ import com.activ8.service.UserDetailsImpl;
 public class StudySessionController {
 
     @Autowired
-    private StudySessionService studySessionService;
+    StudySessionService studySessionService;
 
     @Autowired
-    private EventBus eventBus;
+    FlashcardService flashcardService;
+
+    @Autowired
+    EventBus eventBus;
 
     // GET REQUESTS
 
@@ -71,7 +77,6 @@ public class StudySessionController {
             return ResponseEntity.badRequest().body("startSession failed");
         }
 
-
     }
 
     /**
@@ -84,13 +89,16 @@ public class StudySessionController {
     public ResponseEntity<?> assignFlashcardDifficulty(@AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable String flashcardId, @RequestBody FlashcardDifficultyDTO flashcardDifficultyDTO) {
         try {
-            studySessionService.assignDifficultyToFlashcard(
-                    userDetails.getId(),
-                    flashcardId,
-                    flashcardDifficultyDTO.getDifficultyEnum());
+            if(flashcardService.existsByFlashcardId(flashcardId)) {
+                studySessionService.assignDifficultyToFlashcard(
+                        userDetails.getId(),
+                        flashcardId,
+                        flashcardDifficultyDTO.getDifficultyEnum());
 
-            return ResponseEntity.ok("assigned difficulty to flashcard successfully");
-
+                return ResponseEntity.ok("assigned difficulty to flashcard successfully");
+            } else {
+                throw new NameNotFoundException(flashcardId + " is not a flashcard");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("assign difficulty to flashcard failed");
@@ -107,7 +115,6 @@ public class StudySessionController {
     public ResponseEntity<?> endStudySession(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             studySessionService.endStudySession(userDetails.getId());
-            ;
             return ResponseEntity.ok("Study session ended successfully");
         } catch (Exception e) {
             e.printStackTrace();

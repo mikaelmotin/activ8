@@ -31,6 +31,9 @@ public class FlashcardFlippedEventSubscriber implements Subscriber{
                     Then the progression should be sent through a WebSocket to update the UI progress bar
                     Once the progress is completed an event should happen that awards the user points accordingly.
 
+
+                    Send data to points manager, points manager responds with a number between 0-1
+                    which indicates the percentage of how far a user has come in achieving the goal
                 */                
                 //studySessionProgressionService.updateCardFlipped(flashcardFlippedEvent.userId(), flashcardFlippedEvent.flashcardId());
 

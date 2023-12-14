@@ -35,6 +35,10 @@ public class StudySessionProgress {
         this.completed = completed;
     }
 
+    public int getnFlashcardsIterated() {
+        return nFlashcardsIterated;
+    }
+
     /**
      * Records a flip of a flashcard.
      * 

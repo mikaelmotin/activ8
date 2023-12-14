@@ -55,6 +55,11 @@ public class FlashcardService {
         return false;
     }
 
+    @Transactional
+    public Boolean existsByFlashcardId(String flashcardId) {
+        return flashcardRepository.existsById(flashcardId);
+    }
+
     public String convertFlashcardToJson(Flashcard flashcard) {
         try {
             return objectMapper.writeValueAsString(flashcard);
