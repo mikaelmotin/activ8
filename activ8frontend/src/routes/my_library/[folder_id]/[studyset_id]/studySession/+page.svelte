@@ -7,7 +7,7 @@
   let back = '';
   let isFlipped = false;
   export let data;
-  let difficulty = "MEDIUM";
+  let flashcardId;
 
   console.log("Studyset Id", data.studyset_id, data)
 
@@ -52,16 +52,17 @@
       }
 
       console.log("Next card triggered successfully");
-      // Set card data to display on the front and back
+
       const cardData = await response.json();
       console.log(cardData);
+
+      // Set flashcardId when fetching the next card
+      flashcardId = cardData.id;
 
       // Set card data to display on the front and back
       setCardData(cardData.term, cardData.definition);
     } catch (error) {
       console.error("Getting next card failed with error: ", error);
-
-      // If getting the next card fails, call itself again
       await generateFlashcard();
     }
   }
@@ -70,7 +71,7 @@
     // Recursively call itself if getting the next card fails
     await getNextCard();
   } 
-  async function assignDifficulty(difficulty, flashcardId) {
+  async function assignDifficulty(difficulty) {
     try {
       // Send the selected difficulty to the server
       const response = await fetch('http://localhost:8080/api/studysessions/assignDifficulty/' + flashcardId, {
@@ -84,13 +85,14 @@
         }),
         credentials: 'include',
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       console.log('Difficulty triggered successfully');
-      
+      console.log(flashcardId, difficulty)
+
       // Generate the next flashcard after assigning difficulty
       await generateFlashcard();
     } catch (error) {
