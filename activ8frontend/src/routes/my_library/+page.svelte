@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import RouteGuard from "../../components/RouteGuard.svelte";
   import AddFolderPopUp from "../../components/AddFolderPopUp.svelte";
+  import { goto } from '$app/navigation';
+
 
   let folderPopUp = { title: "", description: "" };
 
@@ -16,6 +18,10 @@
 
   function openFolderPopUp() {
     toggleFolderAdd = true;
+  }
+
+  function toDashboard() {
+    goto("/dashboard"); // Navigate back by one step
   }
 
   onMount(() => {
@@ -128,7 +134,7 @@
       </div>
 
       <div>
-        <img class="h-14 ml-auto mr-12" src="/user.png" alt="user profile" onclick="window.location.href = window.location.href + '/dashboard'" />
+        <img class="h-14 ml-auto mr-12" src="/user.png" alt="user profile" onclick= {toDashboard} />
     </div>
       <button
         on:click={toggleEditMode}
