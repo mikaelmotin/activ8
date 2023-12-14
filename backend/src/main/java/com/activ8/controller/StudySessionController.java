@@ -142,7 +142,7 @@ public class StudySessionController {
                                       @RequestBody FlashcardFlippedDTO flashcardFlippedDTO) 
         {
         double progressionPercentage = Math.floor(Math.random() * 101);
-        eventBus.publish(new StudySessionProgressEvent("ssid_6969", userDetails.getId(), progressionPercentage));
+        eventBus.publish(new StudySessionProgressEvent(flashcardFlippedDTO.sessionId(), userDetails.getId(), progressionPercentage));
         return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
     //     try {
     //         studySessionService.toggleFlashCardFlipped(
