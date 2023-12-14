@@ -435,6 +435,7 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
         // You can implement the functionality to initiate a study session here
         inStudySession = true;
         studySessionService.startFreeRoamStudySession(userId, studySet.id());
+        studySessionService.nextCard(userId);
         System.out.println("Starting study session for " + studySet.title() + "...");
     }
 

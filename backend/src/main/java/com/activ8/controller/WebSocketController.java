@@ -1,4 +1,4 @@
-package com.activ8.controller;
+/*package com.activ8.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -33,4 +33,4 @@ public class WebSocketController {
         String testMessage = "Hello from the server!";
         messagingTemplate.convertAndSend("/topic/nextCard", testMessage);
     }
-}
+}*/

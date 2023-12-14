@@ -1,4 +1,4 @@
-package com.activ8.security;
+/*package com.activ8.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,19 +12,19 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
     /app is the prefix for messages bound for methods annotated with @MessageMapping. 
  */
 
-@Configuration
-@EnableWebSocketMessageBroker
-public class WebSocketSecurityConfig implements WebSocketMessageBrokerConfigurer {
+//@Configuration
+//@EnableWebSocketMessageBroker
+//public class WebSocketSecurityConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:5173").withSockJS();
-    }
+  //  @Override
+  //  public void registerStompEndpoints(StompEndpointRegistry registry) {
+   //     registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:5173").withSockJS();
+  //  }
     
 
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
-        registry.setApplicationDestinationPrefixes("/app");
-    }
-}
+   // @Override
+   // public void configureMessageBroker(MessageBrokerRegistry registry) {
+    //    registry.enableSimpleBroker("/topic");
+   //     registry.setApplicationDestinationPrefixes("/app");
+  //  }
+//}
