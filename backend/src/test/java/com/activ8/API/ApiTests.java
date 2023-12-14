@@ -14,7 +14,7 @@ public class ApiTests {
         RestAssured.baseURI = "http://localhost:8080"; // Set the base URI for all requests
     }
 
-    // Tests that the API call Sign creates a user successfully.
+    // Tests that the API call SignUp creates a user successfully.
     @Test
     public void testSignUp() {
         given()

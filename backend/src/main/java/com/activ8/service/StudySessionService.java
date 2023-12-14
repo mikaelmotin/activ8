@@ -54,7 +54,6 @@ public class StudySessionService {
     public Flashcard nextCard(String userId) {
         Flashcard nextFlashcard = studySessionManager.getSession(userId).nextCard();
         if (nextFlashcard != null) {
-            System.out.println("Next flashcard: " + nextFlashcard.getDefinition());
         } else {
             nextFlashcard = this.nextCard(userId);
         }

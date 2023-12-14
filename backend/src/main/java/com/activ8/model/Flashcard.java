@@ -12,6 +12,7 @@ public abstract class Flashcard {
     protected String term;
     protected String definition;
     protected EDifficulty difficulty;
+    public boolean isTermOnDisplay = false;
 
     public Flashcard() {
 
@@ -45,6 +46,7 @@ public abstract class Flashcard {
     public EDifficulty getDifficulty() {
         return difficulty;
     }
+    public void setTermOnDisplay(boolean value){isTermOnDisplay=value;}
 
 
 }
