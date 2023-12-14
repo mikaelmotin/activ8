@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.activ8.service.FlashcardService;
+import com.activ8.service.StudySessionProgressionService;
 import com.activ8.service.StudySessionService;
 
 @Component
@@ -23,6 +24,9 @@ public class StudySessionStartedEventSubscriber implements Subscriber {
 
     @Autowired
     StudySessionService studySessionService;
+
+    @Autowired
+    StudySessionProgressionService progressionService;
 
     private static final Logger logger = LoggerFactory.getLogger(StudySessionCompletedEventSubscriber.class);
 
@@ -42,18 +46,18 @@ public class StudySessionStartedEventSubscriber implements Subscriber {
                 }
 
                 StudySessionLog log = new StudySessionLog(
-                        null, 
-                        studySessionEvent.userId(), 
-                        studySessionEvent.source(), 
-                        studySessionEvent.studySetId(), 
-                        nFlashcards, 
-                        0, 
-                        LocalDateTime.now().toString(), 
-                        "To Be Decided", 
-                        0
-                );
-                
-               studySessionService.saveStudySessionLog(log);
+                        null,
+                        studySessionEvent.userId(),
+                        studySessionEvent.source(),
+                        studySessionEvent.studySetId(),
+                        nFlashcards,
+                        0,
+                        null,
+                        LocalDateTime.now().toString(),
+                        "To Be Decided",
+                        0);
+                progressionService.tempSaveUserLog(log);
+                studySessionService.saveStudySessionLog(log);
             }
 
         } catch (Exception e) {

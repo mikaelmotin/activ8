@@ -13,6 +13,7 @@ import com.activ8.eventbus.events.StudySessionStartedEvent;
 import com.activ8.eventbus.subscribers.FlashcardFlippedEventSubscriber;
 import com.activ8.eventbus.subscribers.FlashcardIteratedEventSubscriber;
 import com.activ8.eventbus.subscribers.PointLimitReachedEventSubscriber;
+import com.activ8.eventbus.subscribers.StudySessionCompletedEventSubscriber;
 import com.activ8.eventbus.subscribers.StudySessionProgressEventSubscriber;
 import com.activ8.model.EDifficulty;
 import com.activ8.model.Flashcard;
@@ -56,6 +57,7 @@ public class StudySessionService {
     @Autowired
     PointLimitReachedEventSubscriber pointLimitReachedEventSubscriber;
 
+
     private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
 
     @Transactional
@@ -80,12 +82,14 @@ public class StudySessionService {
         eventBus.subscribe(sessionProgressEventSubscriber);
         eventBus.subscribe(flashcardIteratedEventSubscriber);
         eventBus.subscribe(pointLimitReachedEventSubscriber);
+        //eventBus.subscribe(studySessionCompletedEventSubscriber);
     }
 
     public void unsubscribeFromEventBus() {
         eventBus.unsubscribe(flashcardFlippedEventSubscriber);
         eventBus.unsubscribe(sessionProgressEventSubscriber);
         eventBus.unsubscribe(flashcardIteratedEventSubscriber);
+        //eventBus.unsubscribe(studySessionCompletedEventSubscriber);
     }
 
     public Flashcard nextCard(String userId, String sessionId, String studySetId) {
@@ -109,16 +113,11 @@ public class StudySessionService {
     public void endStudySession(String userId) {
         try {
             studySessionManager.getSession(userId).end();
-            /*
-             * eventBus.publish(new StudySessionCompletedEvent(
-             * studySessionManager.getSession(userId),
-             * userId,
-             * 0,
-             * LocalDateTime.now()
-             * 
-             * ));
-             */
-            // UNSUBSCRIBE HERE!!!!
+
+            eventBus.publish(new StudySessionCompletedEvent(
+                userId,
+                LocalDateTime.now().toString()
+            ));
 
             unsubscribeFromEventBus();
             studySessionManager.removeSession(userId);

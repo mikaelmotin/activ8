@@ -2,6 +2,9 @@ package com.activ8.model;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class StudySessionProgress {
     private int nFlashcardsFlipped;
 

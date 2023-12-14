@@ -1,8 +1,6 @@
 package com.activ8.eventbus.events;
 
 
-import com.activ8.model.StudySession;
-
 public record StudySessionProgressEvent(
     String sessionId,
     String userId,
