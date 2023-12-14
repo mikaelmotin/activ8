@@ -127,7 +127,9 @@
         </div>
       </div>
 
-      <img class="h-14 ml-auto mr-12" src="/user.png" alt="user profile" />
+      <div>
+        <img class="h-14 ml-auto mr-12" src="/user.png" alt="user profile" onclick="window.location.href = window.location.href + '/dashboard'" />
+    </div>
       <button
         on:click={toggleEditMode}
         class="border border-gray-500 rounded"
