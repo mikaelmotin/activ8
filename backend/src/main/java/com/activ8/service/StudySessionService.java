@@ -52,7 +52,13 @@ public class StudySessionService {
     }
 
     public Flashcard nextCard(String userId) {
-        return studySessionManager.getSession(userId).nextCard();
+        Flashcard nextFlashcard = studySessionManager.getSession(userId).nextCard();
+        if (nextFlashcard != null) {
+            System.out.println("Next flashcard: " + nextFlashcard.getDefinition());
+        } else {
+            nextFlashcard = this.nextCard(userId);
+        }
+        return nextFlashcard;
     }
 
     public void assignDifficultyToFlashcard(String userId, String flashcardId, EDifficulty difficulty) {
