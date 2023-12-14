@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Transactional
   public void awardPoints(String userId, int points) {
     Optional<User> userToBeAwarded = userRepository.findById(userId);
-    userToBeAwarded.get().setPoints(points);
+    userToBeAwarded.get().setPoints(userToBeAwarded.get().getPoints() + points);
 
     userRepository.save(userToBeAwarded.get());
   }
