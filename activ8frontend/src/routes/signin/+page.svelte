@@ -39,7 +39,7 @@
         isAuthenticated.set(true);
         sessionStorage.setItem("isAuthenticated", "true")
         sessionStorage.setItem(isAuthenticated, true);
-        goto("/my_library");
+        goto("/dashboard");
       } else {
         // Handle error cases
         console.error("Sign in failed:", response.status, response.statusText);

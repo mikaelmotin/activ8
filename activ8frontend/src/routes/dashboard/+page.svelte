@@ -29,7 +29,7 @@
         <div class="text-white text-xl self-center whitespace-nowrap mt-5">
           Keep studying to gain more points.
         </div>
-        <button class="bg-white  flex  text-2xl items-center justify-center shrink-0 h-[49px] flex-col mt-20 rounded-2xl max-md:max-w-full max-md:mt-10" onclick="window.location.href = './'">
+        <button class="bg-white  flex  text-2xl items-center justify-center shrink-0 h-[49px] flex-col mt-20 rounded-2xl max-md:max-w-full max-md:mt-10" onclick="window.location.href = './my_library'">
           My Library
         </button>
       </div>
