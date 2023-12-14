@@ -37,6 +37,7 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
     @Autowired
     private StudySessionService studySessionService;
     private String userId;
+    private boolean inStudySession = false;
     Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMongodbLoginApplication.class, args);
@@ -274,36 +275,40 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
             StudySet selectedStudySet = studySetsInFolder.get(studySetChoice - 1);
             System.out.println("Selected Study Set: " + selectedStudySet.title());
 
-            while (true) {
-                System.out.println("\nStudy Set Actions:");
-                System.out.println("1. Create Flashcard");
-                System.out.println("2. Remove Flashcard");
-                System.out.println("3. See Flashcards");
-                System.out.println("4. Start Study Session");
-                System.out.println("5. Back to Study Sets");
-                System.out.print("Enter your choice: ");
-                int studySetActionChoice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
+            if (!inStudySession) {
+                while (true) {
+                    System.out.println("\nStudy Set Actions:");
+                    System.out.println("1. Create Flashcard");
+                    System.out.println("2. Remove Flashcard");
+                    System.out.println("3. See Flashcards");
+                    System.out.println("4. Start Study Session");
+                    System.out.println("5. Back to Study Sets");
+                    System.out.print("Enter your choice: ");
+                    int studySetActionChoice = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
 
-                switch (studySetActionChoice) {
-                    case 1:
-                        createFlashcard(selectedStudySet);
-                        break;
-                    case 2:
-                        removeFlashcard(selectedStudySet);
-                        break;
-                    case 3:
-                        seeFlashcards(selectedStudySet);
-                        break;
-                    case 4:
-                        startStudySession(selectedStudySet);
-                        break;
-                    case 5:
-                        return; // Back to the list of Study Sets
-                    default:
-                        System.out.println("Invalid choice. Please enter a valid option.");
-                        break;
+                    switch (studySetActionChoice) {
+                        case 1:
+                            createFlashcard(selectedStudySet);
+                            break;
+                        case 2:
+                            removeFlashcard(selectedStudySet);
+                            break;
+                        case 3:
+                            seeFlashcards(selectedStudySet);
+                            break;
+                        case 4:
+                            startStudySession(selectedStudySet);
+                            return; // Exit method to start the study session
+                        case 5:
+                            return; // Back to the list of Study Sets
+                        default:
+                            System.out.println("Invalid choice. Please enter a valid option.");
+                            break;
+                    }
                 }
+            } else {
+                startStudySession(selectedStudySet);
             }
         } else {
             System.out.println("Invalid study set choice. Please select a valid study set.");
@@ -428,9 +433,9 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
     private void startStudySession(StudySet studySet) {
         // Logic to start a study session using the chosen study set
         // You can implement the functionality to initiate a study session here
+        inStudySession = true;
         studySessionService.startFreeRoamStudySession(userId, studySet.id());
         System.out.println("Starting study session for " + studySet.title() + "...");
-        studySessionService.nextCard(userId);
     }
 
 
