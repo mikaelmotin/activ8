@@ -15,7 +15,7 @@ public class BasicPointsStrategy implements PointsStrategy {
         // Calculate weighted average
         double weightedAverage = (flashcardsFlippedMetric * FLIPPED_WEIGHT) + (flashcardsIteratedMetric * ITERATED_WEIGHT);
 
-        // Ensure result is between 0 and 1
+        // Ensure that the result is between 0 and 1 because we are tracking in percentage.
         return Math.min(Math.max(weightedAverage, 0), 1);
     }
 }

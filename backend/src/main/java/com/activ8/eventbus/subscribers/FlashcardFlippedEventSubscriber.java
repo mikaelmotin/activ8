@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.activ8.eventbus.events.Event;
 import com.activ8.eventbus.events.FlashcardFlippedEvent;
+import com.activ8.service.FlashcardService;
 import com.activ8.service.StudySessionProgressionService;
 
 
@@ -16,12 +17,17 @@ public class FlashcardFlippedEventSubscriber implements Subscriber{
     @Autowired
     StudySessionProgressionService studySessionProgressionService;
 
+    @Autowired
+    FlashcardService flashcardService;
+
     private static final Logger logger = LoggerFactory.getLogger(FlashcardFlippedEventSubscriber.class);
 
     @Override
     public void handleEvent(Event event) {
         try {
             if (event instanceof FlashcardFlippedEvent flashcardFlippedEvent) {
+                int studySetSize = flashcardService.getAllFlashcardsInStudySet(flashcardFlippedEvent.studySetId()).size();
+                studySessionProgressionService.handleCardFlip(flashcardFlippedEvent.userId(), flashcardFlippedEvent.flashcardId(), studySetSize);
                 // Logic
                 // ...
                 /*  Planning for tomorrow:

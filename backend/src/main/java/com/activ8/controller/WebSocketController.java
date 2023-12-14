@@ -1,6 +1,7 @@
 package com.activ8.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +21,26 @@ public class WebSocketController {
     @Autowired
     FlashcardService flashcardService;
 
-    @SendTo("/topic/nextCard")
-    public String notifyFrontendNextCard(Flashcard flashcard) {
-        // Convert the Flashcard to JSON or a suitable format
-        return "Apaapapapa";
-        //return flashcardService.convertFlashcardToJson(flashcard);
-    }
+    // @SendTo("/topic/nextCard")
+    // public String notifyFrontendNextCard(Flashcard flashcard) {
+    //     // Convert the Flashcard to JSON or a suitable format
+    //     return "Apaapapapa";
+    //     //return flashcardService.convertFlashcardToJson(flashcard);
+    // }
 
     // A simple endpoint to trigger sending a message
-    @GetMapping("/send-test-message")
-    public void sendTestMessage() {
-        String testMessage = "Hello from the server!";
-        messagingTemplate.convertAndSend("/topic/nextCard", testMessage);
+    // @GetMapping("/send-test-message")
+    // public void sendTestMessage() {
+    //     String testMessage = "Hello from the server!";
+    //     messagingTemplate.convertAndSend("/topic/nextCard", testMessage);
+    // }
+
+
+
+    @MessageMapping("/start")
+    @SendTo("/topic/progress")
+    public String processProgressStart(String message) {
+        // This method could be triggered when a new study session starts
+        return "Session Started: " + message;
     }
 }

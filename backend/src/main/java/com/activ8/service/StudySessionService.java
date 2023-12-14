@@ -28,16 +28,16 @@ import org.slf4j.LoggerFactory;
 public class StudySessionService {
 
     @Autowired
-    private FlashcardService flashcardService;
+    FlashcardService flashcardService;
 
     @Autowired
-    private StudySessionLogRepository studySessionRepository;
+    StudySessionLogRepository studySessionRepository;
 
     @Autowired
-    private EventBus eventBus;
+    EventBus eventBus;
 
     @Autowired
-    private StudySessionManager studySessionManager;
+    StudySessionManager studySessionManager;
 
     private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
 
@@ -85,8 +85,8 @@ public class StudySessionService {
         }
     }
 
-    public void toggleFlashCardFlipped(String userId, String flashcardId) {
-        eventBus.publish(new FlashcardFlippedEvent(userId, flashcardId));
+    public void toggleFlashCardFlipped(String userId, String studySetId, String flashcardId) {
+        eventBus.publish(new FlashcardFlippedEvent(userId, studySetId, flashcardId));
     }
 
     // Database related operations:

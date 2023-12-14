@@ -13,6 +13,9 @@ import com.activ8.dto.FlashcardDifficultyDTO;
 import com.activ8.dto.FlashcardFlippedDTO;
 import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.FlashcardFlippedEvent;
+import com.activ8.eventbus.events.StudySessionProgressEvent;
+import com.activ8.eventbus.subscribers.StudySessionProgressEventSubscriber;
+import com.activ8.eventbus.subscribers.StudySessionStartedEventSubscriber;
 import com.activ8.model.Flashcard;
 import com.activ8.model.StudySessionLog;
 import com.activ8.service.FlashcardService;
@@ -32,6 +35,9 @@ public class StudySessionController {
 
     @Autowired
     EventBus eventBus;
+
+    @Autowired
+    StudySessionProgressEventSubscriber sessionProgressEventSubscriber;
 
     // GET REQUESTS
 
@@ -70,6 +76,15 @@ public class StudySessionController {
     public ResponseEntity<?> startStudySession(@AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable String studySetId) {
         try {
+
+
+
+            // DELETE LATER
+            eventBus.subscribe(sessionProgressEventSubscriber);
+            // DELETE LATER
+
+
+
             studySessionService.startFreeRoamStudySession(userDetails.getId(), studySetId);
             return ResponseEntity.ok("startSession success");
         } catch (Exception e) {
@@ -123,13 +138,23 @@ public class StudySessionController {
     }
 
     @PostMapping("/flipCard")
-    public ResponseEntity<?> flipCard(@RequestBody FlashcardFlippedDTO flashcardFlippedDTO) {
-        try {
-            studySessionService.toggleFlashCardFlipped(flashcardFlippedDTO.userId(), flashcardFlippedDTO.flashcardId());
-            return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error in publishing FlashcardFlippedEvent");
+    public ResponseEntity<?> flipCard(@AuthenticationPrincipal UserDetailsImpl userDetails, 
+                                      @RequestBody FlashcardFlippedDTO flashcardFlippedDTO) 
+        {
+        double progressionPercentage = Math.floor(Math.random() * 101);
+        eventBus.publish(new StudySessionProgressEvent(this.toString(), userDetails.getId(), progressionPercentage));
+        return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
+    //     try {
+    //         studySessionService.toggleFlashCardFlipped(
+    //                 flashcardFlippedDTO.userId(), 
+    //                 flashcardFlippedDTO.studySetId(), 
+    //                 flashcardFlippedDTO.flashcardId()
+    //         );
+
+    //         return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return ResponseEntity.badRequest().body("Error in publishing FlashcardFlippedEvent");
+    //     }
         }
-    }
 }
