@@ -8,6 +8,8 @@ import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.FlashcardFlippedEvent;
 import com.activ8.eventbus.events.StudySessionCompletedEvent;
 import com.activ8.eventbus.events.StudySessionStartedEvent;
+import com.activ8.eventbus.subscribers.FlashcardFlippedEventSubscriber;
+import com.activ8.eventbus.subscribers.StudySessionProgressEventSubscriber;
 import com.activ8.model.EDifficulty;
 import com.activ8.model.Flashcard;
 import com.activ8.model.FreeRoamStudySession;
@@ -22,7 +24,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 @Service
 public class StudySessionService {
@@ -39,22 +40,34 @@ public class StudySessionService {
     @Autowired
     StudySessionManager studySessionManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
+    @Autowired
+    StudySessionProgressEventSubscriber sessionProgressEventSubscriber;
 
+    @Autowired
+    FlashcardFlippedEventSubscriber flashcardFlippedEventSubscriber;
+
+    private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
 
     @Transactional
     public void startFreeRoamStudySession(String userId, String studySetId) {
         try {
-            if(studySessionManager.getSession(userId) == null) {
+            if (studySessionManager.getSession(userId) == null) {
                 studySessionManager.addSession(userId, new FreeRoamStudySession(studySetId, flashcardService));
             }
             studySessionManager.getSession(userId).start(studySetId);
 
-
-            eventBus.publish(new StudySessionStartedEvent(studySessionManager.getSession(userId).toString(), userId, studySetId, LocalDateTime.now()));
+            initalizeSubscribers();
+            eventBus.publish(new StudySessionStartedEvent(studySessionManager.getSession(userId).toString(), userId,
+                    studySetId, LocalDateTime.now()));
         } catch (Exception e) {
-            logger.error("Error starting FreeRoamStudySession for user {} with studySetId {}: {}", userId, studySetId, e.getMessage(), e);
+            logger.error("Error starting FreeRoamStudySession for user {} with studySetId {}: {}", userId, studySetId,
+                    e.getMessage(), e);
         }
+    }
+
+    public void initalizeSubscribers() {
+        eventBus.subscribe(flashcardFlippedEventSubscriber);
+        eventBus.subscribe(sessionProgressEventSubscriber);
     }
 
     public Flashcard nextCard(String userId) {
@@ -70,14 +83,16 @@ public class StudySessionService {
     public void endStudySession(String userId) {
         try {
             studySessionManager.getSession(userId).end();
-            /*eventBus.publish(new StudySessionCompletedEvent(
-                    studySessionManager.getSession(userId), 
-                    userId, 
-                    0, 
-                    LocalDateTime.now()
-                    
-            ));*/
-
+            /*
+             * eventBus.publish(new StudySessionCompletedEvent(
+             * studySessionManager.getSession(userId),
+             * userId,
+             * 0,
+             * LocalDateTime.now()
+             * 
+             * ));
+             */
+            // UNSUBSCRIBE HERE!!!!
             studySessionManager.removeSession(userId);
 
         } catch (Exception e) {
@@ -85,8 +100,8 @@ public class StudySessionService {
         }
     }
 
-    public void toggleFlashCardFlipped(String userId, String studySetId, String flashcardId) {
-        eventBus.publish(new FlashcardFlippedEvent(userId, studySetId, flashcardId));
+    public void toggleFlashCardFlipped(String sessionId, String userId, String studySetId, String flashcardId) {
+        eventBus.publish(new FlashcardFlippedEvent(sessionId, userId, studySetId, flashcardId));
     }
 
     // Database related operations:

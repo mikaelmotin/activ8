@@ -25,9 +25,11 @@ public class FlashcardFlippedEventSubscriber implements Subscriber{
     @Override
     public void handleEvent(Event event) {
         try {
+            
             if (event instanceof FlashcardFlippedEvent flashcardFlippedEvent) {
+                System.out.println("FlashcardFlippedEvent TOGGLED");
                 int studySetSize = flashcardService.getAllFlashcardsInStudySet(flashcardFlippedEvent.studySetId()).size();
-                studySessionProgressionService.handleCardFlip(flashcardFlippedEvent.userId(), flashcardFlippedEvent.flashcardId(), studySetSize);
+                studySessionProgressionService.handleCardFlip(flashcardFlippedEvent.sessionId(), flashcardFlippedEvent.userId(), flashcardFlippedEvent.flashcardId(), studySetSize);
                 // Logic
                 // ...
                 /*  Planning for tomorrow:

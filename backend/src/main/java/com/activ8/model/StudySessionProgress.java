@@ -66,4 +66,17 @@ public class StudySessionProgress {
     public ConcurrentHashMap<String, Integer> getAllFlipCounts() {
         return new ConcurrentHashMap<>(individualFlashcardsFlipCount);
     }
+
+    /**
+     * Gets the total number of flips across all flashcards.
+     * 
+     * @return The total number of flips.
+     */
+    public int getTotalFlips() {
+        int totalFlips = 0;
+        for (int flips : individualFlashcardsFlipCount.values()) {
+            totalFlips += flips;
+        }
+        return totalFlips;
+    }
 }

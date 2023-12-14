@@ -23,7 +23,8 @@ public class StudySessionProgressEventSubscriber implements Subscriber {
     public void handleEvent(Event event) {
         try {
             if (event instanceof StudySessionProgressEvent progressEvent) { 
-                progressionService.notifyProgressBar(progressEvent.source(), progressEvent.progressionPercentage());
+                System.out.println("StudySessionProgressEvent TOGGLED");
+                progressionService.notifyProgressBar(progressEvent.sessionId(), progressEvent.progressionPercentage());
             }
             
         } catch (Exception e) {

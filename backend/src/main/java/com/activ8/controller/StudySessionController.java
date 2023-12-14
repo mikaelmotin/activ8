@@ -80,7 +80,7 @@ public class StudySessionController {
 
 
             // DELETE LATER
-            eventBus.subscribe(sessionProgressEventSubscriber);
+            //eventBus.subscribe(sessionProgressEventSubscriber);
             // DELETE LATER
 
 
@@ -141,20 +141,21 @@ public class StudySessionController {
     public ResponseEntity<?> flipCard(@AuthenticationPrincipal UserDetailsImpl userDetails, 
                                       @RequestBody FlashcardFlippedDTO flashcardFlippedDTO) 
         {
-        double progressionPercentage = Math.floor(Math.random() * 101);
-        eventBus.publish(new StudySessionProgressEvent(flashcardFlippedDTO.sessionId(), userDetails.getId(), progressionPercentage));
-        return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
-    //     try {
-    //         studySessionService.toggleFlashCardFlipped(
-    //                 flashcardFlippedDTO.userId(), 
-    //                 flashcardFlippedDTO.studySetId(), 
-    //                 flashcardFlippedDTO.flashcardId()
-    //         );
+        // double progressionPercentage = Math.floor(Math.random() * 101);
+        // eventBus.publish(new StudySessionProgressEvent(flashcardFlippedDTO.sessionId(), userDetails.getId(), progressionPercentage));
+        // return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
+        try {
+            studySessionService.toggleFlashCardFlipped(
+                    flashcardFlippedDTO.sessionId(),
+                    userDetails.getId(), 
+                    flashcardFlippedDTO.studySetId(), 
+                    flashcardFlippedDTO.flashcardId()
+            );
 
-    //         return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.badRequest().body("Error in publishing FlashcardFlippedEvent");
-    //     }
+            return ResponseEntity.ok().body("Success in publishing FlashcardFlippedEvent");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error in publishing FlashcardFlippedEvent");
+        }
         }
 }

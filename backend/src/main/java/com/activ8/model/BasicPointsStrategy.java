@@ -9,7 +9,12 @@ public class BasicPointsStrategy implements PointsStrategy {
 
     @Override
     public double calculateProgress(StudySessionProgress sessionProgress, int studySetSize) {
-        double flashcardsFlippedMetric = (double) sessionProgress.getAllFlipCounts().size() / studySetSize;
+        // In case studySetSize is < 1 - we don't want to get dividied by zero error
+        if(studySetSize < 1) {
+            studySetSize = 30;
+        }
+
+        double flashcardsFlippedMetric = (double) sessionProgress.getTotalFlips() / studySetSize;
         double flashcardsIteratedMetric = (double) sessionProgress.getnFlashcardsIterated() / studySetSize;
 
         // Calculate weighted average
