@@ -33,8 +33,10 @@ class UserServiceTest {
 
     @Test
     void testRegisterUser_Success() {
-        // "testUser", "test@test.com", "password"
         SignupRequest signupRequest = new SignupRequest();
+        signupRequest.setUsername("tester");
+        signupRequest.setEmail("tester@example.com");
+        signupRequest.setPassword("password");
 
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
@@ -46,8 +48,10 @@ class UserServiceTest {
 
     @Test
     void testRegisterUser_UsernameExists() {
-        //"existingUser", "test@test.com", "password"
         SignupRequest signupRequest = new SignupRequest();
+        signupRequest.setUsername("tester");
+        signupRequest.setEmail("tester@example.com");
+        signupRequest.setPassword("password");
 
         when(userRepository.existsByUsername(signupRequest.getUsername())).thenReturn(true);
 
@@ -57,8 +61,10 @@ class UserServiceTest {
 
     @Test
     void testRegisterUser_EmailExists() {
-        //"testUser", "existing@test.com", "password"
         SignupRequest signupRequest = new SignupRequest();
+        signupRequest.setUsername("tester");
+        signupRequest.setEmail("tester@example.com");
+        signupRequest.setPassword("password");
 
         when(userRepository.existsByUsername(signupRequest.getUsername())).thenReturn(false);
         when(userRepository.existsByEmail(signupRequest.getEmail())).thenReturn(true);
@@ -69,8 +75,9 @@ class UserServiceTest {
 
     @Test
     void testAuthenticateUser_Success() {
-        //"testUser", "password"
         LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("testUser");
+        loginRequest.setPassword("encodedPassword");
         User existingUser = new User("testUser", "test@test.com", "encodedPassword");
 
         when(userRepository.findByUsername(loginRequest.getUsername())).thenReturn(Optional.of(existingUser));
@@ -84,8 +91,9 @@ class UserServiceTest {
 
     @Test
     void testAuthenticateUser_WrongCredentials() {
-        //"testUser", "wrongPassword"
         LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("testUser");
+        loginRequest.setPassword("wrongPassword");
 
         when(userRepository.findByUsername(loginRequest.getUsername())).thenReturn(Optional.empty());
 

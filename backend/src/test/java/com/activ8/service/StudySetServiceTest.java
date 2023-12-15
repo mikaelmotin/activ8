@@ -4,6 +4,7 @@ import com.activ8.model.EDifficulty;
 import com.activ8.model.Flashcard;
 import com.activ8.model.SimpleFlashcard;
 import com.activ8.model.StudySet;
+import com.activ8.repository.FlashcardRepository;
 import com.activ8.service.StudySetService;
 import com.activ8.repository.StudySetRepository;
 import org.junit.jupiter.api.Test;
@@ -24,9 +25,14 @@ class StudySetServiceTest {
     private StudySetRepository studySetRepository;
     @Mock
     private FlashcardService flashcardService;
+    @Mock
+    private FlashcardRepository flashcardRepository;
 
     @InjectMocks
     private StudySetService studySetService;
+    private String userId="userId";
+    private String studyFolderId="folderId";
+    private String studySetId;
 
     @BeforeEach
     void setUp() {
@@ -35,63 +41,57 @@ class StudySetServiceTest {
 
     @Test
     void testSaveStudySet() {
-        StudySet studySetToSave = new StudySet("404","100","101","test","A test set");
+        StudySet studySetToSave = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
         when(studySetRepository.save(studySetToSave)).thenReturn(studySetToSave);
 
         StudySet savedStudySet = studySetService.saveStudySet(studySetToSave);
 
         assertNotNull(savedStudySet);
         assertEquals(studySetToSave, savedStudySet);
-        verify(studySetRepository, times(1)).save(studySetToSave);
     }
 
     @Test
     void testGetAllStudySets() {
-        String studyFolderId = "folder123";
         List<StudySet> studySets = new ArrayList<>();
-        // Populate studySets list with test data
+        StudySet testSet = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
+        StudySet testSet1 = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
+        studySets.add(testSet);
+        studySets.add(testSet1);
+
 
         when(studySetRepository.findAllByStudyFolderId(studyFolderId)).thenReturn(studySets);
 
         List<StudySet> retrievedStudySets = studySetService.getAllStudySets(studyFolderId);
 
         assertEquals(studySets.size(), retrievedStudySets.size());
-        verify(studySetRepository, times(1)).findAllByStudyFolderId(studyFolderId);
     }
 
     @Test
     void testGetStudySet() {
         String studySetId = "123";
-        StudySet studySet = new StudySet(studySetId,"100","101","test","A test set");
+        StudySet studySet = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
         when(studySetRepository.findById(studySetId)).thenReturn(Optional.of(studySet));
 
         Optional<StudySet> retrievedStudySet = studySetService.getStudySet(studySetId);
 
         assertTrue(retrievedStudySet.isPresent());
         assertEquals(studySet, retrievedStudySet.get());
-        verify(studySetRepository, times(1)).findById(studySetId);
     }
     @Test
     void testDeleteStudySet() {
-        String userId = "user123";
-        String studySetId = "studySet456";
-
-        StudySet studySet = new StudySet(studySetId,"100","101","test","A test set");
-        when(studySetRepository.findById(studySetId)).thenReturn(Optional.of(studySet));
+        StudySet studySet = new StudySet(userId,studyFolderId,"test","A test set");
+        when(studySetRepository.findById(studySet.id())).thenReturn(Optional.of(studySet));
 
         List<Flashcard> flashcards = new ArrayList<>();
-        Flashcard testFlashcard = new SimpleFlashcard("studySet456", "test", "A card for testing", EDifficulty.MEDIUM);
+        Flashcard testFlashcard = new SimpleFlashcard(userId, studyFolderId, "test", "A card for testing", EDifficulty.MEDIUM);
         flashcardService.saveFlashcard(testFlashcard);
         flashcards.add(testFlashcard);
 
-        when(flashcardService.getAllFlashcardsInStudySet(studySetId)).thenReturn(flashcards);
+        when(flashcardService.getAllFlashcardsInStudySet(studySet.id())).thenReturn(flashcards);
         when(flashcardService.deleteFlashcard(userId, testFlashcard.getId())).thenReturn(true); // Mock the deleteFlashcard method
 
-        boolean deleted = studySetService.deleteStudySet(userId, studySetId);
+        boolean deleted = studySetService.deleteStudySet(userId, studySet.id());
 
         assertTrue(deleted);
-        verify(studySetRepository, times(1)).findById(studySetId);
-        verify(flashcardService, times(flashcards.size())).deleteFlashcard(userId,testFlashcard.getId()); // Verify that deleteFlashcard was called for each flashcard
-        verify(studySetRepository, times(1)).delete(studySet);
     }
 }

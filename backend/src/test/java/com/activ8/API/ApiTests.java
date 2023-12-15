@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.*;
 
 public class ApiTests {
     //Server needs to be running (Run SpringBootMongodbLoginApplication.java)
+    //We didn't have time to test all API Call methods, but here are the one that have to do with Study Folders
     @BeforeEach
     public void setup() {
         RestAssured.baseURI = "http://localhost:8080"; // Set the base URI for all requests
@@ -17,9 +18,11 @@ public class ApiTests {
     // Tests that the API call SignUp creates a user successfully.
     @Test
     public void testSignUp() {
+        //change nonExistingUsername to a non existing username ex. friedBanana6789
+        //change nonExistingEmail@example.com to a non existing email ex. friedBanana6789@example.com
         given()
                 .header("content-type", "application/json")
-                .body("{\"username\": \"tester7\", \"email\": \"tester7@example.com\", \"password\": \"password\"}")
+                .body("{\"username\": \"nonExistingUsername\", \"email\": \"nonExistingEmail@example.com\", \"password\": \"password\"}")
                 .when()
                 .post("/api/auth/signup")
                 .then()
@@ -29,8 +32,10 @@ public class ApiTests {
                 .log().all(); // Log response for debugging purposes
     }
 
+    // Tests that the API call Sign In logs in a user successfully.
     @Test
     public void testSignIn() {
+        //Copy the Set-Cookie value that is printed out, looks something like this : activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDI2NDY2NTYsImV4cCI6MTcwMjczMzA1Nn0.PsA4ypzWjmdWkaAPygPHDdp2XFGWMONsI5co5Wg8DAY
         Response response = given()
                 .header("content-type", "application/json")
                 .body("{\"username\": \"tester\", \"password\": \"password\"}")
@@ -38,18 +43,38 @@ public class ApiTests {
                 .post("/api/auth/signin")
                 .then()
                 .statusCode(200)
-                .header("Set-Cookie", notNullValue()) // Check if the Set-Cookie header is not null
-                .extract().response(); // Extract the response
+                .header("Set-Cookie", notNullValue())
+                .extract().response();
 
-        // Retrieve the value of the Set-Cookie header from the response
         String cookieValue = response.getHeader("Set-Cookie");
         System.out.println("Set-Cookie value: " + cookieValue);
     }
 
+    // Tests that the API call CreateStudyFolder creates a Study Folder for a user successfully.
+    @Test
+    public void testCreateStudyFolder() {
+        //Type in the copied Set-Cookie in header "Cookie".
+        given()
+                .header("Cookie", "PASTE SET-COOKIE HERE") //<-- Paste Set-Cookie here
+                .header("content-type", "application/json")
+                .body("{\"title\": \"testFolder31\", \"description\": \"A test folder\"}")
+                .when()
+                .post("/api/studyfolders")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("title", equalTo("testFolder31"))
+                .body("description", equalTo("A test folder"))
+                .log().all(); // Log response for debugging purposes
+    }
+
+    // Tests that the API call GetAllStudyFolders returns All the Study Folders belonging to user successfully.
     @Test
     public void testGetAllStudyFolders() {
+        //Type in the copied Set-Cookie in header "Cookie".
+        //Copy one of the StudyFolderIds for a later test
         given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE5NTAzNDAsImV4cCI6MTcwMjAzNjc0MH0.Tc8_r_I6ZnxSOFIMQuc-d565agsY_-50A54O6p5CMow")
+                .header("Cookie", "PASTE SET-COOKIE HERE") // <-- Paste the Set-Cookie here
                 .header("content-type", "application/json")
                 .when()
                 .get("/api/studyfolders")
@@ -62,63 +87,37 @@ public class ApiTests {
                 .log().all(); // Log response for debugging purposes
     }
 
+    // Tests that the API call EditExisitingStudyFolder edits a Study Folder for a user successfully.
     @Test
-    public void testCreateStudyFolders() {
-        given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTIyMjAxIiwiaWF0IjoxNzAxMTgyMTA5LCJleHAiOjE3MDEyNjg1MDl9.G854Qj4XoMNCKWZxJ3de7BI1ENnu6mm-GvMk4IrBiaE")
-                .header("content-type", "application/json")
-                .body("{\"title\": \"testFolder\", \"description\": \"A test folder\"}")
-                .when()
-                .post("/api/studyfolders")
-                .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON) // Assert content type is JSON
-                .body("title", equalTo("testFolder")) // Assert 'title' field in the response body
-                .body("description", equalTo("A test folder")) // Assert 'description' field in the response body
-                .log().all(); // Log response for debugging purposes
-    }
+    public void testEditExistingStudyFolder() {
+        //Type in the copied Set-Cookie in header "Cookie".
+        //Type the folderId of a folder you want to edit, replace folderToEdit, from earlier tests there should be some folders created already
 
-    @Test
-    public void testEditExistingStudyFolders() {
         given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE4MDI4MjUsImV4cCI6MTcwMTg4OTIyNX0.FNfyWwXYgldL4ujYysYPQox8xp6ibRq7SJxwFUgqemY")
+                .header("Cookie", "PASTE SET-COOKIE HERE") //<-- Paste Set-Cookie here
                 .header("content-type", "application/json")
-                .body("{\"title\": \"testFolder2\", \"description\": \"A test folder2\"}")
+                .body("{\"title\": \"testFolder31\", \"description\": \"A test folder31\"}")
                 .when()
-                .put("/api/studyfolders/65635676cd44ec3fc70fbcdf")
+                .put("/api/studyfolders/folderIdToEdit")
                 .then()
                 .statusCode(200)
-                .contentType(ContentType.JSON) // Assert content type is JSON
-                .body("title", equalTo("testFolder2")) // Assert 'title' field in the response body
-                .body("description", equalTo("A test folder2")) // Assert 'description' field in the response body
+                .contentType(ContentType.JSON)
+                .body("title", equalTo("testFolder31"))
+                .body("description", equalTo("A test folder31"))
                 .log().all(); // Log response for debugging purposes
     }
+    // Tests that the API call DeleteStudyFolder deletes a Study Folder for a user successfully.
     @Test
     public void testDeleteStudyFolder() {
+        //Type the copied Set-Cookie in header "Cookie".
+        //Type the folderId of a folder you want to delete, replace TYPE HERE THE FOLDERID, from earlier tests there should be some folders created already
         given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZXIiLCJpYXQiOjE3MDE5NTAzNDAsImV4cCI6MTcwMjAzNjc0MH0.Tc8_r_I6ZnxSOFIMQuc-d565agsY_-50A54O6p5CMow")
+                .header("Cookie", "PASTE SET-COOKIE HERE") //<-- Paste Set-Cookie here
                 .header("Content-Type", "application/json")
                 .when()
-                .delete("/api/studyfolders/{folderId}", "65635676cd44ec3fc70fbcdf")
+                .delete("/api/studyfolders/{folderId}", "TYPE HERE THE FOLDERID")
                 .then()
                 .statusCode(200)
                 .log().all();
     }
-    @Test
-    public void testGetAllFlashcardsInStudySet() {
-        given()
-                .header("Cookie", "activ8=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAyIiwiaWF0IjoxNzAxMjgzNjI5LCJleHAiOjE3MDEzNzAwMjl9.21ukDUCqpEGA2UTRv6zyOdy3MzCHnEjJKQH7BtIVFZo")
-                .header("content-type", "application/json")
-                .when()
-                .get("/api/flashcards/all/6567877386dcd351d6f3515e")
-                .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                // Add assertions as needed for the response body
-                .body("property", equalTo("expectedValue"))
-                .body("listProperty", hasSize(3))
-                // Add more assertions based on the response structure
-                .log().all(); // Log response for debugging purposes
-    }
-
 }

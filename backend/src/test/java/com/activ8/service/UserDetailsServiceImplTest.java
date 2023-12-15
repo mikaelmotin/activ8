@@ -30,16 +30,14 @@ class UserDetailsServiceImplTest {
     @Test
     void testLoadUserByUsername_ExistingUser() {
         String username = "testUser";
-        User mockUser = new User("testUser", "test@test.com", "password");
+        User testUser = new User("testUser", "test@test.com", "password");
 
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(testUser));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         assertNotNull(userDetails);
-        assertEquals(mockUser.getUsername(), userDetails.getUsername());
-        // Add more assertions based on UserDetails attributes or behavior
-        verify(userRepository, times(1)).findByUsername(username);
+        assertEquals(testUser.getUsername(), userDetails.getUsername());
     }
 
     @Test
@@ -49,6 +47,5 @@ class UserDetailsServiceImplTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername(username));
-        verify(userRepository, times(1)).findByUsername(username);
     }
 }

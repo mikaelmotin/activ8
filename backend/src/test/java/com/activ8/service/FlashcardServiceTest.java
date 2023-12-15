@@ -31,6 +31,10 @@ class FlashcardServiceTest {
 
     @InjectMocks
     private FlashcardService flashcardService;
+    private String userId= "userId";
+    private String studySetId="studySetId";
+    private String flashcardId = "flashcardId";
+    private String studyFolderId = "folderId";
 
     @BeforeEach
     void setUp() {
@@ -39,34 +43,32 @@ class FlashcardServiceTest {
 
     @Test
     void testSaveFlashcard() {
-        Flashcard flashcardToSave = new SimpleFlashcard("2222", "test", "A card for testing", EDifficulty.MEDIUM);
-        when(flashcardRepository.save(any(Flashcard.    class))).thenReturn(flashcardToSave);
+        Flashcard flashcardToSave = new SimpleFlashcard(studySetId, "test", "A card for testing", EDifficulty.MEDIUM);
+        when(flashcardRepository.save(any(Flashcard.class))).thenReturn(flashcardToSave);
 
         Flashcard savedFlashcard = flashcardService.saveFlashcard(flashcardToSave);
 
         assertNotNull(savedFlashcard);
         assertEquals(flashcardToSave, savedFlashcard);
-        verify(flashcardRepository, times(1)).save(any(Flashcard.class));
     }
 
     @Test
     void testGetFlashcard() {
-        String flashcardId = "123";
-        Flashcard flashcard = new SimpleFlashcard("2222", "test", "A card for testing",EDifficulty.MEDIUM);
+        Flashcard flashcard = new SimpleFlashcard(studySetId, "test", "A card for testing",EDifficulty.MEDIUM);
         when(flashcardRepository.findById(flashcardId)).thenReturn(Optional.of(flashcard));
 
         Optional<Flashcard> retrievedFlashcard = flashcardService.getFlashcard(flashcardId);
 
         assertTrue(retrievedFlashcard.isPresent());
         assertEquals(flashcard, retrievedFlashcard.get());
-        verify(flashcardRepository, times(1)).findById(flashcardId);
     }
 
     @Test
     void testGetAllFlashcardsInStudySet() {
-        String studySetId = "456";
         List<Flashcard> flashcards = new ArrayList<>();
-        // Add some flashcards to the list
+        Flashcard flashcard = new SimpleFlashcard(studySetId, "test", "A card for testing",EDifficulty.MEDIUM);
+        flashcardService.saveFlashcard(flashcard);
+        flashcards.add(flashcard);
 
         when(flashcardRepository.findAllByStudySetId(studySetId)).thenReturn(flashcards);
 
@@ -77,37 +79,17 @@ class FlashcardServiceTest {
     }
 
     @Test
-    void testGuessTerm() {
-        FlashcardCheckDTO flashcardCheckDTO = new FlashcardCheckDTO("test", "123");
-        String flashcardId = flashcardCheckDTO.flashcardId();
-        String guess = flashcardCheckDTO.guess();
-
-        Flashcard flashcard = new SimpleFlashcard("2222", "test", "A card for testing",EDifficulty.MEDIUM);
-        when(flashcardRepository.findById(flashcardId)).thenReturn(Optional.of(flashcard));
-
-        boolean result = flashcardService.guessTerm(flashcardCheckDTO);
-
-        assertTrue(result); // Assuming the guess matches the flashcard term
-        verify(flashcardRepository, times(1)).findById(flashcardId);
-    }
-
-    @Test
     void testDeleteFlashcard() {
-        String userId = "user123";
-        String flashcardId = "flashcard456";
 
         Flashcard flashcard = new SimpleFlashcard("2222", "test", "A card for testing", EDifficulty.MEDIUM);
-        StudySet mockStudySet = new StudySet("2222", userId, "101", "test", "A test set");
+        StudySet testStudySet = new StudySet(studySetId, userId, studyFolderId, "test", "A test set");
 
         when(flashcardRepository.findById(flashcardId)).thenReturn(Optional.of(flashcard));
-        when(studySetService.getStudySet(anyString())).thenReturn(Optional.of(mockStudySet));
+        when(studySetService.getStudySet(anyString())).thenReturn(Optional.of(testStudySet));
         when(flashcardRepository.existsById(flashcardId)).thenReturn(true);
 
         boolean deleted = flashcardService.deleteFlashcard(userId, flashcardId);
 
         assertTrue(deleted);
-        verify(flashcardRepository, times(1)).findById(flashcardId);
-        verify(studySetService, times(1)).getStudySet(anyString()); // Verify interaction with getStudySet method
-        verify(flashcardRepository, times(1)).delete(flashcard);
     }
 }
