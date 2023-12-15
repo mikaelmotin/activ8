@@ -1,17 +1,24 @@
 <script>
   import { onMount } from "svelte";
+    import { get } from "svelte/store";
+    import { goto } from '$app/navigation';
+
 
   let points = 0;
   let username = "";
   let recentFolders;
   let studylogs;
 
+
   onMount(() => {
     getUsername();
     getPoints();
     getRecentFolders();
     getStudylogs();
+    console.log(getStudylogs())
+
   });
+
 
   async function getUsername() {
     try {
@@ -65,21 +72,63 @@
     }
   }
   async function getStudylogs() {
-    try {
-      const response = await fetch("http://localhost:8080/api/userData/studylogs", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      if (response.ok) {
-        studylogs = await response.json();
+  try {
+    const response = await fetch("http://localhost:8080/api/userData/studylogs", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      const logs = await response.json();
+
+      // Iterate through study logs and fetch study set titles
+      for (const log of logs) {
+        const studySetTitleResponse = await fetch(`http://localhost:8080/api/studysets/${log.studySetId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (studySetTitleResponse.ok) {
+          const studySetTitleData = await studySetTitleResponse.json();
+          log.title = studySetTitleData.title;
+        }
       }
-    } catch (error) {
-      console.error(error);
+
+      studylogs = logs;
     }
+  } catch (error) {
+    console.error(error);
   }
+}
+
+
+  function getUserBadges(points) {
+  const badges = [];
+
+  if (points >= 1000) {
+    badges.push("🥸");
+  }
+  if (points >= 500) {
+    badges.push("🤩");
+  }
+  if (points >= 200) {
+    badges.push("😗");
+  }
+  if (points >= 100) {
+    badges.push("😵‍💫");
+  }
+
+  return badges;
+}
+
+
+
 </script>
 
 <div class="bg-slate-100 flex flex-col items-center pt-3.5 px-16 max-md:px-5">
@@ -137,7 +186,20 @@
           My Library
         </button>
       </div>
+      
     </div>
+      <!-- Achievements Panel -->
+      <div class="text-black text-base font-bold bg-white self-stretch mt-6 pl-4 pr-16 pt-0.5 pb-24 rounded-2xl items-start max-md:max-w-full max-md:pr-5">
+        <div class="mb-2">Achievements:</div>
+        <div class="flex flex-wrap">
+          {#each getUserBadges(points) as badge}
+            <div class="badge-container inline-flex items-center space-x-2 text-xl mb-2 mr-2">
+              {badge}
+            </div>
+          {/each}
+        </div>
+      </div>
+      
     <div class="self-stretch mt-7 max-md:max-w-full">
       <div class="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
         <div
@@ -165,7 +227,30 @@
             class="text-black text-2xl font-bold max-w-[700px] bg-white grow w-full pl-10 pr-16 pt-6 pb-80 rounded-[30px] items-start max-md:max-w-full max-md:mt-10 max-md:pb-10 max-md:px-5"
           >
             Studyset Statistics
+
+            <div
+  class="text-black text-2xl font-bold max-w-[700px] bg-white grow w-full pl-10 pr-16 pt-6 pb-80 rounded-[30px] items-start max-md:max-w-full max-md:mt-10 max-md:pb-10 max-md:px-5 "
+>
+<div class="flex flex-wrap gap-4">
+  {#if studylogs && studylogs.length > 0}
+    {#each studylogs as log (log.id)}
+    <a href={`/dashboard/${log.id}`} class="focus:outline-none">
+      <div class="bg-white rounded-lg p-4 w-full md:w-[48%]">
+        <p class="text-lg font-semibold">{log.title}</p>
+        <p class="text-gray-500 font-light text-xs">{log.startDate}</p>
+        <!-- Add more details as needed -->
+      </div>
+    </a>
+    {/each}
+  {:else}
+    <p>No study logs available.</p>
+  {/if}
+</div>
+</div>
+
           </div>
+            <!-- Cards Section -->
+ 
         </div>
       </div>
     </div>
