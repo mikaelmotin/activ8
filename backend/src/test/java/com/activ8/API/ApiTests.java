@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ApiTests {
-    //Server needs to be running (Run SpringBootMongodbLoginApplication.java)
+    //Server needs to be running (Run SpringBootMongodbTerminalApplication.java)
     //We didn't have time to test all API Call methods, but here are the one that have to do with Study Folders
     @BeforeEach
     public void setup() {
