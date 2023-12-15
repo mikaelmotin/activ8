@@ -57,9 +57,12 @@ public class StudySessionService {
 
     @Autowired
     PointLimitReachedEventSubscriber pointLimitReachedEventSubscriber;
-//HERE FAULT!!!
+
     @Autowired
     StudySessionProgressionManager userProgressionManager;
+//HERE FAULT!!!
+    @Autowired
+    StudySessionCompletedEventSubscriber studySessionCompletedEventSubscriber;
 
     private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
 
@@ -85,7 +88,7 @@ public class StudySessionService {
         eventBus.subscribe(sessionProgressEventSubscriber);
         eventBus.subscribe(flashcardIteratedEventSubscriber);
         eventBus.subscribe(pointLimitReachedEventSubscriber);
-        //eventBus.subscribe(studySessionCompletedEventSubscriber);
+        eventBus.subscribe(studySessionCompletedEventSubscriber);
     }
 
     public void unsubscribeFromEventBus() {
@@ -134,17 +137,4 @@ public class StudySessionService {
         eventBus.publish(new FlashcardFlippedEvent(sessionId, userId, studySetId, flashcardId));
     }
 
-    // Database related operations:
-    public List<StudySessionLog> getAllStudySessionLogs(String userId) {
-        return studySessionRepository.findAllByUserId(userId);
-    }
-
-    public Optional<StudySessionLog> getStudySessionLogById(String id) {
-        return studySessionRepository.findById(id);
-    }
-
-    public StudySessionLog saveStudySessionLog(StudySessionLog studySessionLogToSave) {
-        StudySessionLog savedStudySessionLog = studySessionRepository.save(studySessionLogToSave);
-        return savedStudySessionLog;
-    }
 }

@@ -20,6 +20,7 @@ import com.activ8.eventbus.subscribers.StudySessionStartedEventSubscriber;
 import com.activ8.model.Flashcard;
 import com.activ8.model.StudySessionLog;
 import com.activ8.service.FlashcardService;
+import com.activ8.service.StudySessionLogService;
 import com.activ8.service.StudySessionService;
 import com.activ8.service.UserDetailsImpl;
 
@@ -30,6 +31,9 @@ public class StudySessionController {
 
     @Autowired
     StudySessionService studySessionService;
+
+    @Autowired
+    StudySessionLogService studySessionLogService;
 
     @Autowired
     FlashcardService flashcardService;
@@ -45,13 +49,13 @@ public class StudySessionController {
     @GetMapping
     public ResponseEntity<List<StudySessionLog>> getStudySessions(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<StudySessionLog> studySessions = studySessionService.getAllStudySessionLogs(userDetails.getId());
+        List<StudySessionLog> studySessions = studySessionLogService.getAllStudySessionLogs(userDetails.getId());
         return ResponseEntity.ok(studySessions);
     }
 
     @GetMapping("/{studySessionId}")
     public ResponseEntity<?> getStudySessionById(@PathVariable String studySessionId) {
-        return studySessionService.getStudySessionLogById(studySessionId)
+        return studySessionLogService.getStudySessionLogById(studySessionId)
                 .map(studySession -> ResponseEntity.ok().body(studySession))
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -15,6 +15,7 @@ import com.activ8.model.StudySessionLog;
 import com.activ8.model.StudySessionProgress;
 import com.activ8.model.StudySessionProgressionManager;
 import com.activ8.repository.StudySessionLogRepository;
+import com.activ8.service.StudySessionLogService;
 import com.activ8.service.StudySessionProgressionService;
 import com.activ8.service.StudySessionService;
 
@@ -24,7 +25,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class StudySessionCompletedEventSubscriber implements Subscriber {
     @Autowired
-    StudySessionService studySessionService;
+    StudySessionLogService studySessionLogService;
 
     @Autowired
     StudySessionProgressionService progressionService;
@@ -73,7 +74,7 @@ public class StudySessionCompletedEventSubscriber implements Subscriber {
                         studySessionCompletedEvent.endtime().toString(),
                         timeSpentInMinutes);
 
-                studySessionService.saveStudySessionLog(logToSave);
+                studySessionLogService.saveStudySessionLog(logToSave);
                 progressionService.clearSessionLog();
 
                 eventBus.unsubscribe(this);
