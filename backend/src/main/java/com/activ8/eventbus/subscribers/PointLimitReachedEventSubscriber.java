@@ -35,7 +35,10 @@ public class PointLimitReachedEventSubscriber implements Subscriber {
                 System.out.println("PointLimitReachedEvent TOGGLED");
 
                 pointsManager = new PointsManager(userDetailsServiceImpl);
-                pointsManager.awardPoints(pointLimitReachedEvent.userid(), pointLimitReachedEvent.pointPercentage());
+                pointsManager.awardPoints(
+                        pointLimitReachedEvent.userid(), 
+                        pointLimitReachedEvent.pointPercentage()
+                );
                 eventBus.unsubscribe(this);
             }
         } catch (Exception e) {

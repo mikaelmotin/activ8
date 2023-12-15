@@ -1,11 +1,14 @@
 package com.activ8.model;
 
-import com.activ8.eventbus.EventBus;
 import com.activ8.service.FlashcardService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-
+/**
+ * FreeRoamStudySession represents a free-roaming study session where the user can explore
+ * flashcards at their own pace. It uses the FlashcardFrequencyManager to manage flashcard
+ * difficulties and distribution within a study set. This session allows users to start, end, and
+ * retrieve the next flashcard based on difficulty.
+ * 
+ */
 public class FreeRoamStudySession implements StudySession {
 
 

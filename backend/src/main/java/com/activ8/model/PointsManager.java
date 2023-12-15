@@ -2,8 +2,6 @@ package com.activ8.model;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.activ8.service.UserDetailsServiceImpl;
 

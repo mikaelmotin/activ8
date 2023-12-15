@@ -14,10 +14,8 @@ import org.springframework.stereotype.Component;
 import com.activ8.model.StudySessionLog;
 import com.activ8.model.StudySessionProgress;
 import com.activ8.model.StudySessionProgressionManager;
-import com.activ8.repository.StudySessionLogRepository;
 import com.activ8.service.StudySessionLogService;
 import com.activ8.service.StudySessionProgressionService;
-import com.activ8.service.StudySessionService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +42,9 @@ public class StudySessionCompletedEventSubscriber implements Subscriber {
             if (event instanceof StudySessionCompletedEvent studySessionCompletedEvent) {
                 System.out.println("STUDYSESSIONCOMPLETED EVENT TOGGLED");
 
-                StudySessionProgress sessionProgress = sessionProgressionManager.getUserProgress(studySessionCompletedEvent.userId());
+                StudySessionProgress sessionProgress = sessionProgressionManager
+                        .getUserProgress(studySessionCompletedEvent.userId()
+                );
 
                 StudySessionLog unfinishedLog = progressionService.getSessionLog();
 
@@ -60,7 +60,7 @@ public class StudySessionCompletedEventSubscriber implements Subscriber {
 
                 int timeSpentInMinutes = (int) duration.toMinutes();
 
-                int numberOfCardsIteratedThrough = sessionProgress.getTotalFlips(); 
+                int numberOfCardsIteratedThrough = sessionProgress.getTotalFlips();
 
                 StudySessionLog logToSave = new StudySessionLog(
                         unfinishedLog.id(),

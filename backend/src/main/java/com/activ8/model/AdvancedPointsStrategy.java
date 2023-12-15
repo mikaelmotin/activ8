@@ -11,6 +11,7 @@ import com.activ8.service.StudySessionProgressionService;
  * session
  * considering attention decay over time.
  * With the current DECAY_RATE, a User is given no more points after a 30 minute session
+ * This is much like a Pomodoro method to encourage small but focused study sessions
  */
 
 public class AdvancedPointsStrategy implements PointsStrategy {    

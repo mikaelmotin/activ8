@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.FlashcardFlippedEvent;
 import com.activ8.eventbus.events.FlashcardIteratedEvent;
-import com.activ8.eventbus.events.PointLimitReachedEvent;
 import com.activ8.eventbus.events.StudySessionCompletedEvent;
 import com.activ8.eventbus.events.StudySessionStartedEvent;
 import com.activ8.eventbus.subscribers.FlashcardFlippedEventSubscriber;
@@ -18,14 +17,11 @@ import com.activ8.eventbus.subscribers.StudySessionProgressEventSubscriber;
 import com.activ8.model.EDifficulty;
 import com.activ8.model.Flashcard;
 import com.activ8.model.FreeRoamStudySession;
-import com.activ8.model.StudySession;
-import com.activ8.model.StudySessionLog;
 import com.activ8.model.StudySessionManager;
 import com.activ8.model.StudySessionProgressionManager;
 import com.activ8.repository.StudySessionLogRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;

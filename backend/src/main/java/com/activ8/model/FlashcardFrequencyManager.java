@@ -2,7 +2,18 @@ package com.activ8.model;
 import com.activ8.service.FlashcardService;
 import java.util.*;
 
-
+/**
+ * FlashcardFrequencyManager is responsible for managing flashcard difficulties and their distribution
+ * within a study set. It uses a specified DifficultySelectionStrategy to determine how to select
+ * flashcards for study based on their difficulties. This class initializes flashcards, assigns initial
+ * difficulties, and tracks the distribution of flashcards across different difficulty levels.
+ * 
+ * - Flashcard difficulty assignment: assignDifficulty()
+ * - Getting flashcards by difficulty: getFlashcardsDifficultyMap()
+ * - Getting difficulty counters: getDifficultyCounters()
+ * - Getting difficulty probabilities: getDifficultyProbabilities()
+ * - Generating the next flashcard: generateNextCard()
+ */
 public class FlashcardFrequencyManager implements FrequencyManager {
 
     private final Map<EDifficulty, List<Flashcard>> flashcardsDifficultyMap = new HashMap<>();

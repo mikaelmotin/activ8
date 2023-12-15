@@ -10,10 +10,9 @@ import com.activ8.eventbus.events.Event;
 import com.activ8.eventbus.events.StudySessionProgressEvent;
 import com.activ8.service.StudySessionProgressionService;
 
-
 @Component
 public class StudySessionProgressEventSubscriber implements Subscriber {
-    
+
     @Autowired
     StudySessionProgressionService progressionService;
 
@@ -22,11 +21,14 @@ public class StudySessionProgressEventSubscriber implements Subscriber {
     @Override
     public void handleEvent(Event event) {
         try {
-            if (event instanceof StudySessionProgressEvent progressEvent) { 
+            if (event instanceof StudySessionProgressEvent progressEvent) {
                 System.out.println("StudySessionProgressEvent TOGGLED");
-                progressionService.notifyProgressBar(progressEvent.sessionId(), progressEvent.progressionPercentage());
+                progressionService.notifyProgressBar(
+                        progressEvent.sessionId(), 
+                        progressEvent.progressionPercentage()
+                );
             }
-            
+
         } catch (Exception e) {
             logger.error("Error handling StudySessionProgressEvent: {}", e.getMessage(), e);
         }

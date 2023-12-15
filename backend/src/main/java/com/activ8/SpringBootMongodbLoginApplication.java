@@ -1,7 +1,6 @@
 package com.activ8;
 
 import com.activ8.eventbus.EventBus;
-import com.activ8.eventbus.subscribers.StudySessionCompletedEventSubscriber;
 import com.activ8.eventbus.subscribers.StudySessionStartedEventSubscriber;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
     @Autowired
     private StudySessionStartedEventSubscriber studySessionStartedSubscriber;
 
-    @Autowired
-    private StudySessionCompletedEventSubscriber studySessionCompletedSubscriber;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMongodbLoginApplication.class, args);
@@ -33,6 +30,6 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
 
         // Subscribe StudySessionStartedSubscriber to EventBus
         eventBus.subscribe(studySessionStartedSubscriber);
-       // eventBus.subscribe(studySessionCompletedSubscriber);
+    
     }
 }

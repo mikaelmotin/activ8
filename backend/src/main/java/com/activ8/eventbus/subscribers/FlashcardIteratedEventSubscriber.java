@@ -9,7 +9,6 @@ import com.activ8.eventbus.events.Event;
 import com.activ8.eventbus.events.FlashcardIteratedEvent;
 import com.activ8.service.FlashcardService;
 import com.activ8.service.StudySessionProgressionService;
-import com.activ8.service.StudySessionService;
 
 @Component
 public class FlashcardIteratedEventSubscriber implements Subscriber {
@@ -30,7 +29,11 @@ public class FlashcardIteratedEventSubscriber implements Subscriber {
                 
                 int studySetSize = flashcardService.getAllFlashcardsInStudySet(flashcardIteratedEvent.studySetId()).size();
 
-                studySessionProgressionService.handleCardIterated(flashcardIteratedEvent.sessionId(), flashcardIteratedEvent.userId(), studySetSize);
+                studySessionProgressionService.handleCardIterated(
+                        flashcardIteratedEvent.sessionId(), 
+                        flashcardIteratedEvent.userId(), 
+                        studySetSize
+                );
 
             }
         } catch (Exception e) {

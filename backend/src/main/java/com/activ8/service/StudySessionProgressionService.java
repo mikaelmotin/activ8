@@ -4,7 +4,6 @@ import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.PointLimitReachedEvent;
 import com.activ8.eventbus.events.StudySessionProgressEvent;
 import com.activ8.model.AdvancedPointsStrategy;
-import com.activ8.model.BasicPointsStrategy;
 import com.activ8.model.PointsManager;
 import com.activ8.model.StudySessionLog;
 import com.activ8.model.StudySessionProgress;

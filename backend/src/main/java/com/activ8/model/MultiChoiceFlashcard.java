@@ -2,6 +2,7 @@ package com.activ8.model;
 
 import java.util.List;
 
+// Did not have time to implement this feature 
 public class MultiChoiceFlashcard extends Flashcard {
     
     private List<String> flashcardIds;
