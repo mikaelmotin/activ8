@@ -124,7 +124,6 @@ public class StudySessionService {
 
             unsubscribeFromEventBus();
             studySessionManager.removeSession(userId);
-            //remove everythng else
             userProgressionManager.removeSession(userId);
         } catch (Exception e) {
             logger.error("Error ending FreeRoamStudySession for user {}: {}", userId, e.getMessage(), e);

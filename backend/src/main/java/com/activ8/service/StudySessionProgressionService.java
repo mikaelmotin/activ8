@@ -70,7 +70,7 @@ public class StudySessionProgressionService {
             eventBus.publish(new StudySessionProgressEvent(sessionId, userId, progressionPercentage));
 
             // Start award process if eligible
-            if (isEligibleForPoints(progressionPercentage)) {
+            if (isEligibleForPoints(progressionPercentage, userId)) {
                 togglePointLimitReachedEvent(userId, progressionPercentage);
             }
 
@@ -95,7 +95,7 @@ public class StudySessionProgressionService {
             eventBus.publish(new StudySessionProgressEvent(sessionId, userId, progressionPercentage));
 
             // Start award process if eligible
-            if (isEligibleForPoints(progressionPercentage)) {
+            if (isEligibleForPoints(progressionPercentage, userId)) {
                 togglePointLimitReachedEvent(userId, progressionPercentage);
             }
 
@@ -104,8 +104,9 @@ public class StudySessionProgressionService {
         }
     }
 
-    private boolean isEligibleForPoints(double progressionPercentage) {
+    private boolean isEligibleForPoints(double progressionPercentage, String userId) {
         if (progressionPercentage >= 1) {
+            userProgressionManager.removeSession(userId);
             return true;
         }
         return false;
