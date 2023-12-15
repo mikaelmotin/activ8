@@ -276,12 +276,13 @@ const createFlashcards = async (studySetId, flashcards) => {
                     8
                 </div>
             </div>
-
+            <a href="/dashboard">
             <img
                 class="h-14 ml-auto mr-12"
                 src="/user.png"
                 alt="user profile"
             />
+            </a>
         </nav>
 
         <!-- "White Canvas" -->

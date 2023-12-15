@@ -63,12 +63,13 @@
                     8
                 </div>
             </div>
-
+            <a href="/dashboard">
             <img
                 class="h-14 ml-auto mr-12"
                 src="/user.png"
                 alt="user profile"
             />
+            </a>
             <div>
                 <button
                     class="border border-gray-500 rounded"
