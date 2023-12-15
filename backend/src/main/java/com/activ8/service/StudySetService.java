@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.activ8.model.Flashcard;
 import com.activ8.model.StudySet;
+import com.activ8.repository.FlashcardRepository;
 import com.activ8.repository.StudySetRepository;
 
 @Service
@@ -15,6 +17,9 @@ public class StudySetService {
 
     @Autowired
     StudySetRepository studySetRepository;
+
+    @Autowired
+    FlashcardRepository flashcardRepository;
 
     @Transactional
     public StudySet saveStudySet(StudySet studySet) {
@@ -33,5 +38,21 @@ public class StudySetService {
         Optional<StudySet> studySet = studySetRepository.findById(studySetId);
 
         return studySet;
+    }
+
+    @Transactional
+    public boolean deleteStudySet(String userId,String studySetId) {
+        Optional<StudySet> studySetOptional = studySetRepository.findById(studySetId);
+
+        if (studySetOptional.isPresent()) {
+            StudySet studySet = studySetOptional.get();
+            List<Flashcard> flashcards = flashcardRepository.findAllByStudySetId(studySetId);
+            for (Flashcard flashcard : flashcards) {
+                flashcardRepository.deleteById(flashcard.getId());
+            }
+            studySetRepository.delete(studySet);
+            return true;
+        }
+        return false;
     }
 }

@@ -11,12 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.activ8.dto.FlashcardDifficultyDTO;
 import com.activ8.dto.FlashcardFlippedDTO;
-import com.activ8.dto.FlashcardIteratedDTO;
 import com.activ8.eventbus.EventBus;
-import com.activ8.eventbus.events.FlashcardFlippedEvent;
-import com.activ8.eventbus.events.StudySessionProgressEvent;
 import com.activ8.eventbus.subscribers.StudySessionProgressEventSubscriber;
-import com.activ8.eventbus.subscribers.StudySessionStartedEventSubscriber;
 import com.activ8.model.Flashcard;
 import com.activ8.model.StudySessionLog;
 import com.activ8.service.FlashcardService;
@@ -24,6 +20,21 @@ import com.activ8.service.StudySessionLogService;
 import com.activ8.service.StudySessionService;
 import com.activ8.service.UserDetailsImpl;
 
+
+/**
+ * Controller handling study sessions and related operations. This controller provides endpoints
+ * for starting, managing, and retrieving information about study sessions, as well as operations
+ * such as assigning difficulty to flashcards and flipping flashcards during a session.
+ *
+ * Endpoints:
+ * - GET /api/studysessions: Retrieve all study sessions associated with the authenticated user.
+ * - GET /api/studysessions/{studySessionId}: Retrieve a specific study session by its ID.
+ * - GET /api/studysessions/nextCard/{studySetId}/{sessionId}: Retrieve the next flashcard for a study session.
+ * - POST /api/studysessions/start/{studySetId}: Start a new study session for the given study set.
+ * - POST /api/studysessions/assignDifficulty/{flashcardId}: Assign difficulty to a flashcard during a study session.
+ * - POST /api/studysessions/endSession: End the active study session for the user.
+ * - POST /api/studysessions/flipCard: Flip a flashcard during a study session.
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/studysessions")
@@ -44,8 +55,13 @@ public class StudySessionController {
     @Autowired
     StudySessionProgressEventSubscriber sessionProgressEventSubscriber;
 
-    // GET REQUESTS
-
+    
+    /**
+     * Retrieves all study sessions associated with the authenticated user.
+     *
+     * @param userDetails Authenticated user details.
+     * @return ResponseEntity<List<StudySessionLog>> List of study session logs.
+     */
     @GetMapping
     public ResponseEntity<List<StudySessionLog>> getStudySessions(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -53,6 +69,12 @@ public class StudySessionController {
         return ResponseEntity.ok(studySessions);
     }
 
+    /**
+     * Retrieves a specific study session by its ID.
+     *
+     * @param studySessionId ID of the study session.
+     * @return ResponseEntity<?> The requested study session.
+     */
     @GetMapping("/{studySessionId}")
     public ResponseEntity<?> getStudySessionById(@PathVariable String studySessionId) {
         return studySessionLogService.getStudySessionLogById(studySessionId)
@@ -60,6 +82,14 @@ public class StudySessionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Retrieves the next flashcard for a study session.
+     *
+     * @param userDetails Authenticated user details.
+     * @param studySetId  ID of the study set.
+     * @param sessionId   ID of the study session.
+     * @return Message Error if Failed 
+     */
     @GetMapping("/nextCard/{studySetId}/{sessionId}") 
     public ResponseEntity<?> nextCard(
             @AuthenticationPrincipal UserDetailsImpl userDetails, 
@@ -81,11 +111,12 @@ public class StudySessionController {
             }
     }
 
-    /**
-     * Starts a new StudySession
-     * 
-     * @param userDetails User details of the authenticated user
-     * @return The started StudySession
+     /**
+     * Starts a new study session.
+     *
+     * @param userDetails Authenticated user details.
+     * @param studySetId  ID of the study set.
+     * @return Response indicating success or failure.
      */
     @PostMapping("/start/{studySetId}")
     public ResponseEntity<?> startStudySession(@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -101,10 +132,12 @@ public class StudySessionController {
     }
 
     /**
-     * Updates the difficulty of a flashcard
-     * 
-     * @param userDetails User details of the authenticated user
-     * @return Success/failure
+     * Assigns difficulty to a flashcard.
+     *
+     * @param userDetails            Authenticated user details.
+     * @param flashcardId            ID of the flashcard.
+     * @param flashcardDifficultyDTO DTO containing flashcard difficulty information.
+     * @return Response indicating success or failure.
      */
     @PostMapping("/assignDifficulty/{flashcardId}")
     public ResponseEntity<?> assignFlashcardDifficulty(@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -143,6 +176,13 @@ public class StudySessionController {
         }
     }
 
+    /**
+     * Flips a flashcard during a study session.
+     *
+     * @param userDetails        Authenticated user details.
+     * @param flashcardFlippedDTO DTO containing flashcard flipping information.
+     * @return Response indicating success or failure.
+     */
     @PostMapping("/flipCard")
     public ResponseEntity<?> flipCard(@AuthenticationPrincipal UserDetailsImpl userDetails, 
                                       @RequestBody FlashcardFlippedDTO flashcardFlippedDTO) 

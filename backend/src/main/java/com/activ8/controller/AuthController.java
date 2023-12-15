@@ -26,6 +26,23 @@ import com.activ8.repository.UserRepository;
 import com.activ8.security.jwt.JwtUtils;
 import com.activ8.service.UserDetailsImpl;
 
+
+/**
+ * Controller responsible for user authentication and authorization operations.
+ * This controller supports user sign-in and sign-up functionalities, providing
+ * secure authentication and authorization for accessing protected resources.
+ * All endpoints are secured and require valid authentication.
+ *
+ * Endpoints:
+ * - POST /api/auth/signin: Authenticates a user by validating the provided credentials
+ *   and returns a JWT cookie along with user information upon successful authentication.
+ * - POST /api/auth/signup: Registers a new user with the provided signup information.
+ *
+ * Security Features:
+ * - Cross-Origin Resource Sharing (CORS) is enabled to allow requests from any origin.
+ * - JWT (JSON Web Token) is used for secure and stateless user authentication.
+ *
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")

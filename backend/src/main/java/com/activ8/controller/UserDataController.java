@@ -12,7 +12,15 @@ import com.activ8.payload.response.MessageResponse;
 import com.activ8.service.StudySessionLogService;
 import com.activ8.service.UserDetailsImpl;
 
-
+/**
+ * Controller managing user data-related operations. This controller provides endpoints
+ * for retrieving points, username, and study logs of the authenticated user.
+ *
+ * Endpoints:
+ * - GET /api/userData/points: Retrieve the points of the authenticated user.
+ * - GET /api/userData/username: Retrieve the username of the authenticated user.
+ * - GET /api/userData/studylogs: Retrieve the study logs of the authenticated user.
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/userData")

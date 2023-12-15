@@ -24,6 +24,22 @@ import com.activ8.service.UserDetailsImpl;
 import com.activ8.dto.CreateFlashcardDTO;
 import com.activ8.dto.UpdateFlashcardDTO;
 
+
+/**
+ * Controller responsible for handling operations related to flashcards within study sets.
+ * This controller supports the retrieval, creation, update, and deletion of flashcards,
+ * as well as providing general methods for managing flashcards in a study set.
+ * All endpoints are secured and require valid authentication.
+ *
+ * Endpoints:
+ * - GET /api/flashcards/all/{studySetId}: Retrieves all flashcards within a specified study set.
+ * - GET /api/flashcards/{flashcardId}: Retrieves a specific flashcard based on its ID.
+ * - POST /api/flashcards/{studySetId}: Creates a new flashcard in the specified study set.
+ * - PUT /api/flashcards/{flashcardId}: Updates a specific flashcard based on its ID.
+ * - DELETE /api/flashcards/{flashcardId}: Deletes a specific flashcard based on its ID.
+ *
+ * All endpoints are secured and require valid user authentication.
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/flashcards")
@@ -49,6 +65,13 @@ public class FlashcardController {
     return ResponseEntity.ok().body(flashcards);
   }
 
+
+/**
+ * Retrieves a specific flashcard based on its ID.
+ *
+ * @param flashcardId The ID of the flashcard.
+ * @return ResponseEntity containing the flashcard if retrieval is successful.
+ */
   @GetMapping("/{flashcardId}")
   public ResponseEntity<?> getFlashcard(@PathVariable String flashcardId) {
     Optional<Flashcard> flashcard = flashcardService.getFlashcard(flashcardId);
@@ -56,8 +79,13 @@ public class FlashcardController {
     return ResponseEntity.ok().body(flashcard);
   }
 
-  /* BELOW ARE POST AND PUT REQUESTS FOR "SIMPLE FLASHCARDS" */
-  // POST REQUESTS - Used to create data
+/**
+ * Creates a new flashcard in the specified study set.
+ *
+ * @param studySetId   The ID of the study set.
+ * @param flashcardDTO The data for creating the flashcard.
+ * @return ResponseEntity containing the created flashcard if successful.
+ */
   @PostMapping("/{studySetId}")
   public ResponseEntity<?> createFlashcard(@PathVariable String studySetId,
       @RequestBody CreateFlashcardDTO flashcardDTO) {
@@ -71,7 +99,13 @@ public class FlashcardController {
     return ResponseEntity.ok().body(createdFlashcard);
   }
 
-  // PUT REQUESTS - Used to change data
+/**
+ * Updates a specific flashcard based on its ID.
+ *
+ * @param flashcardId       The ID of the flashcard.
+ * @param updateFlashcardDTO The data for updating the flashcard.
+ * @return ResponseEntity containing the updated flashcard if successful.
+ */
   @PutMapping("/{flashcardId}")
   public ResponseEntity<?> updateFlashcard(
       @PathVariable String flashcardId,
@@ -89,8 +123,13 @@ public class FlashcardController {
     return ResponseEntity.ok().body(updatedFlashcard);
   }
 
-  /* GENERAL DELETE REQUESTS */
-  // DELETE REQUESTS - Used to remove data
+/**
+ * Deletes a specific flashcard based on its ID.
+ *
+ * @param userDetails The authenticated user details.
+ * @param flashcardId  The ID of the flashcard.
+ * @return ResponseEntity indicating the success or failure of the deletion.
+ */
   @DeleteMapping("/{flashcardId}")
   public ResponseEntity<?> deleteFlashcard(
       @AuthenticationPrincipal UserDetailsImpl userDetails,

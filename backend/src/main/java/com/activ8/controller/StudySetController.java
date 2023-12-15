@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,18 @@ import com.activ8.service.StudySetService;
 import com.activ8.service.UserDetailsImpl;
 import com.activ8.dto.UpdateStudySetDTO;
 
+/**
+ * Controller managing study sets and related operations. This controller provides endpoints
+ * for retrieving, creating, updating, and deleting study sets. Study sets are organized within
+ * study folders and are associated with a user.
+ *
+ * Endpoints:
+ * - GET /api/studysets/all/{studyFolderId}: Retrieve all study sets in a specific study folder.
+ * - GET /api/studysets/{studySetId}: Retrieve a specific study set by its ID.
+ * - POST /api/studysets: Create a new study set.
+ * - PUT /api/studysets/{studySetId}: Update an existing study set.
+ * - DELETE /api/studysets/{studySetId}: Delete a study set and its associated flashcards.
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/studysets")
@@ -29,7 +42,6 @@ public class StudySetController {
   @Autowired
   StudySetService studySetService;
 
-  // GET REQUESTS - Used to get data
 
   /**
    * Used to get all StudySets in a StudyFolder by ID
@@ -57,16 +69,6 @@ public class StudySetController {
     return ResponseEntity.ok().body(studySet);
   }
 
-  // @GetMapping("/{studyFolderId}/shares")
-  // public ResponseEntity<?> getSharedStudySets(@PathVariable String
-  // studyFolderId) {
-  // List<StudySet> studySets = studySetService.getAllStudySets(studyFolderId);
-
-  // return ResponseEntity.ok().body(studySets);
-  // }
-
-  // POST REQUESTS - Used to create data
-
   /**
    * Creates & returns the created StudySet
    * 
@@ -90,7 +92,6 @@ public class StudySetController {
     return ResponseEntity.ok().body(createdStudySet);
   }
 
-  // PUT REQUESTS - Used to change data
 
   /**
    * Updates the values of a StudySet and returns the updated StudySet
@@ -118,7 +119,23 @@ public class StudySetController {
     return ResponseEntity.ok().body(updatedStudySet);
   }
 
-  // DELETE NOT IMPLEMENTED THINK ABOUT THIS, SHOULD IT ALSO DELETE ALL
-  // FLASHCARDS?
+/**
+ * Deletes a study set and its associated flashcards.
+ * 
+ * @param userDetails User details of the authenticated user.
+ * @param studySetId ID of the study set to be deleted.
+ * @return ResponseEntity indicating the success or failure of the deletion operation.
+ */
+  @DeleteMapping("/{studySetId}")
+  public ResponseEntity<?> deleteStudySet(
+          @AuthenticationPrincipal UserDetailsImpl userDetails,
+          @PathVariable String studySetId) {
+
+    if (studySetService.deleteStudySet(userDetails.getId(), studySetId)) {
+      return ResponseEntity.ok().body("Study set " + studySetId + " and its flashcards successfully deleted");
+    }
+
+    return ResponseEntity.ok().body("Error while deleting study set " + studySetId);
+  }
 
 }
