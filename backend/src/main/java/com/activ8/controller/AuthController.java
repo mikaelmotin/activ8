@@ -42,11 +42,21 @@ public class AuthController {
   @Autowired
   JwtUtils jwtUtils;
 
+
+  /**
+ * Authenticates a user by validating the provided credentials.
+ *
+ * @param loginRequest The login request containing the username and password.
+ * @return ResponseEntity containing a JWT cookie and user information if authentication is successful.
+ */
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
     Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        new UsernamePasswordAuthenticationToken(
+                                  loginRequest.getUsername(), 
+                                  loginRequest.getPassword()
+        ));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -61,6 +71,12 @@ public class AuthController {
                                    userDetails.getEmail()));
   }
 
+/**
+ * Registers a new user with the provided signup information.
+ *
+ * @param signUpRequest The signup request containing the username, email, and password.
+ * @return ResponseEntity indicating the success or failure of the registration process.
+ */
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
