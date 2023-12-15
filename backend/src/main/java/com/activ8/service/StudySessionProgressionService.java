@@ -49,6 +49,10 @@ public class StudySessionProgressionService {
         return sessionLog;
     }
 
+    public void clearSessionLog() {
+        this.sessionLog = null;
+    }
+
     public void handleCardFlip(String sessionId, String userId, String flashcardId, int studySetSize) {
         try {
 

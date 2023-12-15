@@ -21,6 +21,7 @@ import com.activ8.model.FreeRoamStudySession;
 import com.activ8.model.StudySession;
 import com.activ8.model.StudySessionLog;
 import com.activ8.model.StudySessionManager;
+import com.activ8.model.StudySessionProgressionManager;
 import com.activ8.repository.StudySessionLogRepository;
 
 import java.time.LocalDateTime;
@@ -56,7 +57,9 @@ public class StudySessionService {
 
     @Autowired
     PointLimitReachedEventSubscriber pointLimitReachedEventSubscriber;
-
+//HERE FAULT!!!
+    @Autowired
+    StudySessionProgressionManager userProgressionManager;
 
     private static final Logger logger = LoggerFactory.getLogger(StudySessionService.class);
 
@@ -121,6 +124,8 @@ public class StudySessionService {
 
             unsubscribeFromEventBus();
             studySessionManager.removeSession(userId);
+            //remove everythng else
+            userProgressionManager.removeSession(userId);
         } catch (Exception e) {
             logger.error("Error ending FreeRoamStudySession for user {}: {}", userId, e.getMessage(), e);
         }
