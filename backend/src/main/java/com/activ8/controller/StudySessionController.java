@@ -91,15 +91,6 @@ public class StudySessionController {
     public ResponseEntity<?> startStudySession(@AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable String studySetId) {
         try {
-
-
-
-            // DELETE LATER
-            //eventBus.subscribe(sessionProgressEventSubscriber);
-            // DELETE LATER
-
-
-
             studySessionService.startFreeRoamStudySession(userDetails.getId(), studySetId);
             return ResponseEntity.ok("startSession success");
         } catch (Exception e) {

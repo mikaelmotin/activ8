@@ -3,7 +3,6 @@ package com.activ8.service;
 import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.PointLimitReachedEvent;
 import com.activ8.eventbus.events.StudySessionProgressEvent;
-import com.activ8.eventbus.subscribers.PointLimitReachedEventSubscriber;
 import com.activ8.model.AdvancedPointsStrategy;
 import com.activ8.model.BasicPointsStrategy;
 import com.activ8.model.PointsManager;
@@ -14,8 +13,6 @@ import com.activ8.model.StudySessionProgressionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class StudySessionProgressionService {
@@ -38,10 +35,13 @@ public class StudySessionProgressionService {
 
     public StudySessionProgressionService() {
         this.pointsManager = new PointsManager(userDetailsServiceImpl);
-        // Choose the strategy for points algorithm - make this prettier in the future
+        // Default strategy for points algorithm 
+        // Did not have time to implement a feature where the user can choose strategy
+        // Uncomment the version you would like to try.
         //pointsManager.setStrategy(new BasicPointsStrategy());
         pointsManager.setStrategy(new AdvancedPointsStrategy(this));
     }
+
 
     public void tempSaveUserLog(StudySessionLog sessionLog) {
         this.sessionLog = sessionLog;
@@ -64,6 +64,7 @@ public class StudySessionProgressionService {
             }
             // Record card flip for the user progress
             userProgressionManager.getUserProgress(userId).recordFlashcardFlip(flashcardId);
+
 
             double progressionPercentage = pointsManager.calculateProgress(
                     userProgressionManager.getUserProgress(userId),
@@ -89,6 +90,7 @@ public class StudySessionProgressionService {
             }
             // Record flashcard iterated for the user progress
             userProgressionManager.getUserProgress(userId).recordFlashcardIterated();
+
 
             double progressionPercentage = pointsManager.calculateProgress(
                     userProgressionManager.getUserProgress(userId),

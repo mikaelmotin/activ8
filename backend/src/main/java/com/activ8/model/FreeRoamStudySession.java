@@ -28,7 +28,6 @@ public class FreeRoamStudySession implements StudySession {
             isStarted = true;
         }
         // FlashcardfrequencyManager should already have been initialized
-
     }
 
     @Override

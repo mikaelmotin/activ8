@@ -31,6 +31,7 @@ public class AdvancedPointsStrategy implements PointsStrategy {
 
     @Override
     public double calculateProgress(StudySessionProgress sessionProgress, int studySetSize) {
+ 
         // In case studySetSize is < MINIMUM_SIZE_WEIGHT, set it to MINIMUM_SIZE_WEIGHT
         int sizeWeight = Math.max(studySetSize, MINIMUM_SIZE_WEIGHT);
 
