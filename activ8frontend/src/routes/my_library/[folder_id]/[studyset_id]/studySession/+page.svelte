@@ -73,7 +73,7 @@
           body: JSON.stringify({
             sessionId: sessionId,
             studySetId: data.studyset_id,
-            flashcardId: flashcardId,
+            flashcardId: flashcardId
           }),
           credentials: "include",
         },
