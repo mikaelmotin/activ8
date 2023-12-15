@@ -9,12 +9,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MultiChoiceFlashcardTest {
 
+    List<Flashcard> flashcardList = new ArrayList<>();
+    private String studySetId = "studySetId";
     @Test
-    void getFlashcardIds() {
-        List<Flashcard> flashcardList = new ArrayList<>();
-        Flashcard testCard = new SimpleFlashcard("1111", "test", "A card for testing",EDifficulty.MEDIUM);
-        flashcardList.add(testCard);
-        MultiChoiceFlashcard MCF = new MultiChoiceFlashcard("222","test","A test MCF", EDifficulty.MEDIUM,flashcardList);
-        assertNull(MCF.getFlashcardIds());
+    void TestCreateMultiChoiceFlashcard(){
+        Flashcard fakeOption1 = new SimpleFlashcard(studySetId, "fake1", "A card for testing",EDifficulty.MEDIUM);
+        Flashcard fakeOption2 = new SimpleFlashcard(studySetId, "fake2", "A card for testing",EDifficulty.MEDIUM);
+        Flashcard fakeOption3 = new SimpleFlashcard(studySetId, "fake3", "A card for testing",EDifficulty.MEDIUM);
+        flashcardList.add(fakeOption1);
+        flashcardList.add(fakeOption2);
+        flashcardList.add(fakeOption3);
+        Flashcard multiChoiceFlashcard = new MultiChoiceFlashcard(studySetId, "test", "A card for testing",EDifficulty.MEDIUM,flashcardList);
+        assertNotNull(multiChoiceFlashcard);
     }
 }
