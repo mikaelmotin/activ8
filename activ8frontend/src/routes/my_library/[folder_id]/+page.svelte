@@ -148,7 +148,7 @@
                                     <p
                                         class="self-end mt-2 mr-4 font-thin text-white"
                                     >
-                                        12 cards
+                                        
                                     </p>
                                 </a>
                             {/each}
