@@ -6,7 +6,7 @@ public class RightOrWrongEventSubscriber implements Subscriber {
 
     @Override
     public void handleEvent(Event event) {
-        // TODO Auto-generated method stub
+        // Didn't have time to implement this feature
         throw new UnsupportedOperationException("Unimplemented method 'handleEvent'");
     }
     

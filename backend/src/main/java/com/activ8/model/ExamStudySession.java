@@ -2,6 +2,9 @@
 
 // import com.activ8.eventbus.EventBus;
 
+
+/* ---  We did not have time to implement this feature --- */
+
 // public class ExamStudySession implements StudySession {
 //     // Implement methods for exam study session
 

@@ -1,11 +1,9 @@
 package com.activ8.eventbus.events;
 
-
-public record FlashcardFlippedEvent(
+public record FlashcardIteratedEvent(
     String sessionId,
     String userId,
-    String studySetId,
-    String flashcardId
+    String studySetId
 ) implements Event {
-
+    
 }

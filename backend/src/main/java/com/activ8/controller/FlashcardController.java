@@ -32,74 +32,75 @@ public class FlashcardController {
   @Autowired
   FlashcardService flashcardService;
 
-   @Autowired
+  @Autowired
   StudySetService studySetService;
 
-        /* GENERAL GET METHODS FOR TYPE FLASHCARD (Should work with all kinds of flashcards)*/
-    // GET REQUESTS - Used to get data
+  /**
+   * Retrieves all flashcards within a specified study set.
+   *
+   * @param studySetId The ID of the study set.
+   * @return ResponseEntity containing a list of flashcards if retrieval is
+   *         successful.
+   */
   @GetMapping("/all/{studySetId}")
   public ResponseEntity<?> getAllFlashcardsInStudySet(@PathVariable String studySetId) {
     List<Flashcard> flashcards = flashcardService.getAllFlashcardsInStudySet(studySetId);
 
-    
     return ResponseEntity.ok().body(flashcards);
   }
 
   @GetMapping("/{flashcardId}")
-    public ResponseEntity<?> getFlashcard(@PathVariable String flashcardId) {
+  public ResponseEntity<?> getFlashcard(@PathVariable String flashcardId) {
     Optional<Flashcard> flashcard = flashcardService.getFlashcard(flashcardId);
 
-    
     return ResponseEntity.ok().body(flashcard);
   }
 
-
-        /*BELOW ARE POST AND PUT REQUESTS FOR "SIMPLE FLASHCARDS" */
+  /* BELOW ARE POST AND PUT REQUESTS FOR "SIMPLE FLASHCARDS" */
   // POST REQUESTS - Used to create data
   @PostMapping("/{studySetId}")
-  public ResponseEntity<?> createFlashcard(@PathVariable String studySetId, @RequestBody CreateFlashcardDTO flashcardDTO) {
-    Flashcard flashcard = new SimpleFlashcard(studySetId, flashcardDTO.term(), flashcardDTO.definition(), flashcardDTO.difficulty());
+  public ResponseEntity<?> createFlashcard(@PathVariable String studySetId,
+      @RequestBody CreateFlashcardDTO flashcardDTO) {
+    Flashcard flashcard = new SimpleFlashcard(
+          studySetId, flashcardDTO.term(), 
+          flashcardDTO.definition(),
+          flashcardDTO.difficulty()
+    );
     Flashcard createdFlashcard = flashcardService.saveFlashcard(flashcard);
-
 
     return ResponseEntity.ok().body(createdFlashcard);
   }
-  
+
   // PUT REQUESTS - Used to change data
   @PutMapping("/{flashcardId}")
   public ResponseEntity<?> updateFlashcard(
-      @PathVariable String flashcardId, 
+      @PathVariable String flashcardId,
       @RequestBody UpdateFlashcardDTO updateFlashcardDTO) {
 
     Flashcard flashcard = new SimpleFlashcard(
-        flashcardId, 
-        updateFlashcardDTO.studySetId(), 
-        updateFlashcardDTO.term(), 
+        flashcardId,
+        updateFlashcardDTO.studySetId(),
+        updateFlashcardDTO.term(),
         updateFlashcardDTO.definition(),
-        updateFlashcardDTO.difficulty()
-    );
+        updateFlashcardDTO.difficulty());
 
     Flashcard updatedFlashcard = flashcardService.saveFlashcard(flashcard);
-   
 
     return ResponseEntity.ok().body(updatedFlashcard);
   }
 
-          /* GENERAL DELETE REQUESTS */
+  /* GENERAL DELETE REQUESTS */
   // DELETE REQUESTS - Used to remove data
   @DeleteMapping("/{flashcardId}")
   public ResponseEntity<?> deleteFlashcard(
-      @AuthenticationPrincipal UserDetailsImpl userDetails, 
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable String flashcardId) {
-    
-    if(flashcardService.deleteFlashcard(userDetails.getId(), flashcardId)) {
+
+    if (flashcardService.deleteFlashcard(userDetails.getId(), flashcardId)) {
       return ResponseEntity.ok().body("Flashcard " + flashcardId + " successfully deleted");
     }
 
     return ResponseEntity.ok().body("Error while deleting: " + flashcardId);
   }
 
-
-
 }
-

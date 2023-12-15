@@ -1,6 +1,5 @@
 package com.activ8.model;
 import com.activ8.service.FlashcardService;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 
 
@@ -10,7 +9,6 @@ public class FlashcardFrequencyManager implements FrequencyManager {
     private final Map<EDifficulty, Integer> difficultyCounters = new HashMap<>();
     private List<EDifficulty> difficultyProbabilities = new ArrayList<>();
 
-    private EDifficulty lastGeneratedDifficulty;
     private Flashcard lastGeneratedFlashcard;
     private DifficultySelectionStrategy difficultySelectionStrategy;
 
@@ -108,21 +106,6 @@ public class FlashcardFrequencyManager implements FrequencyManager {
         difficultyCounters.put(difficulty, difficultyCounters.getOrDefault(difficulty, 0) + 1);
     }
 
-    private EDifficulty selectRandomDifficulty() {
-        Random random = new Random();
-        double randomValue = random.nextDouble();
-        // Adjust the probabilities based on your preferences
-        if (randomValue < 0.6) {
-            // 60% chance for Hard
-            return EDifficulty.HARD;
-        } else if (randomValue < 0.9) {
-            return EDifficulty.MEDIUM;
-        } else {
-            // 10% chance for Easy
-            return EDifficulty.EASY;
-        }
-    }
-
     public Flashcard generateNextCard(Map<EDifficulty, List<Flashcard>> flashcardsDifficultyMap) {
         for (int attempt = 0; attempt < difficultyProbabilities.size(); attempt++) {
             EDifficulty selectedDifficulty = difficultySelectionStrategy.selectDifficulty();
@@ -138,6 +121,6 @@ public class FlashcardFrequencyManager implements FrequencyManager {
         }
 
         System.out.println("No suitable flashcard found");
-        return null; // Or handle this case as per your requirement
+        return null; 
     }
 }

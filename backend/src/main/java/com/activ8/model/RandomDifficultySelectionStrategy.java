@@ -2,6 +2,9 @@ package com.activ8.model;
 
 import java.util.Random;
 
+
+// Used the Strategy pattern in case you would want to switch between different
+// strategies in the future.
 public class RandomDifficultySelectionStrategy implements DifficultySelectionStrategy {
     private static final double HARD_THRESHOLD = 0.6;
     private static final double MEDIUM_THRESHOLD = 0.9;

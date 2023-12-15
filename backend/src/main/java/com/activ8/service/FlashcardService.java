@@ -44,9 +44,6 @@ public class FlashcardService {
         List<Flashcard> flashcards = flashcardRepository.findAllByStudySetId(studySetId); 
         return flashcards; 
     }
-    public boolean guessTerm(FlashcardCheckDTO flashcard){
-        return flashcardRepository.findById(flashcard.flashcardId()).get().getTerm().equals(flashcard.guess());
-    }
 
     @Transactional
     public Boolean deleteFlashcard(String userID, String flashcardId) {
@@ -62,6 +59,10 @@ public class FlashcardService {
         return false;
     }
 
+    @Transactional
+    public Boolean existsByFlashcardId(String flashcardId) {
+        return flashcardRepository.existsById(flashcardId);
+    }
 
     public String convertFlashcardToJson(Flashcard flashcard) {
         try {

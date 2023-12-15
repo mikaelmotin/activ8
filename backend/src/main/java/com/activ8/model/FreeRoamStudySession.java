@@ -28,7 +28,6 @@ public class FreeRoamStudySession implements StudySession {
             isStarted = true;
         }
         // FlashcardfrequencyManager should already have been initialized
-
     }
 
     @Override
@@ -44,11 +43,6 @@ public class FreeRoamStudySession implements StudySession {
         
         
         return nextFlashcard;
-        // // Log event for study session progress
-        // eventBus.publish(new StudySessionProgressEvent(this));
-
-        // // Log event for flashcard flipped - not here tho
-        // eventBus.publish(new FlashcardFlippedEvent(this));
     }
 
     public void assignDifficulty(Flashcard flashcard, EDifficulty difficulty) {
