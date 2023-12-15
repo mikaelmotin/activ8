@@ -4,6 +4,7 @@ import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.events.PointLimitReachedEvent;
 import com.activ8.eventbus.events.StudySessionProgressEvent;
 import com.activ8.eventbus.subscribers.PointLimitReachedEventSubscriber;
+import com.activ8.model.AdvancedPointsStrategy;
 import com.activ8.model.BasicPointsStrategy;
 import com.activ8.model.PointsManager;
 import com.activ8.model.StudySessionLog;
@@ -38,7 +39,8 @@ public class StudySessionProgressionService {
     public StudySessionProgressionService() {
         this.pointsManager = new PointsManager(userDetailsServiceImpl);
         // Choose the strategy for points algorithm - make this prettier in the future
-        pointsManager.setStrategy(new BasicPointsStrategy());
+        //pointsManager.setStrategy(new BasicPointsStrategy());
+        pointsManager.setStrategy(new AdvancedPointsStrategy(this));
     }
 
     public void tempSaveUserLog(StudySessionLog sessionLog) {
