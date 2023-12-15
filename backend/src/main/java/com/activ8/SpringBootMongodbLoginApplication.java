@@ -34,7 +34,5 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
         // Subscribe StudySessionStartedSubscriber to EventBus
         eventBus.subscribe(studySessionStartedSubscriber);
         eventBus.subscribe(studySessionCompletedSubscriber);
-
-        // Rest of your application initialization logic...
     }
 }

@@ -74,6 +74,7 @@ public class StudySessionCompletedEventSubscriber implements Subscriber {
                         timeSpentInMinutes);
 
                 studySessionService.saveStudySessionLog(logToSave);
+                progressionService.clearSessionLog();
 
                 eventBus.unsubscribe(this);
             }

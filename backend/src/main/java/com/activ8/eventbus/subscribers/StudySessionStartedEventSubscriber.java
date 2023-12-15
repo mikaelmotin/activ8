@@ -57,7 +57,6 @@ public class StudySessionStartedEventSubscriber implements Subscriber {
                         "To Be Decided",
                         0);
                 progressionService.tempSaveUserLog(log);
-                studySessionService.saveStudySessionLog(log);
             }
 
         } catch (Exception e) {
