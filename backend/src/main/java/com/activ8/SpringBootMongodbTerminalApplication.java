@@ -4,8 +4,7 @@ import com.activ8.UI.UIConsole;
 import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.subscribers.StudySessionStartedEventSubscriber;
 import com.activ8.service.*;
-import com.activ8.view.FlashcardView;
-import com.activ8.view.StartProgramView;
+import com.activ8.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +16,7 @@ import java.util.Scanner;
 
 @SpringBootApplication
 @ComponentScan({"com.activ8", "com.activ8.eventbus.subscribers"})
-public class SpringBootMongodbLoginApplication implements CommandLineRunner {
+public class SpringBootMongodbTerminalApplication implements CommandLineRunner {
 
     @Autowired
     private EventBus eventBus;
@@ -36,15 +35,21 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
     private StudySessionService studySessionService;
     @Autowired
     private FlashcardView flashcardView;
+    @Autowired
+    private StudyFolderView studyFolderView;
+    @Autowired
+    private StudySetView studySetView;
+    @Autowired
+    private StudySessionView studySessionView;
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootMongodbLoginApplication.class, args);
+        SpringApplication.run(SpringBootMongodbTerminalApplication.class, args);
     }
 
     @Override
     public void run(String... args) {
         System.out.println("APPLICATION STARTED");
-        UIConsole uiConsole = new UIConsole(userService, studyFolderService, studySetService, flashcardService, studySessionService, flashcardView);
+        UIConsole uiConsole = new UIConsole(userService, studyFolderService, studySetService, flashcardService, studySessionService, flashcardView,studySetView,studyFolderView,studySessionView);
 
         // Subscribe StudySessionStartedSubscriber to EventBus
         eventBus.subscribe(studySessionStartedSubscriber);

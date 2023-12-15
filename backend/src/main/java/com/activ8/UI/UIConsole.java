@@ -5,6 +5,9 @@ import com.activ8.payload.request.LoginRequest;
 import com.activ8.payload.request.SignupRequest;
 import com.activ8.service.*;
 import com.activ8.view.FlashcardView;
+import com.activ8.view.StudyFolderView;
+import com.activ8.view.StudySessionView;
+import com.activ8.view.StudySetView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +26,9 @@ public class UIConsole {
     private Flashcard currentFlashcard;
     private Scanner scanner = new Scanner(System.in);
     private FlashcardView flashcardView;
+    private StudySetView studySetView;
+    private StudyFolderView studyFolderView;
+    private StudySessionView studySessionView;
 
     @Autowired
     public UIConsole(
@@ -31,7 +37,10 @@ public class UIConsole {
             StudySetService studySetService,
             FlashcardService flashcardService,
             StudySessionService studySessionService,
-            FlashcardView flashcardView
+            FlashcardView flashcardView,
+            StudySetView studySetView,
+            StudyFolderView studyFolderView,
+            StudySessionView studySessionView
     ) {
         this.userService = userService;
         this.studyFolderService = studyFolderService;
@@ -39,6 +48,9 @@ public class UIConsole {
         this.flashcardService = flashcardService;
         this.studySessionService = studySessionService;
         this.flashcardView = flashcardView;
+        this.studySetView= studySetView;
+        this.studyFolderView = studyFolderView;
+        this.studySessionView = studySessionView;
     }
 
 
@@ -81,13 +93,7 @@ public class UIConsole {
             userId = authenticatedUser.get().getId();
 
             while (true) {
-                System.out.println("\nChoose an option:");
-                System.out.println("1. Choose a folder");
-                System.out.println("2. Add a new folder");
-                System.out.println("3. Remove a folder");
-                System.out.println("4. Sign Out");
-
-                System.out.print("Enter your choice: ");
+                studyFolderView.displayStudyFolderOptions();
                 int folderOption = scanner.nextInt();
                 scanner.nextLine(); // Consume newline
 
@@ -115,7 +121,7 @@ public class UIConsole {
     }
 
     public  void chooseFolder() {
-        System.out.println("\nChoose a folder:");
+        studyFolderView.displayChooseFolderMessage();
         // Assuming this fetches folders associated with the logged-in user
         List<StudyFolder> userFolders = studyFolderService.getAllStudyFolders(userId);
 
@@ -131,7 +137,7 @@ public class UIConsole {
 
         if (folderChoice > 0 && folderChoice <= userFolders.size()) {
             StudyFolder selectedFolder = userFolders.get(folderChoice - 1);
-            System.out.println("Selected Folder: " + selectedFolder.title());
+            studyFolderView.displaySelectedFolder(selectedFolder);
 
             while (true) {
                 System.out.println("\nStudySet Options:");
@@ -221,7 +227,7 @@ public class UIConsole {
         }
     }
     public  void chooseStudySet(StudyFolder folder) {
-        System.out.println("\nChoose a Study Set in folder '" + folder.title() + "':");
+        studySetView.displayChooseStudySet(folder);
         List<StudySet> studySetsInFolder = studySetService.getAllStudySets(folder.id());
 
         int index = 1;
@@ -236,18 +242,12 @@ public class UIConsole {
 
         if (studySetChoice > 0 && studySetChoice <= studySetsInFolder.size()) {
             StudySet selectedStudySet = studySetsInFolder.get(studySetChoice - 1);
-            System.out.println("Selected Study Set: " + selectedStudySet.title());
+            studySetView.displaySelectedStudySet(selectedStudySet);
 
             if (!inStudySession) {
                 // Display Study Set Options
                 while (true) {
-                    System.out.println("\nStudy Set Actions:");
-                    System.out.println("1. Create Flashcard");
-                    System.out.println("2. Remove Flashcard");
-                    System.out.println("3. See Flashcards");
-                    System.out.println("4. Start Study Session");
-                    System.out.println("5. Back to Study Sets");
-                    System.out.print("Enter your choice: ");
+                    studySetView.displayStudySetActions();
                     int studySetActionChoice = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
 
@@ -274,12 +274,7 @@ public class UIConsole {
             } else {
                 // Display Study Session Options
                 while (true) {
-                    System.out.println("\nStudy Session Actions:");
-                    System.out.println("1. Flip Card");
-                    System.out.println("2. Next Card");
-                    System.out.println("3. Rate Difficulty");
-                    System.out.println("4. End Study Session");
-                    System.out.print("Enter your choice: ");
+                    studySessionView.displayStudySessionActions();
                     int studySessionActionChoice = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
 
@@ -307,17 +302,17 @@ public class UIConsole {
         }
     }
     public  void createStudySet(StudyFolder folder) {
-        System.out.println("\nCreating a new Study Set:");
+        studySetView.displayCreateStudySetMessage();
 
-        System.out.print("Enter the Study Set title: ");
+        studySetView.displayEnterStudySetTitle();
         String title = scanner.nextLine();
 
-        System.out.print("Enter the Study Set description: ");
+        studySetView.displayEnterStudySetDescription();
         String description = scanner.nextLine();
 
         StudySet studySet = new StudySet(folder.userId(), folder.id(), title, description);
         studySetService.saveStudySet(studySet);
-        System.out.println("Study Set created successfully!");
+        studySetView.displaySuccessfulCreation();
     }
     public  void removeStudySet(StudyFolder folder) {
         System.out.println("\nRemove Study Set:");
@@ -336,45 +331,26 @@ public class UIConsole {
 
         if (setChoice > 0 && setChoice <= studySetsInFolder.size()) {
             StudySet selectedStudySet = studySetsInFolder.get(setChoice - 1);
-            studySetService.deleteStudySet(folder.userId(), selectedStudySet.id());
+            studySetService.deleteStudySet(userId, selectedStudySet.id());
             System.out.println("Study Set removed successfully!");
         } else {
             System.out.println("Invalid study set choice. Please select a valid study set.");
         }
+        return;
     }
-    public  void seeFlashcards(StudySet studySet) {
+    public void seeFlashcards(StudySet studySet) {
         List<Flashcard> flashcards = flashcardService.getAllFlashcardsInStudySet(studySet.id());
-
         if (!flashcards.isEmpty()) {
-            System.out.println("\nFlashcards in " + studySet.title() + ":");
-            int index = 1;
-
-            for (Flashcard flashcard : flashcards) {
-                System.out.println(index + ". Term: " + flashcard.getTerm() + ", Definition: " + flashcard.getDefinition());
-                index++;
-            }
-
             while (true) {
-                System.out.println("\nFlashcard Options:");
-                System.out.println("1. Remove Flashcard");
-                System.out.println("2. Back to Study Set");
-                System.out.print("Enter your choice: ");
+                System.out.println("\nFlashcards in " + studySet.title() + ":");
+                studySetView.displayAllFlashcards(studySet);
+
+                flashcardView.displayFlashcardActions();
                 int flashcardOption = scanner.nextInt();
                 scanner.nextLine(); // Consume newline
 
                 if (flashcardOption == 1) {
-                    System.out.print("Enter the flashcard number to remove: ");
-                    int flashcardChoice = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-
-                    if (flashcardChoice > 0 && flashcardChoice <= flashcards.size()) {
-                        Flashcard selectedFlashcard = flashcards.get(flashcardChoice - 1);
-                        flashcardService.deleteFlashcard(studySet.id(), selectedFlashcard.getId());
-                        System.out.println("Flashcard removed successfully!");
-                        return; // Back to the list of Flashcards
-                    } else {
-                        System.out.println("Invalid flashcard choice. Please select a valid flashcard.");
-                    }
+                    removeFlashcard(studySet);
                 } else if (flashcardOption == 2) {
                     return; // Back to the list of Flashcards
                 } else {
@@ -399,16 +375,16 @@ public class UIConsole {
         System.out.println("Flashcard created successfully!");
     }
 
-    public  void removeFlashcard(StudySet studySet) {
+    public void removeFlashcard(StudySet studySet) {
         System.out.println("\nRemove Flashcard:");
-        // Fetch and display existing flashcards in the chosen study set
         List<Flashcard> flashcardsInSet = flashcardService.getAllFlashcardsInStudySet(studySet.id());
 
-        int index = 1;
-        for (Flashcard flashcard : flashcardsInSet) {
-            System.out.println(index + ". " + flashcard.getTerm());
-            index++;
+        if (flashcardsInSet.isEmpty()) {
+            System.out.println("No flashcards found in " + studySet.title() + ".");
+            return;
         }
+
+        studySetView.displayAllFlashcards(studySet);
 
         System.out.print("Enter the flashcard number to remove: ");
         int flashcardChoice = scanner.nextInt();
@@ -416,7 +392,7 @@ public class UIConsole {
 
         if (flashcardChoice > 0 && flashcardChoice <= flashcardsInSet.size()) {
             Flashcard selectedFlashcard = flashcardsInSet.get(flashcardChoice - 1);
-            flashcardService.deleteFlashcard(studySet.id(), selectedFlashcard.getId());
+            flashcardService.deleteFlashcard(userId, selectedFlashcard.getId());
             System.out.println("Flashcard removed successfully!");
         } else {
             System.out.println("Invalid flashcard choice. Please select a valid flashcard.");
@@ -427,17 +403,12 @@ public class UIConsole {
         inStudySession = true;
         studySessionService.startFreeRoamStudySession(userId, studySet.id());
         currentFlashcard = studySessionService.nextCard(userId);
-        System.out.println("Starting study session for " + studySet.title() + "...");
+        studySessionView.displayStudySessionStarting();
         flashcardView.displayFlashcardDefinition(currentFlashcard);
 
         // After displaying flashcard details, go directly to study session actions
         while (inStudySession) {
-            System.out.println("\nStudy Session Actions:");
-            System.out.println("1. Flip Card");
-            System.out.println("2. Next Card");
-            System.out.println("3. Rate Difficulty");
-            System.out.println("4. End Study Session");
-            System.out.print("Enter your choice: ");
+            studySessionView.displayStudySessionActions();
             int studySessionActionChoice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
 
@@ -464,23 +435,19 @@ public class UIConsole {
 
     public  void nextFlashcard() {
         currentFlashcard = studySessionService.nextCard(userId);
-        System.out.println("Next flashcard: " + currentFlashcard.getDefinition());
+        flashcardView.displayFlashcardDefinition(currentFlashcard);
     }
     public  void flipFlashcard(Flashcard flashcard) {
         if (flashcard.isTermOnDisplay) {
             flashcardView.displayFlashcardDefinition(flashcard);
             flashcard.setTermOnDisplay(false);
         } else {
-            System.out.println("Term: " + flashcard.getTerm());
+            flashcardView.displayFlashcardTitle(flashcard);
             flashcard.setTermOnDisplay(true);
         }
     }
     public  void rateDifficulty(Flashcard flashcard) {
-        System.out.println("\nRate Difficulty:");
-        System.out.println("1. Easy");
-        System.out.println("2. Medium");
-        System.out.println("3. Hard");
-        System.out.print("Enter your choice: ");
+        studySessionView.displayRateFlashcardOptions();
 
         int difficultyChoice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
@@ -502,12 +469,11 @@ public class UIConsole {
                 break;
         }
         studySessionService.assignDifficultyToFlashcard(userId,flashcard.getId(), difficulty);
-        System.out.println("Difficulty rated as: " + difficulty.toString());
+        studySessionView.displayAssignedDifficulty(difficulty);
     }
     public  void endStudySession(){
-        System.out.println("\nEnding Study Session...");
         inStudySession = false;
         studySessionService.endStudySession(userId);
-        System.out.println("Study Session ended.");
+        studySessionView.displayStudySessionEnded();
     }
 }

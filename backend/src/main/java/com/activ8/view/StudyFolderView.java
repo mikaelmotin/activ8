@@ -38,4 +38,15 @@ public class StudyFolderView {
             }
         }
     }
+    public void displayStudyFolderOptions(){
+        System.out.println("\nStudy Folder options:");
+        System.out.println("1. Choose a folder");
+        System.out.println("2. Add a new folder");
+        System.out.println("3. Remove a folder");
+        System.out.println("4. Sign Out");
+
+        System.out.print("Enter your choice: ");
+    }
+    public void displayChooseFolderMessage(){System.out.println("\nChoose a folder:");}
+    public void displaySelectedFolder(StudyFolder selectedFolder){System.out.println("Selected Folder: " + selectedFolder.title());}
 }
