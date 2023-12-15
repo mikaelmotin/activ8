@@ -93,7 +93,7 @@
       console.error("Changing difficulty failed with error: ", error);
     }
   }
-  async function flipCard() {
+  async function logflippedCard() {
     try {
       const response = await fetch(
         "http://localhost:8080/api/studysessions/flipCard",
@@ -195,7 +195,7 @@ function generateSessionId() {
   <button on:click={assignDifficulty}>UPDATE DIFFICULTY </button>
   <button on:click={connect}>Connect WebSocket</button>
   <button on:click={triggerTestMessage}>Test WebSocket</button>
-  <button on:click={flipCard}>Flip Card</button>
+  <button on:click={logflippedCard}>Flip Card</button>
   <button on:click={endSession}>End Study Session</button>
   <button on:click={disconnect}>Disconnect WebSocket</button>
 

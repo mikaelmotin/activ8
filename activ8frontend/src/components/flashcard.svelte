@@ -1,20 +1,8 @@
 <!-- Flashcard.svelte -->
 
 <script>
-  import { onMount } from "svelte";
-  import { onDestroy } from "svelte";
   import { flashcardStore, initWebSocket } from "../stores/websocket";
 
-  let ws;
-
-  onMount(() => {
-    ws = initWebSocket();
-  });
-
-  // Optional: handle component unmount to close the WebSocket
-  onDestroy(() => {
-    if (ws) ws.close();
-  });
 
   export let front = $flashcardStore;
   export let back = "Answer";
