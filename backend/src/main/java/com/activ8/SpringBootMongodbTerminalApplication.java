@@ -1,3 +1,7 @@
+/**
+ * Entry point for the Spring Boot MongoDB Terminal Application.
+ * This class initializes and starts the application with the terminal user interface.
+ */
 package com.activ8;
 
 import com.activ8.UI.UIConsole;
@@ -43,10 +47,21 @@ public class SpringBootMongodbTerminalApplication implements CommandLineRunner {
     @Autowired
     private StudySessionView studySessionView;
 
+    /**
+     * Main method to start the Spring Boot MongoDB Terminal Application.
+     * Initializes the application context and starts the command-line runner.
+     *
+     * @param args Command-line arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMongodbTerminalApplication.class, args);
     }
 
+    /**
+     * Runs the application by initializing the UIConsole and handling user interactions through the console interface.
+     *
+     * @param args Command-line arguments
+     */
     @Override
     public void run(String... args) {
         System.out.println("APPLICATION STARTED");
@@ -58,6 +73,11 @@ public class SpringBootMongodbTerminalApplication implements CommandLineRunner {
         startTerminalProgram(uiConsole);
     }
 
+    /**
+     * Starts the terminal program, displays the welcome message, and handles user choices through the console interface.
+     *
+     * @param uiConsole The UIConsole for user interaction
+     */
     private void startTerminalProgram(UIConsole uiConsole) {
         Scanner scanner = new Scanner(System.in);
         StartProgramView startProgramView = new StartProgramView(uiConsole);

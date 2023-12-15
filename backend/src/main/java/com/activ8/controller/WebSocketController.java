@@ -1,4 +1,5 @@
-/*package com.activ8.controller;
+package com.activ8.controller;
+/* WEB SOCKET IS USED IN FRONTEND APPLICATION
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;

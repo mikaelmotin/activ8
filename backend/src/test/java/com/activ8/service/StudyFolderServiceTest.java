@@ -31,7 +31,9 @@ class StudyFolderServiceTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
     }
-
+    /**
+     * Test to save a study folder and verify the saved study folder matches the expected one.
+     */
     @Test
     void testSaveStudyFolder() {
         StudyFolder studyFolderToSave = new StudyFolder(studyFolderId, userId, "test", "A test folder");
@@ -42,7 +44,9 @@ class StudyFolderServiceTest {
         assertNotNull(savedStudyFolder);
         assertEquals(studyFolderToSave, savedStudyFolder);
     }
-
+    /**
+     * Test to retrieve all study folders and verify the count matches the expected number.
+     */
     @Test
     void testGetAllStudyFolders() {
         List<StudyFolder> studyFolders = new ArrayList<>();
@@ -56,7 +60,9 @@ class StudyFolderServiceTest {
 
         assertEquals(studyFolders.size(), retrievedStudyFolders.size());
     }
-
+    /**
+     * Test to retrieve a study folder by ID and ensure it matches the expected study folder.
+     */
     @Test
     void testGetStudyFolder() {
         StudyFolder studyFolder = new StudyFolder(studyFolderId, userId, "test", "A test folder");
@@ -67,7 +73,9 @@ class StudyFolderServiceTest {
         assertTrue(retrievedStudyFolder.isPresent());
         assertEquals(studyFolder, retrievedStudyFolder.get());
     }
-
+    /**
+     * Test to delete a study folder and verify its deletion based on certain conditions.
+     */
     @Test
     void testDeleteStudyFolder() {
 

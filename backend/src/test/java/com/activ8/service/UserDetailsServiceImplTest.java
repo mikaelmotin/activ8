@@ -1,6 +1,6 @@
 package com.activ8.service;
+
 import com.activ8.model.User;
-import com.activ8.service.UserDetailsServiceImpl;
 import com.activ8.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,11 +9,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the UserDetailsServiceImpl class.
+ */
 class UserDetailsServiceImplTest {
 
     @Mock
@@ -29,8 +33,9 @@ class UserDetailsServiceImplTest {
 
     @Test
     void testLoadUserByUsername_ExistingUser() {
+        // Test loading an existing user by username
         String username = "testUser";
-        User testUser = new User("testUser", "test@test.com", "password");
+        User testUser = new User("testUser", "test@test.com", "password", 0);
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(testUser));
 
@@ -42,6 +47,7 @@ class UserDetailsServiceImplTest {
 
     @Test
     void testLoadUserByUsername_NonExistingUser() {
+        // Test loading a non-existing user by username
         String username = "nonExistingUser";
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());

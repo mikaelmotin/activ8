@@ -1,5 +1,5 @@
-/*package com.activ8.security;
-
+package com.activ8.security;
+//WEB SOCKET IS USED IN FRONTEND APPLICATION
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;

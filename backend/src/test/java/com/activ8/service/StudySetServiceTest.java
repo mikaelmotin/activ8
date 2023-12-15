@@ -5,7 +5,6 @@ import com.activ8.model.Flashcard;
 import com.activ8.model.SimpleFlashcard;
 import com.activ8.model.StudySet;
 import com.activ8.repository.FlashcardRepository;
-import com.activ8.service.StudySetService;
 import com.activ8.repository.StudySetRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,19 +18,24 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the StudySetService class.
+ */
 class StudySetServiceTest {
 
     @Mock
     private StudySetRepository studySetRepository;
+
     @Mock
     private FlashcardService flashcardService;
+
     @Mock
     private FlashcardRepository flashcardRepository;
 
     @InjectMocks
     private StudySetService studySetService;
-    private String userId="userId";
-    private String studyFolderId="folderId";
+    private String userId = "userId";
+    private String studyFolderId = "folderId";
     private String studySetId;
 
     @BeforeEach
@@ -41,7 +45,8 @@ class StudySetServiceTest {
 
     @Test
     void testSaveStudySet() {
-        StudySet studySetToSave = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
+        // Test the save operation for a study set
+        StudySet studySetToSave = new StudySet(studySetId, userId, studyFolderId, "test", "A test set");
         when(studySetRepository.save(studySetToSave)).thenReturn(studySetToSave);
 
         StudySet savedStudySet = studySetService.saveStudySet(studySetToSave);
@@ -52,12 +57,12 @@ class StudySetServiceTest {
 
     @Test
     void testGetAllStudySets() {
+        // Test retrieving all study sets in a study folder
         List<StudySet> studySets = new ArrayList<>();
-        StudySet testSet = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
-        StudySet testSet1 = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
+        StudySet testSet = new StudySet(studySetId, userId, studyFolderId, "test", "A test set");
+        StudySet testSet1 = new StudySet(studySetId, userId, studyFolderId, "test", "A test set");
         studySets.add(testSet);
         studySets.add(testSet1);
-
 
         when(studySetRepository.findAllByStudyFolderId(studyFolderId)).thenReturn(studySets);
 
@@ -68,8 +73,9 @@ class StudySetServiceTest {
 
     @Test
     void testGetStudySet() {
+        // Test retrieving a specific study set by ID
         String studySetId = "123";
-        StudySet studySet = new StudySet(studySetId,userId,studyFolderId,"test","A test set");
+        StudySet studySet = new StudySet(studySetId, userId, studyFolderId, "test", "A test set");
         when(studySetRepository.findById(studySetId)).thenReturn(Optional.of(studySet));
 
         Optional<StudySet> retrievedStudySet = studySetService.getStudySet(studySetId);
@@ -77,9 +83,11 @@ class StudySetServiceTest {
         assertTrue(retrievedStudySet.isPresent());
         assertEquals(studySet, retrievedStudySet.get());
     }
+
     @Test
     void testDeleteStudySet() {
-        StudySet studySet = new StudySet(userId,studyFolderId,"test","A test set");
+        // Test deleting a study set
+        StudySet studySet = new StudySet(userId, studyFolderId, "test", "A test set");
         when(studySetRepository.findById(studySet.id())).thenReturn(Optional.of(studySet));
 
         List<Flashcard> flashcards = new ArrayList<>();
@@ -88,7 +96,7 @@ class StudySetServiceTest {
         flashcards.add(testFlashcard);
 
         when(flashcardService.getAllFlashcardsInStudySet(studySet.id())).thenReturn(flashcards);
-        when(flashcardService.deleteFlashcard(userId, testFlashcard.getId())).thenReturn(true); // Mock the deleteFlashcard method
+        when(flashcardService.deleteFlashcard(userId, testFlashcard.getId())).thenReturn(true);
 
         boolean deleted = studySetService.deleteStudySet(userId, studySet.id());
 

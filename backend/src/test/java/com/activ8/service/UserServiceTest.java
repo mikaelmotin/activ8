@@ -1,6 +1,6 @@
 package com.activ8.service;
+
 import com.activ8.model.User;
-import com.activ8.service.UserService;
 import com.activ8.payload.request.LoginRequest;
 import com.activ8.payload.request.SignupRequest;
 import com.activ8.repository.UserRepository;
@@ -10,11 +10,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the UserService class.
+ */
 class UserServiceTest {
 
     @Mock
@@ -33,6 +38,7 @@ class UserServiceTest {
 
     @Test
     void testRegisterUser_Success() {
+        // Test registration of a new user successfully
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setUsername("tester");
         signupRequest.setEmail("tester@example.com");
@@ -48,6 +54,7 @@ class UserServiceTest {
 
     @Test
     void testRegisterUser_UsernameExists() {
+        // Test registration when username already exists
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setUsername("tester");
         signupRequest.setEmail("tester@example.com");
@@ -61,6 +68,7 @@ class UserServiceTest {
 
     @Test
     void testRegisterUser_EmailExists() {
+        // Test registration when email already exists
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setUsername("tester");
         signupRequest.setEmail("tester@example.com");
@@ -75,10 +83,11 @@ class UserServiceTest {
 
     @Test
     void testAuthenticateUser_Success() {
+        // Test authentication of a user with correct credentials
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("testUser");
         loginRequest.setPassword("encodedPassword");
-        User existingUser = new User("testUser", "test@test.com", "encodedPassword");
+        User existingUser = new User("testUser", "test@test.com", "encodedPassword", 0);
 
         when(userRepository.findByUsername(loginRequest.getUsername())).thenReturn(Optional.of(existingUser));
         when(passwordEncoder.matches(loginRequest.getPassword(), existingUser.getPassword())).thenReturn(true);
@@ -91,6 +100,7 @@ class UserServiceTest {
 
     @Test
     void testAuthenticateUser_WrongCredentials() {
+        // Test authentication of a user with wrong credentials
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("testUser");
         loginRequest.setPassword("wrongPassword");

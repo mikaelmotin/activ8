@@ -1,5 +1,5 @@
 package com.activ8;
-
+/* FOR FRONTEND APPLICATION
 import com.activ8.eventbus.EventBus;
 import com.activ8.eventbus.subscribers.StudySessionCompletedEventSubscriber;
 import com.activ8.eventbus.subscribers.StudySessionStartedEventSubscriber;
@@ -36,3 +36,4 @@ public class SpringBootMongodbLoginApplication implements CommandLineRunner {
        // eventBus.subscribe(studySessionCompletedSubscriber);
     }
 }
+*/

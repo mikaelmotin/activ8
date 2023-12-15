@@ -1,4 +1,8 @@
+/**
+ * This test class validates the functionalities of the FlashcardService methods.
+ */
 package com.activ8.service;
+
 import com.activ8.dto.FlashcardCheckDTO;
 import com.activ8.model.EDifficulty;
 import com.activ8.model.Flashcard;
@@ -43,6 +47,7 @@ class FlashcardServiceTest {
 
     @Test
     void testSaveFlashcard() {
+        // Test to save a flashcard and verify the saved flashcard matches the expected one.
         Flashcard flashcardToSave = new SimpleFlashcard(studySetId, "test", "A card for testing", EDifficulty.MEDIUM);
         when(flashcardRepository.save(any(Flashcard.class))).thenReturn(flashcardToSave);
 
@@ -54,6 +59,7 @@ class FlashcardServiceTest {
 
     @Test
     void testGetFlashcard() {
+        // Test to retrieve a flashcard by ID and ensure it matches the expected flashcard.
         Flashcard flashcard = new SimpleFlashcard(studySetId, "test", "A card for testing",EDifficulty.MEDIUM);
         when(flashcardRepository.findById(flashcardId)).thenReturn(Optional.of(flashcard));
 
@@ -65,6 +71,7 @@ class FlashcardServiceTest {
 
     @Test
     void testGetAllFlashcardsInStudySet() {
+        // Test to retrieve all flashcards within a study set and verify the count matches the expected number.
         List<Flashcard> flashcards = new ArrayList<>();
         Flashcard flashcard = new SimpleFlashcard(studySetId, "test", "A card for testing",EDifficulty.MEDIUM);
         flashcardService.saveFlashcard(flashcard);
@@ -80,7 +87,7 @@ class FlashcardServiceTest {
 
     @Test
     void testDeleteFlashcard() {
-
+        // Test to delete a flashcard and verify its deletion based on certain conditions.
         Flashcard flashcard = new SimpleFlashcard("2222", "test", "A card for testing", EDifficulty.MEDIUM);
         StudySet testStudySet = new StudySet(studySetId, userId, studyFolderId, "test", "A test set");
 

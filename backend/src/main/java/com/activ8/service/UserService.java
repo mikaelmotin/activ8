@@ -1,4 +1,8 @@
+/**
+ * Service class for user-related operations such as user registration, authentication, and retrieval of user details.
+ */
 package com.activ8.service;
+
 import com.activ8.model.User;
 import com.activ8.payload.request.LoginRequest;
 import com.activ8.payload.request.SignupRequest;
@@ -17,6 +21,12 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Registers a new user if the username and email are unique, saving the user's details into the database.
+     *
+     * @param signupRequest Object containing user details for registration
+     * @throws RuntimeException if the provided username or email is already taken
+     */
     public void registerUser(SignupRequest signupRequest) {
         // Check if the username or email already exists
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
@@ -32,12 +42,18 @@ public class UserService {
         // Create a new user entity and save it to the database
         User user = new User(signupRequest.getUsername(),
                 signupRequest.getEmail(),
-                passwordEncoder.encode(signupRequest.getPassword()));
+                passwordEncoder.encode(signupRequest.getPassword()), 0);
 
         userRepository.save(user);
         System.out.println("Successfully created user!");
     }
 
+    /**
+     * Authenticates a user based on the provided login credentials.
+     *
+     * @param loginRequest Object containing user login details
+     * @return Optional containing the user information if authentication is successful, otherwise empty
+     */
     public Optional<User> authenticateUser(LoginRequest loginRequest) {
         Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
 
@@ -53,6 +69,13 @@ public class UserService {
         System.out.println("Wrong Password or Username!");
         return Optional.empty(); // Return empty optional if authentication fails
     }
+
+    /**
+     * Retrieves the user ID by username from the database.
+     *
+     * @param username Username of the user
+     * @return Optional containing the user ID if the username exists, otherwise empty
+     */
     public Optional<String> getUserIdByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
 

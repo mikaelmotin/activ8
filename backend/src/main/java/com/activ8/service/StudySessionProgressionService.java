@@ -23,8 +23,8 @@ public class StudySessionProgressionService {
     @Autowired
     StudySessionProgressionManager userProgressionManager;
 
-    @Autowired
-    WebSocketService webSocketService;
+    //@Autowired USES IN FRONTEND APPLICATION PROGRAM
+   // WebSocketService webSocketService;
 
     @Autowired
     EventBus eventBus;
@@ -117,7 +117,7 @@ public class StudySessionProgressionService {
     }
 
     public void notifyProgressBar(String sessionId, double progress) {
-        webSocketService.notifyProgressBar(sessionId, progress);
+      //  webSocketService.notifyProgressBar(sessionId, progress);
     }
 
     public void togglePointLimitReachedEvent(String userId, double pointPercentage) {
