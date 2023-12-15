@@ -117,7 +117,7 @@
     <nav class="flex w-full mt-4">
       <div style="width: 100%; height: 100%; position: relative">
         <div
-          style="width: 77px; height: 77px; left: 20px; top: 0px; position: absolute"
+          style="width: 77px; height: 77px; left: 20px; top: 0px; position: absolute" class=" hover:animate-bounce"
         >
           <div
             style="width: 77px; height: 77px; left: 0px; top: 0px; position: absolute; background: #967E76; border-radius: 9999px"
@@ -127,15 +127,15 @@
           ></div>
         </div>
         <div
-          style="width: 8px; height: 13px; left: 43px; top: 15px; position: absolute; color: #967E76; font-size: 24px; font-family: Impact; font-weight: 400; word-wrap: break-word"
+          style="width: 8px; height: 13px; left: 43px; top: 15px; position: absolute; color: #967E76; font-size: 24px; font-family: Impact; font-weight: 400; word-wrap: break-word" class=" hover:animate-bounce"
         >
           8
         </div>
       </div>
 
-      <div>
+      <a href="/dashboard">
         <img class="h-14 ml-auto mr-12" src="/user.png" alt="user profile" onclick= {toDashboard} />
-    </div>
+      </a>
       <button
         on:click={toggleEditMode}
         class="border border-gray-500 rounded"
