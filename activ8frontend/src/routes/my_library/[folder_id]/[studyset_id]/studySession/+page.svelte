@@ -1,6 +1,6 @@
 <script>
   import Flashcard from "../../../../../components/flashcard.svelte";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { goto } from "$app/navigation";
   import SockJS from "sockjs-client";
   import Stomp from "stompjs";
@@ -242,6 +242,14 @@
       flipCard();
     }
   }
+
+  onDestroy(() => {
+    endSession();
+    disconnect;
+
+  });
+
+  
 </script>
 
 <main class="bg-gray-100 flex flex-col min-h-screen">
